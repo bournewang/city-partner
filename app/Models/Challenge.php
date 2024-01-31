@@ -22,6 +22,7 @@ class Challenge extends Model
 
     const APPLYING = 'applying';
     const CHALLENGING = 'challenging';
+    const SUCCESS = 'success';
     const CANCELED = 'canceled';
 
     static public function statusOptions()
@@ -29,6 +30,7 @@ class Challenge extends Model
         return [
             self::APPLYING      => __(ucfirst(self::APPLYING)),
             self::CHALLENGING   => __(ucfirst(self::CHALLENGING)),
+            self::SUCCESS       => __(ucfirst(self::SUCCESS)),
             self::CANCELED      => __(ucfirst(self::CANCELED)),
         ];
     }

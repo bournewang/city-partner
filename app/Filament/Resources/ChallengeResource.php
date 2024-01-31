@@ -39,7 +39,11 @@ class ChallengeResource extends Resource
                 TextInput::make('index_no'),
                 TextInput::make('level'),
                 TextInput::make('success_at'),
-                TextInput::make('status'),
+                // TextInput::make('status'),
+                Select::make('status')
+                    ->label(__('Status'))
+                    ->options(Challenge::statusOptions())
+                    // ->searchable(),
             ]);
     }
 
