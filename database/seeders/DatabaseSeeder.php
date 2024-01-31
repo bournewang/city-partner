@@ -12,7 +12,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+         // $this->call([
+         //     UserSeeder::class
+         // ]);
+        \App\Models\User::create(['name' => 'Admin', 'email' => 'admin@local.com', 'password' => bcrypt('123456')]);
+        \App\Models\User::factory(200)->create();
+        \App\Models\Challenge::factory(50)->create();
+        \App\Models\Order::factory(10)->create();
+        // foreach (User::all() as $user) {
+        //     if (rand(0,1)) {
+        //         \App\Models\Challenge::factory()->create();
+        //     }
+        // }
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

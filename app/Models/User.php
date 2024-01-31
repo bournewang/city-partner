@@ -18,9 +18,21 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'openid',
+        'platform_openid',
         'name',
+        'nickname',
+        'avatar',
+        'gender',
+        'mobile',
+        'qrcode',
+        'id_no',
+        'balance',
+        'referer_id',
         'email',
         'password',
+        'status',
+        'level',
     ];
 
     /**
@@ -41,5 +53,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'referer_id' => 'integer'
     ];
+
+    public function referer()
+    {
+        return $this->belongsTo(User::class, 'referer_id');
+    }
+
+    public function recommands()
+    {
+        return $this->hasMany(User::class, 'referer_id');
+    }
+
+    public function challenge()
+    {
+        return $this->hasOne(Challenge::class);
+    }
 }
