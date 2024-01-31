@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ChallengeResource extends Resource
 {
     protected static ?string $model = Challenge::class;
+    protected static ?string $label = "挑战";
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -33,15 +34,15 @@ class ChallengeResource extends Resource
                 //
                 // TextInput::make('name'),
                 Select::make('user_id')
-                    ->label('User')
+                    ->translateLabel()
                     ->options(User::all()->pluck('name', 'id'))
                     ->searchable(),
-                TextInput::make('index_no'),
-                TextInput::make('level'),
-                TextInput::make('success_at'),
+                TextInput::make('index_no')->translateLabel(),
+                TextInput::make('level')->translateLabel(),
+                TextInput::make('success_at')->translateLabel(),
                 // TextInput::make('status'),
                 Select::make('status')
-                    ->label(__('Status'))
+                    ->translateLabel()
                     ->options(Challenge::statusOptions())
                     // ->searchable(),
             ]);
@@ -54,10 +55,9 @@ class ChallengeResource extends Resource
                 //
                 TextColumn::make("user.name")->translateLabel()->searchable(),
                 TextColumn::make("index_no")->translateLabel()->searchable(),
-                TextColumn::make("level")->label(__("Level"))->searchable(),
-                TextColumn::make("success_at")->label(__("Success At"))->searchable(),
-                // TextColumn::make("user.name")->label(__("Name"))->searchable(),
-                TextColumn::make("status")->label(__("Status"))->searchable(),
+                TextColumn::make("level")->translateLabel()->searchable(),
+                TextColumn::make("success_at")->translateLabel()->searchable(),
+                TextColumn::make("status")->translateLabel()->searchable(),
             ])
             ->filters([
                 Filter::make('created_at')

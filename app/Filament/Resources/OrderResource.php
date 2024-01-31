@@ -22,6 +22,7 @@ use App\Models\User;
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
+    protected static ?string $label = "订单";
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -33,13 +34,14 @@ class OrderResource extends Resource
                 Select::make('user_id')
                     ->label('User')
                     ->options(User::all()->pluck('name', 'id'))
+                    ->translateLabel()
                     ->searchable(),
-                TextInput::make('order_no'),
-                TextInput::make('amount'),
-                TextInput::make('paid_at'),
-                TextInput::make('refund_at'),
+                TextInput::make('order_no')->translateLabel(),
+                TextInput::make('amount')->translateLabel(),
+                TextInput::make('paid_at')->translateLabel(),
+                TextInput::make('refund_at')->translateLabel(),
                 Select::make('status')
-                    ->label('Status')
+                    ->translateLabel()
                     ->options(Order::statusOptions())
             ]);
     }

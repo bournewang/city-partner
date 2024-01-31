@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
+    protected static ?string $label = "用户";
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -32,11 +33,11 @@ class UserResource extends Resource
         return $form
             ->schema([
                 //
-                TextInput::make('name'),
-                TextInput::make('nickname'),
-                TextInput::make('mobile'),
-                TextInput::make('status'),
-                TextInput::make('level'),
+                TextInput::make('name')->translateLabel(),
+                TextInput::make('nickname')->translateLabel(),
+                TextInput::make('mobile')->translateLabel(),
+                TextInput::make('status')->translateLabel(),
+                TextInput::make('level')->translateLabel(),
 
             ]);
     }
@@ -46,16 +47,16 @@ class UserResource extends Resource
         return $table
             ->columns([
                 //
-                // TextColumn::make("openid")->label(__("OpenId"))->searchable(),
-                // TextColumn::make("platform_openid")->label(__("platform_openid"))->searchable(),
-                TextColumn::make("name")->label(__("Name"))->searchable(),
-                TextColumn::make("nickname")->label(__("Nickname"))->searchable(),
-                // TextColumn::make("email")->label(__("Email"))->searchable()
-                TextColumn::make("mobile")->label(__("Mobile"))->searchable(),
-                ToggleColumn::make("status")->label(__("Status")),
-                TextColumn::make("level")->label(__("Level")),
-                TextColumn::make("referer.name")->label(__("Referer")),
-                TextColumn::make("recommands_count")->label(__("Recommands"))->counts('recommands'),
+                // TextColumn::make("openid")->translateLabel()->searchable(),
+                // TextColumn::make("platform_openid")->translateLabel()->searchable(),
+                TextColumn::make("name")->translateLabel()->searchable(),
+                TextColumn::make("nickname")->translateLabel()->searchable(),
+                // TextColumn::make("email")->translateLabel()->searchable()
+                TextColumn::make("mobile")->translateLabel()->searchable(),
+                ToggleColumn::make("status")->translateLabel(),
+                TextColumn::make("level")->translateLabel(),
+                TextColumn::make("referer.name")->translateLabel(),
+                TextColumn::make("recommands_count")->translateLabel()->counts('recommands'),
                 TextColumn::make("created_at")->translateLabel() //label(__("Created At")),
             ])
             ->filters([
@@ -72,7 +73,7 @@ class UserResource extends Resource
                     })
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -86,17 +87,17 @@ class UserResource extends Resource
     {
         return $infolist
             ->schema([
-                TextEntry::make("openid")->label(__("OpenId")),
-                TextEntry::make("platform_openid")->label(__("Platform Openid")),
-                TextEntry::make("name")->label(__("Name")),
-                TextEntry::make("nickname")->label(__("Nickname")),
-                // TextColumn::make("email")->label(__("Email"))->searchable()
-                TextEntry::make("mobile")->label(__("Mobile")),
-                TextEntry::make("status")->label(__("Status")),
-                TextEntry::make("level")->label(__("Level")),
-                TextEntry::make("referer.name")->label(__("Referer")),
-                TextEntry::make("created_at")->label("Created At"),
-                // TextEntry::make("recommands")->label(__("Recommands"))->counts('recommands'),
+                TextEntry::make("openid")->translateLabel(),
+                TextEntry::make("platform_openid")->translateLabel(),
+                TextEntry::make("name")->translateLabel(),
+                TextEntry::make("nickname")->translateLabel(),
+                // TextColumn::make("email")->translateLabel()->searchable()
+                TextEntry::make("mobile")->translateLabel(),
+                TextEntry::make("status")->translateLabel(),
+                TextEntry::make("level")->translateLabel(),
+                TextEntry::make("referer.name")->translateLabel(),
+                TextEntry::make("created_at")->translateLabel() //label("Created At"),
+                // TextEntry::make("recommands")->translateLabel()->counts('recommands'),
                 // Infolists\Components\TextEntry::make('name'),
                 // Infolists\Components\TextEntry::make('email'),
                 // Infolists\Components\TextEntry::make('notes')
@@ -116,7 +117,7 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\Viewuser::route('/{record}'),
+            // 'view' => Pages\Viewuser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
