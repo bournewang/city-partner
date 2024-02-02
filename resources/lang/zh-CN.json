@@ -36,5 +36,7 @@
     "Register Users": "注册用户",
     "Challenge Users": "挑战用户",
     "Sign in": "登录",
+    "Increase": "增加",
+    "Decrease": "减少",
     "filament-panels::pages/dashboard.title": "仪表盘"
 }

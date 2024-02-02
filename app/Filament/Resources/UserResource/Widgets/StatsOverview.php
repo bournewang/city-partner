@@ -6,37 +6,76 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use App\Models\User;
+use App\Models\Challenge;
 use DB;
 class StatsOverview extends BaseWidget
 {
+    protected function getTrendData($class, $dateColumn = 'created_at')
+    {
+        $origin = $class::whereBetween($dateColumn, [today()->subDays(7), today()->subDay(1)->endOfDay()])
+            ->select(DB::raw("count(id) as total"), DB::raw("date($dateColumn) as calc_date"))
+            ->groupBy('calc_date')
+            ->orderBy('calc_date', 'asc')
+            ->pluck('total', 'calc_date')
+            ->toArray();
+        $start = today()->subDays(7);
+        $i = 0;
+        $data = [];
+        $day = $start->toDateString();
+        $data[$day] = $origin[$day] ?? 0;
+        while($i < 6) {
+            $day = $start->addDays(1)->toDateString();
+            $data[$day] = $origin[$day] ?? 0;
+            // echo  . "\n";
+            $i++;
+        }
+        $view_data = array_values($data);
+        if ($view_data[6] > $view_data[5]){
+            $trend = "up";
+        }else{
+            $trend = "down";
+        }
+        $diff = $this->views_show(abs($view_data[6] - $view_data[5]));
+
+        return [$diff, $trend, $view_data];
+    }
+
+    protected function views_show($num)
+    {
+        if($num < 1000) {
+            return $num;
+        }else if($num >=1000 && $num < 10000){
+            return round($num/1000,1).'k';
+        } else if ($num >= 10000) {
+            return round($num/10000,2).'w';
+        }
+    }
+
     protected function getStats(): array
     {
-        $register_data = User::whereBetween('created_at', [today()->subDays(7), today()->endOfDay()])
-            ->select(DB::raw("count(id) as total"), DB::raw("date(created_at) as created_date"))
-            ->groupBy('created_date')
-            ->orderBy('created_date', 'asc')
-            ->pluck('total')
+        [$diff1, $trend1, $register_data]  = $this->getTrendData(User::class);
+        [$diff2, $trend2, $challenge_data] = $this->getTrendData(Challenge::class);
+        [$diff3, $trend3, $success_data]   = $this->getTrendData(Challenge::class, 'success_at');
 
-            ->toArray();
-            // die();
-        \Log::debug($register_data);
-        // die();
+        // \Log::debug($register_data);
+        // \Log::debug($challenge_data);
+        // \Log::debug($success_data);
         return [
-            Stat::make(__('Register Users'), '192.1k')
-                // ->description('32k increase')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
+            Stat::make(__('Register Users'), $this->views_show($register_data[6]))
+                ->description(__($trend1 == 'up' ? 'Increase' : 'Decrease').$diff1)
+                ->descriptionIcon('heroicon-m-arrow-trending-'.$trend1)
                 ->chart($register_data)
-                ->color('success'),
-            Stat::make(__('Challenge Users'), '21%')
-                // ->description('7% increase')
-                ->descriptionIcon('heroicon-m-arrow-trending-down')
-                ->chart([7, 2, 10, 3, 15, 4, 17])
-                ->color('danger'),
-            Stat::make(__('Challenge Success'), '3:12')
-                // ->description('3% increase')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                ->chart([7, 2, 10, 3, 15, 4, 17])
-                ->color('success'),
+                ->color($trend1 == 'up' ? 'success' : 'danger'),
+            Stat::make(__('Challenge Users'), $this->views_show($challenge_data[6]))
+                ->description(__($trend2 == 'up' ? 'Increase' : 'Decrease').$diff2)
+                ->descriptionIcon('heroicon-m-arrow-trending-'.$trend2)
+                ->chart($challenge_data)
+                ->color($trend2 == 'up' ? 'success' : 'danger'),
+            Stat::make(__('Challenge Success'), $this->views_show($success_data[6]))
+                ->description(__($trend3 == 'up' ? 'Increase' : 'Decrease').$diff3)
+                ->descriptionIcon('heroicon-m-arrow-trending-'.$trend3)
+                ->chart($success_data)
+                ->color($trend3 == 'up' ? 'success' : 'danger'),
         ];
     }
 }
