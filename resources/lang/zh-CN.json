@@ -32,5 +32,9 @@
     "Challenge Success": "挑战成功",
     "List": "列表",
     "Search": "搜索",
+    "Challenge Success": "挑战成功",
+    "Register Users": "注册用户",
+    "Challenge Users": "挑战用户",
+    "Sign in": "登录",
     "filament-panels::pages/dashboard.title": "仪表盘"
 }
