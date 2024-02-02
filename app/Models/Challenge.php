@@ -30,7 +30,7 @@ class Challenge extends Model
         return [
             self::APPLYING      => __(ucfirst(self::APPLYING)),
             self::CHALLENGING   => __(ucfirst(self::CHALLENGING)),
-            self::SUCCESS       => __(ucfirst(self::SUCCESS)),
+            self::SUCCESS       => __("Challenge Success"),
             self::CANCELED      => __(ucfirst(self::CANCELED)),
         ];
     }

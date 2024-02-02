@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
@@ -60,7 +61,9 @@ class OrderResource extends Resource
                 TextColumn::make("user.name")->translateLabel()->searchable(),
                 TextColumn::make("order_no")->translateLabel()->searchable(),
                 TextColumn::make("amount")->translateLabel(),
-                TextColumn::make("status")->translateLabel(),
+                // TextColumn::make("status")->translateLabel(),
+                ViewColumn::make('status')->translateLabel()
+                    ->view('filament.tables.columns.order-status'),
                 TextColumn::make("paid_at")->translateLabel(),
                 TextColumn::make("refund_at")->translateLabel(),
             ])

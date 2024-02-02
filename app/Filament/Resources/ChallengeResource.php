@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
@@ -57,7 +58,9 @@ class ChallengeResource extends Resource
                 TextColumn::make("index_no")->translateLabel()->searchable(),
                 TextColumn::make("level")->translateLabel()->searchable(),
                 TextColumn::make("success_at")->translateLabel()->searchable(),
-                TextColumn::make("status")->translateLabel()->searchable(),
+                // TextColumn::make("status")->translateLabel()->searchable(),
+                ViewColumn::make('status')->translateLabel()
+                    ->view('filament.tables.columns.challenge-status'),
             ])
             ->filters([
                 Filter::make('created_at')
