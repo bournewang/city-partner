@@ -77,4 +77,28 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasOne(Challenge::class);
     }
+
+    const LEVEL_0 = "consumer";
+    const LEVEL_1 = "station_manager";
+    const LEVEL_2 = "center_director";
+    const LEVEL_3 = "county_manager";
+    const LEVEL_4 = "area_president";
+    const LEVEL_5 = "province_management";
+
+    static public function levelOptions()
+    {
+        return [
+            __(self::LEVEL_0),
+            __(self::LEVEL_1),
+            __(self::LEVEL_2),
+            __(self::LEVEL_3),
+            __(self::LEVEL_4),
+            __(self::LEVEL_5),
+        ];
+    }
+
+    public function levelLabel()
+    {
+        return self::levelOptions()[$this->level];
+    }
 }

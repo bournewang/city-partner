@@ -15,7 +15,9 @@ use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
@@ -37,7 +39,10 @@ class UserResource extends Resource
                 TextInput::make('nickname')->translateLabel(),
                 TextInput::make('mobile')->translateLabel(),
                 TextInput::make('status')->translateLabel(),
-                TextInput::make('level')->translateLabel(),
+                // TextInput::make('level')->translateLabel(),
+                Select::make('level')
+                    ->translateLabel()
+                    ->options(User::levelOptions())
 
             ]);
     }
@@ -54,7 +59,9 @@ class UserResource extends Resource
                 // TextColumn::make("email")->translateLabel()->searchable()
                 TextColumn::make("mobile")->translateLabel()->searchable(),
                 ToggleColumn::make("status")->translateLabel(),
-                TextColumn::make("level")->translateLabel(),
+                // TextColumn::make("level")->translateLabel(),
+                ViewColumn::make('level')->translateLabel()
+                    ->view('filament.tables.columns.user-level'),
                 TextColumn::make("referer.name")->translateLabel(),
                 TextColumn::make("recommands_count")->translateLabel()->counts('recommands'),
                 TextColumn::make("created_at")->translateLabel() //label(__("Created At")),
@@ -94,7 +101,9 @@ class UserResource extends Resource
                 // TextColumn::make("email")->translateLabel()->searchable()
                 TextEntry::make("mobile")->translateLabel(),
                 TextEntry::make("status")->translateLabel(),
-                TextEntry::make("level")->translateLabel(),
+                // TextEntry::make("level")->translateLabel(),
+                ViewColumn::make('level')->translateLabel()
+                    ->view('filament.tables.columns.user-level'),
                 TextEntry::make("referer.name")->translateLabel(),
                 TextEntry::make("created_at")->translateLabel() //label("Created At"),
                 // TextEntry::make("recommands")->translateLabel()->counts('recommands'),

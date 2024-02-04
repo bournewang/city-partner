@@ -38,5 +38,11 @@
     "Sign in": "登录",
     "Increase": "增加",
     "Decrease": "减少",
+    "consumer": "消费商",
+    "station_manager": "服务站经理",
+    "center_director": "运营中心总监",
+    "county_manager": "县级子公司总经理",
+    "area_president": "地级子公司总裁",
+    "province_management": "省级巡视董事",
     "filament-panels::pages/dashboard.title": "仪表盘"
 }
