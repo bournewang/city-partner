@@ -44,5 +44,9 @@
     "county_manager": "县级子公司总经理",
     "area_president": "地级子公司总裁",
     "province_management": "省级巡视董事",
+    "Register Users Count": "注册消费者",
+    "Certified Users Count": "认证消费者",
+    "Challeng Users Count": "挑战者人数",
+    "Challeng Success Count": "挑战成功者人数",
     "filament-panels::pages/dashboard.title": "仪表盘"
 }
