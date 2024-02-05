@@ -56,7 +56,9 @@ class ChallengeResource extends Resource
                 //
                 TextColumn::make("user.name")->translateLabel()->searchable(),
                 TextColumn::make("index_no")->translateLabel()->searchable(),
-                TextColumn::make("level")->translateLabel()->searchable(),
+                // TextColumn::make("level")->translateLabel()->searchable(),
+                ViewColumn::make('level')->translateLabel()
+                    ->view('filament.tables.columns.user-level'),
                 TextColumn::make("success_at")->translateLabel()->searchable(),
                 // TextColumn::make("status")->translateLabel()->searchable(),
                 ViewColumn::make('status')->translateLabel()

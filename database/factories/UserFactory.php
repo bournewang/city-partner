@@ -24,6 +24,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $date = Carbon::today()->subDays(rand(0,30));
         return [
             'openid' => str_replace(' ', '', fake()->unique()->text(32)),
             'platform_openid' => str_replace(' ', '', fake()->unique()->text(32)),
@@ -33,10 +34,11 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'certified_at' => rand(0,1) ? $date->addDays(rand(0,3)) : null,
             'remember_token' => Str::random(10),
             'status' => rand(0,1),
             'level' => rand(1,5),
-            'created_at' => Carbon::today()->subDays(rand(0,30))
+            'created_at' => $date
             // 'referer_id' => User::pluck('id')->toArray()[rand(0,User::count()-1)]
         ];
     }

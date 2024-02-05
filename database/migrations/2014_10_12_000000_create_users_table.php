@@ -27,13 +27,14 @@ return new class extends Migration
             $table->decimal('balance', 10, 2)->nullable();
             $table->integer('level')->default(0);
 
-            $table->string('bank_key', 24)->nullable();
-            $table->string('bank_name', 32)->nullable();
-            $table->string('account_no', 32)->nullable();
+            // $table->string('bank_key', 24)->nullable();
+            // $table->string('bank_name', 32)->nullable();
+            // $table->string('account_no', 32)->nullable();
 
             $table->boolean('status')->default(1);
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('certified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('api_token', 80)->nullable();
             $table->rememberToken();

@@ -27,7 +27,7 @@ class OrderFactory extends Factory
         return [
             //
             'user_id' => $ids[rand(0,count($ids)-1)],
-            'order_no' => today()->toDateString().sprintf("%08s", rand(1,50)),
+            'order_no' => today()->toDateString().sprintf("%08s", rand(1,5000)),
             'amount' => [500,1000,3000][rand(0, 2)],
             'paid_at' => $paid_at,
             'status' => $status,

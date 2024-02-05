@@ -24,7 +24,7 @@ class ChallengeFactory extends Factory
             'index_no' => sprintf("%08s", rand(1,50)),
             'level' => rand(0, 5),
             'success_at' => now()->subDays(rand(0,7)),
-            'status' => Challenge::APPLYING,
+            'status' => array_keys(Challenge::statusOptions())[rand(0,3)],
             'created_at' => today()->subDays(rand(0,30))
         ];
     }
