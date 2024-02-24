@@ -70,7 +70,7 @@ class User extends Authenticatable implements FilamentUser
         return $this->belongsTo(User::class, 'referer_id');
     }
 
-    public function recommands()
+    public function recommends()
     {
         return $this->hasMany(User::class, 'referer_id');
     }
@@ -102,5 +102,25 @@ class User extends Authenticatable implements FilamentUser
     public function levelLabel()
     {
         return self::levelOptions()[$this->level];
+    }
+
+    public function root()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function relation()
+    {
+        return $this->hasOne(Relation::class);
+    }
+
+    public function info()
+    {
+        $data = $this->toArray();
+        $data['level_label'] = $this->levelLabel();
+        // $data['referer_id'] = $this->referer_id ?? 0;
+        $data['referer.name'] = $this->referer->name ?? $this->referer->nickname ?? $this->referer->mobile ?? null;
+        $data['qrcode'] = $this->qrcode ? url($this->qrcode) : null;
+        return $data;
     }
 }

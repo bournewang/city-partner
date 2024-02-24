@@ -54,7 +54,7 @@ class UserResource extends Resource
                 //
                 // TextColumn::make("openid")->translateLabel()->searchable(),
                 // TextColumn::make("platform_openid")->translateLabel()->searchable(),
-                TextColumn::make("name")->translateLabel()->searchable(),
+                // TextColumn::make("name")->translateLabel()->searchable(),
                 TextColumn::make("nickname")->translateLabel()->searchable(),
                 // TextColumn::make("email")->translateLabel()->searchable()
                 TextColumn::make("mobile")->translateLabel()->searchable(),
@@ -62,8 +62,8 @@ class UserResource extends Resource
                 // TextColumn::make("level")->translateLabel(),
                 ViewColumn::make('level')->translateLabel()
                     ->view('filament.tables.columns.user-level'),
-                TextColumn::make("referer.name")->translateLabel(),
-                TextColumn::make("recommands_count")->translateLabel()->counts('recommands'),
+                TextColumn::make("referer.nickname")->translateLabel(),
+                TextColumn::make("recommends_count")->translateLabel()->counts('recommends'),
                 TextColumn::make("created_at")->translateLabel() //label(__("Created At")),
             ])
             ->filters([
@@ -106,7 +106,7 @@ class UserResource extends Resource
                     ->view('filament.tables.columns.user-level'),
                 TextEntry::make("referer.name")->translateLabel(),
                 TextEntry::make("created_at")->translateLabel() //label("Created At"),
-                // TextEntry::make("recommands")->translateLabel()->counts('recommands'),
+                // TextEntry::make("recommends")->translateLabel()->counts('recommends'),
                 // Infolists\Components\TextEntry::make('name'),
                 // Infolists\Components\TextEntry::make('email'),
                 // Infolists\Components\TextEntry::make('notes')

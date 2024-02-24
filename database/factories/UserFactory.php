@@ -26,6 +26,7 @@ class UserFactory extends Factory
     {
         $date = Carbon::today()->subDays(rand(0,30));
         return [
+            // 'root_id' => rand(1,5),
             'openid' => str_replace(' ', '', fake()->unique()->text(32)),
             'platform_openid' => str_replace(' ', '', fake()->unique()->text(32)),
             'name' => fake()->name(),
@@ -37,7 +38,7 @@ class UserFactory extends Factory
             'certified_at' => rand(0,1) ? $date->addDays(rand(0,3)) : null,
             'remember_token' => Str::random(10),
             'status' => rand(0,1),
-            'level' => rand(1,5),
+            'level' => 0,//rand(1,5),
             'created_at' => $date
             // 'referer_id' => User::pluck('id')->toArray()[rand(0,User::count()-1)]
         ];

@@ -3,6 +3,7 @@ namespace App\Helpers;
 use App\Models\User;
 use App\Models\Challenge;
 use App\Wechat;
+use DB;
 
 class ChallengeHelper
 {
@@ -32,6 +33,33 @@ class ChallengeHelper
                 echo "success, make success\n";
                 self::makeSuccess($challenge);
         }
+    }
+
+    static public function range()
+    {
+        $str = cache1("challenge-range", function(){
+            $res = DB::table('challenges as c')
+                ->join("users as u", "u.id", "=", "c.user_id")
+                ->selectRaw("u.id, u.nickname, u.mobile, c.level, c.success_at")
+                ->where('c.status', '=', Challenge::SUCCESS)
+                ->orderByDesc("level")
+                ->orderBy("success_at")
+                ->limit(10)
+                ->get();
+                // ->toArray();
+            $data = [];
+            $i=1;
+            foreach ($res as $item) {
+                $data[]  =[
+                    'index' => $i++,
+                    'label' => ($item->nickname ?? $item->mobile) . User::levelOptions()[$item->level],
+                    'value' => $item->success_at
+                ];
+            }
+            return $data;
+            }, 3600 * 24);
+
+        return json_decode($str);
     }
 
 

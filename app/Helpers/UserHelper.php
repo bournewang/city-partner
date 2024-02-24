@@ -1,0 +1,80 @@
+<?php
+namespace App\Helpers;
+use App\Models\User;
+use App\Wechat;
+use Carbon\Carbon;
+use DB;
+
+class UserHelper{
+
+    // should be call while confirm user's challenge
+    static public function createQrCode(User $user)
+    {
+        $url  ="user/{$user->id}.jpg";
+        $path = \Storage::disk('public')->path($url);
+        if (!file_exists(dirname($path))){
+            // \Log::debug("dir not exists $path, create");
+            mkdir(dirname($path));
+        }
+        // \Log::debug("url: $url, save qrcode to path: $path");
+        try{
+            $app = Wechat::app();
+            $response = $app->getClient()->postJson('/wxa/getwxacodeunlimit', [
+                'scene' => "referer_id={$user->id}",
+                'page' => 'pages/index/page',
+                'width' => 430,
+                'check_path' => false,
+            ]);
+            $response->saveAs($path);
+
+            // $qrcodeUrl = url("storage/$url");
+            $user->update(["qrcode" => "storage/$url"]);
+        } catch (\Throwable $e) {
+            // 失败
+            \Log::debug($e->getMessage());
+            // return $this->sendError("获取二维码失败: ".$e->getMessage());
+        }
+    }
+
+    static public function totalTeamMembers($user)
+    {
+        return DB::table('relations')->where('path', 'like', "%,{$user->id},%")->count();
+    }
+
+    static public function teamOverview($user)
+    {
+        $str = cache1("user.{$user->id}.team-overview", function()use($user){
+            $team = DB::table('relations')->where('path', 'like', "%,$user->id,%");
+            // $yesterday_members = User::whereIn('id', $team->pluck('user_id'))->whereBetween("created_at", [Carbon::today()->subDay(1), Carbon::today()])->count();
+            $team_members = $team->count();
+            $direct_members = $user->recommends->count();
+            // $yesterday_income = $user->balanceLogs()->whereBetween("created_at", [Carbon::today()->subDay(1), Carbon::today()])->where('type', BalanceLog::DEPOSIT)->sum('amount');
+            // $today_income = $user->balanceLogs()->where("created_at", ">", Carbon::today())->where('type', BalanceLog::DEPOSIT)->sum('amount');
+            // $total_income = $user->balanceLogs()->where('type', BalanceLog::DEPOSIT)->sum('amount');
+            return [
+                ['label' => __("Team Members"),     "value" => $team_members],
+                ["label" => __("Direct Members"),   'value' => $direct_members],
+                // ["label" => __("Yesterday Members"),'value' => $yesterday_members],
+                // ["label" => __("Yesterday Income"), 'value' => money($yesterday_income)],
+                // ["label" => __("Today Income"),     'value' => money($today_income)],
+                // ["label" => __("Total Income"),     'value' => money($total_income)],
+            ];
+        }, 3600);
+        return json_decode($str);
+    }
+
+    static public function teamDetail($user)
+    {
+        $str = cache1("user.{$user->id}.team-detail", function()use($user){
+            $data = [];
+            foreach ($user->recommends as $member) {
+                $data[] = [
+                    "head" => ["img" => $member->avatar, "label" => $member->nickname ?? $member->mobile, "desc" => User::levelOptions()[$member->level]],
+                    "data" => $member->challenge ? self::teamOverview($member) : null
+                ];
+            }
+            return $data;
+        }, 3600 * 12);
+        return json_decode($str);
+    }
+}
