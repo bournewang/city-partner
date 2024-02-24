@@ -9,7 +9,7 @@ use App\Models\User;
 
 class LineUsersChart extends ChartWidget
 {
-    protected static ?string $heading = 'Chart';
+    protected static ?string $heading = "用户";
     public ?string $filter = 'week';
 
     protected function getData(): array
@@ -18,13 +18,13 @@ class LineUsersChart extends ChartWidget
         $subDays = 7;
         if ($activeFilter == 'month'){
             $subDays = 30;
-        } elseif ($activeFilter == 'year'){
-            $subDays = 365;
+        } elseif ($activeFilter == 'season'){
+            $subDays = 91;
         }
         $data = Trend::model(User::class)
             ->between(
                 start: today()->subDays($subDays),
-                end: today()->endOfDay(),
+                end: today()->subDay(1)->endOfDay(),
             )
             ->perDay()
             ->count();
@@ -33,7 +33,7 @@ class LineUsersChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Users',
+                    'label' => __('User'),
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
@@ -47,7 +47,7 @@ class LineUsersChart extends ChartWidget
             // 'today' => 'Today',
             'week' => __('Last week'),
             'month' => __('Last month'),
-            'year' => __('Last year'),
+            'season' => __('Last season'),
         ];
     }
 

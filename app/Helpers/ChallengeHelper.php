@@ -8,7 +8,7 @@ class ChallengeHelper
 {
     static public function makeSuccess($challenge)
     {
-        $challenge->update(['status' => Challenge::SUCCESS]);
+        $challenge->update(['status' => Challenge::SUCCESS, 'success_at' => now()]);
 
         // update user's level
         $challenge->user->update(['level' => $challenge->level]);
