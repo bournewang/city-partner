@@ -10,10 +10,5 @@ class EditChallenge extends EditRecord
 {
     protected static string $resource = ChallengeResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
+
 }

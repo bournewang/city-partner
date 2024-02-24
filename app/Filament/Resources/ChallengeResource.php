@@ -39,7 +39,10 @@ class ChallengeResource extends Resource
                     ->options(User::all()->pluck('name', 'id'))
                     ->searchable(),
                 TextInput::make('index_no')->translateLabel(),
-                TextInput::make('level')->translateLabel(),
+                // TextInput::make('level')->translateLabel(),
+                Select::make('level')
+                    ->translateLabel()
+                    ->options(User::levelOptions()),
                 TextInput::make('success_at')->translateLabel(),
                 // TextInput::make('status'),
                 Select::make('status')
@@ -54,7 +57,8 @@ class ChallengeResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make("user.name")->translateLabel()->searchable(),
+                TextColumn::make("id")->translateLabel()->searchable(),
+                TextColumn::make("user.mobile")->translateLabel()->searchable(),
                 TextColumn::make("index_no")->translateLabel()->searchable(),
                 // TextColumn::make("level")->translateLabel()->searchable(),
                 ViewColumn::make('level')->translateLabel()
@@ -64,6 +68,7 @@ class ChallengeResource extends Resource
                 ViewColumn::make('status')->translateLabel()
                     ->view('filament.tables.columns.challenge-status'),
             ])
+            ->defaultSort("id", "desc")
             ->filters([
                 Filter::make('created_at')
                     ->form([
@@ -77,7 +82,7 @@ class ChallengeResource extends Resource
                     })
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()->translateLabel(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -97,8 +102,9 @@ class ChallengeResource extends Resource
     {
         return [
             'index' => Pages\ListChallenges::route('/'),
-            'create' => Pages\CreateChallenge::route('/create'),
-            'edit' => Pages\EditChallenge::route('/{record}/edit'),
+            // 'create' => Pages\CreateChallenge::route('/create'),
+            // 'edit' => Pages\EditChallenge::route('/{record}/edit'),
+            'view' => Pages\ViewChallenge::route('/{record}'),
         ];
     }
 }

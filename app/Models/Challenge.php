@@ -38,4 +38,20 @@ class Challenge extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function info()
+    {
+        $userInfo = $this->user->info();
+        return [
+            "referer.name" => $userInfo['referer.name'],
+            "current_level" => $userInfo['level'],
+            "current_level_label" => $userInfo['level_label'],
+            "qrcode" => $userInfo['qrcode'],
+            "level" => $this->level,
+            "level_label" => User::levelOptions()[$this->level],
+            "success_at" => $this->success_at,
+            "status" => $this->status,
+            "status_label" => self::statusOptions()[$this->status]
+        ];
+    }
 }
