@@ -52,7 +52,7 @@ class UserController extends ApiBaseController
         $this->user->update($request->all());
         \Log::debug("user ".$this->user->id." update ");
         \Log::debug($request->all());
-        return $this->sendResponse([]);
+        return $this->sendResponse($this->user->info());
     }
 
     // start challenge

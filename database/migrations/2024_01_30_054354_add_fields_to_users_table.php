@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('openid', 64)->nullable()->unique();
             $table->string('platform_openid', 64)->nullable()->unique();
             $table->string('nickname', 32)->nullable();
+            $table->string('avatar')->nullable();
             $table->string('mobile', 24)->nullable()->unique();
             $table->string('qrcode', 64)->nullable();
             $table->string('id_no', 24)->nullable();

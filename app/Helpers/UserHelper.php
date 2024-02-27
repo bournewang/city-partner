@@ -48,12 +48,14 @@ class UserHelper{
             // $yesterday_members = User::whereIn('id', $team->pluck('user_id'))->whereBetween("created_at", [Carbon::today()->subDay(1), Carbon::today()])->count();
             $team_members = $team->count();
             $direct_members = $user->recommends->count();
+            $certified_members = $user->recommends()->whereNotNull("certified_at")->count();
             // $yesterday_income = $user->balanceLogs()->whereBetween("created_at", [Carbon::today()->subDay(1), Carbon::today()])->where('type', BalanceLog::DEPOSIT)->sum('amount');
             // $today_income = $user->balanceLogs()->where("created_at", ">", Carbon::today())->where('type', BalanceLog::DEPOSIT)->sum('amount');
             // $total_income = $user->balanceLogs()->where('type', BalanceLog::DEPOSIT)->sum('amount');
             return [
                 ['label' => __("Team Members"),     "value" => $team_members],
                 ["label" => __("Direct Members"),   'value' => $direct_members],
+                ["label" => __("Direct Certified Members"), "value" => $certified_members]
                 // ["label" => __("Yesterday Members"),'value' => $yesterday_members],
                 // ["label" => __("Yesterday Income"), 'value' => money($yesterday_income)],
                 // ["label" => __("Today Income"),     'value' => money($today_income)],
