@@ -20,7 +20,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\User;
 
-class OrderResource extends Resource
+// hide order temporarily
+// class OrderResource extends Resource
+class OrderResource
 {
     protected static ?string $model = Order::class;
     protected static ?string $label = "订单";

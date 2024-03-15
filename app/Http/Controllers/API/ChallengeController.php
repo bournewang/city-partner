@@ -25,10 +25,10 @@ class ChallengeController extends ApiBaseController
     public function stats()
     {
         return $this->sendResponse([
-            ['label' => __('Register Users Count'), 'value' => User::count()],
-            ['label' => __('Certified Users Count'), 'value' => User::whereNotNull('certified_at')->count()],
-            ['label' => __('Challeng Users Count'), 'value' => Challenge::where('status', Challenge::CHALLENGING)->count()],
-            ['label' => __('Challeng Success Count'), 'value' => Challenge::where('status', Challenge::SUCCESS)->count()]
+            ['label' => __('Register Consumers'),   'value' => User::count()],
+            ['label' => __('Partner Consumers'),    'value' => User::whereNotNull('certified_at')->count()],
+            ['label' => __('Challengers'),          'value' => Challenge::where('status', Challenge::CHALLENGING)->count()],
+            ['label' => __('Successed Challengers'),'value' => Challenge::where('status', Challenge::SUCCESS)->count()]
         ]);
     }
 
