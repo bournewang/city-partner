@@ -121,6 +121,7 @@ class User extends Authenticatable implements FilamentUser
         // $data['referer_id'] = $this->referer_id ?? 0;
         $data['referer.name'] = $this->referer->name ?? $this->referer->nickname ?? $this->referer->mobile ?? null;
         $data['qrcode'] = $this->qrcode ? url($this->qrcode) : null;
+        $data['display_name'] = $this->displayName();
         return $data;
     }
 
