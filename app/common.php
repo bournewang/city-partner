@@ -1,6 +1,10 @@
 <?php
 // use Cache;
 use Carbon\Carbon;
+function ___($str) {
+    return __(ucwords(str_replace('_', ' ', $str)));
+}
+
 function cache1($key, $callback, $expires = null)
 {
     // \Log::debug(__FUNCTION__);

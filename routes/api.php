@@ -30,8 +30,10 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user/team-detail', [UserController::class, "teamDetail"]);
 });
 Route::get('/challenge/levels',     [ChallengeController::class, "levels"]);
+Route::get('/challenge/types',      [ChallengeController::class, "types"]);
 Route::get('/challenge/stats',      [ChallengeController::class, "stats"]);
 Route::get('/challenge/success',    [ChallengeController::class, "success"]);
+Route::get('/challenge/activity',   [ChallengeController::class, "activity"]);
 Route::get('/challenge/range',      [ChallengeController::class, "range"]);
 Route::post('/wxapp/register',      [WechatController::class, 'register']);
 Route::post('/wxapp/login',         [WechatController::class, 'login']);

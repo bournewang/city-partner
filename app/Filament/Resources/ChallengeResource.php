@@ -38,8 +38,10 @@ class ChallengeResource extends Resource
                     ->translateLabel()
                     ->options(User::all()->pluck('name', 'id'))
                     ->searchable(),
-                TextInput::make('index_no')->translateLabel(),
+                // TextInput::make('index_no')->translateLabel(),
                 // TextInput::make('level')->translateLabel(),
+                Select::make('type')->translateLabel()
+                        ->options(Challenge::typeOptions()),
                 Select::make('level')
                     ->translateLabel()
                     ->options(User::levelOptions()),
@@ -59,10 +61,12 @@ class ChallengeResource extends Resource
                 //
                 TextColumn::make("id")->translateLabel()->searchable(),
                 TextColumn::make("user.mobile")->translateLabel()->searchable(),
-                TextColumn::make("index_no")->translateLabel()->searchable(),
+                // TextColumn::make("index_no")->translateLabel()->searchable(),
                 // TextColumn::make("level")->translateLabel()->searchable(),
                 ViewColumn::make('level')->translateLabel()
                     ->view('filament.tables.columns.user-level'),
+                ViewColumn::make('type')->translateLabel()
+                        ->view('filament.tables.columns.challenge-type'),
                 TextColumn::make("success_at")->translateLabel()->searchable(),
                 // TextColumn::make("status")->translateLabel()->searchable(),
                 ViewColumn::make('status')->translateLabel()

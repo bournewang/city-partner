@@ -52,7 +52,7 @@ class WechatController extends ApiBaseController
                     // 'store_id'  => $store_id,
                     'openid'    => $openid,
                     // 'mobile'    => $phone_number,
-                    'name'      => " ",
+                    // 'name'      => null,
                     'email'     => $openid."@wechat.com",
                     'password'  => bcrypt($openid),
                     'referer_id'=> $request->input('referer_id'),

@@ -12,6 +12,7 @@ class Challenge extends Model
     protected $fillable = [
         'user_id',
         'index_no',
+        'type',
         'level',
         'success_at',
         'status',
@@ -20,6 +21,18 @@ class Challenge extends Model
     protected $casts = [
     ];
 
+    const TYPE_CONSUMER     = 'consumer';
+    const TYPE_CAR_MANAGER  = 'car_manager';
+    const TYPE_CAR_OWNER    = 'car_owner';
+
+    static public function typeOptions()
+    {
+        return [
+            self::TYPE_CONSUMER     => ___(self::TYPE_CONSUMER),
+            self::TYPE_CAR_MANAGER  => ___(self::TYPE_CAR_MANAGER),
+            self::TYPE_CAR_OWNER    => ___(self::TYPE_CAR_OWNER),
+        ];
+    }
     const APPLYING = 'applying';
     const CHALLENGING = 'challenging';
     const SUCCESS = 'success';
@@ -28,7 +41,7 @@ class Challenge extends Model
     static public function statusOptions()
     {
         return [
-            self::APPLYING      => __(ucfirst(self::APPLYING)),
+            self::APPLYING      => __("Challenge").__(ucfirst(self::APPLYING)),
             self::CHALLENGING   => __(ucfirst(self::CHALLENGING)),
             self::SUCCESS       => __("Challenge Success"),
             self::CANCELED      => __(ucfirst(self::CANCELED)),
@@ -43,6 +56,7 @@ class Challenge extends Model
     {
         $userInfo = $this->user->info();
         return [
+            "id" => $this->id,
             "referer.name" => $userInfo['referer.name'],
             "current_level" => $userInfo['level'],
             "current_level_label" => $userInfo['level_label'],

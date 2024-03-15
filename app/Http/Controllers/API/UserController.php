@@ -57,13 +57,14 @@ class UserController extends ApiBaseController
 
     // start challenge
     // post
-    public function startChallenge()
+    public function startChallenge(Request $request)
     {
         // $challenge = null;
         if (!$challenge = $this->user->challenge) {
             $challenge = Challenge::create([
                 'user_id' => $this->user->id,
                 // 'index_no',
+                'type' => $request->input('type', null),
                 'level' => $this->user->level,
                 'success_at' => null,
                 'status' => Challenge::APPLYING,

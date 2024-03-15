@@ -123,4 +123,9 @@ class User extends Authenticatable implements FilamentUser
         $data['qrcode'] = $this->qrcode ? url($this->qrcode) : null;
         return $data;
     }
+
+    public function displayName()
+    {
+        return $this->name ?? $this->nickname ?? $this->mobile ?? '-';
+    }
 }

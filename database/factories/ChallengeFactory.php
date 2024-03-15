@@ -18,11 +18,13 @@ class ChallengeFactory extends Factory
     public function definition(): array
     {
         // $ids = User::pluck('id')->toArray();
+        $types = array_keys(Challenge::typeOptions());
         return [
             //
             // 'user_id' => $ids[rand(0,count($ids)-1)],
             'index_no' => sprintf("%08s", rand(1,50)),
             'level' => rand(0, 4) ? 1 : 2,
+            'type' => $types[rand(0, count($types)-1)],
             'success_at' => null, //now()->subDays(rand(0,7)),
             'status' => rand(0,5) ? Challenge::CHALLENGING : Challenge::APPLYING,// array_keys(Challenge::statusOptions())[rand(0,1)],
             'created_at' => today()->subDays(rand(0,30))

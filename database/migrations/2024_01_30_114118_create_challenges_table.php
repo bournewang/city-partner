@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->string('index_no')->nullable();
+            $table->enum('type', array_keys(Challenge::typeOptions()));
             $table->tinyInteger('level')->default(0);
             $table->datetime('success_at')->nullable();
             $table->enum("status", array_keys(Challenge::statusOptions()))->default(Challenge::APPLYING);

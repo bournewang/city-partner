@@ -10,6 +10,22 @@ use Log;
 
 class ChallengeController extends ApiBaseController
 {
+    public function activity()
+    {
+        $list = Challenge::orderBy('id', 'desc')->limit(20)->get();
+        $statusOptions = Challenge::statusOptions();
+        $data = [];
+        foreach ($list as $item){
+            // $data[] = "$item->success_at ".$item->user->name ."挑战".$item->user->levelLabel()."成功！";
+            $data[] = [
+                "updated_at" => $item->updated_at ? $item->updated_at->toDateTimeString() : null,
+                "content" => $item->user->displayName() . $statusOptions[$item->status]."!",
+                "avatar" => $item->user->avatar
+            ];
+        }
+
+        return $this->sendResponse($data);
+    }
     public function success(Request $request)
     {
         $list = Challenge::whereNotNull('success_at')->orderBy('success_at', 'desc')->limit(20)->get();
@@ -35,6 +51,11 @@ class ChallengeController extends ApiBaseController
     public function levels()
     {
         return $this->sendResponse(config('challenge'));
+    }
+
+    public function types()
+    {
+        return $this->sendResponse(Challenge::typeOptions());
     }
 
     /**
