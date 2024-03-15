@@ -127,6 +127,6 @@ class User extends Authenticatable implements FilamentUser
 
     public function displayName()
     {
-        return $this->name ?? $this->nickname ?? $this->mobile ?? '-';
+        return $this->name ?? $this->nickname ?? $this->mobile ?? __("User").$this->id;
     }
 }
