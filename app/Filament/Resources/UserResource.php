@@ -52,9 +52,9 @@ class UserResource extends Resource
         return $table
             ->columns([
                 //
-                // TextColumn::make("openid")->translateLabel()->searchable(),
+                TextColumn::make("id")->translateLabel()->searchable(),
                 // TextColumn::make("platform_openid")->translateLabel()->searchable(),
-                // TextColumn::make("name")->translateLabel()->searchable(),
+                TextColumn::make("name")->translateLabel()->searchable(),
                 TextColumn::make("nickname")->translateLabel()->searchable(),
                 // TextColumn::make("email")->translateLabel()->searchable()
                 TextColumn::make("mobile")->translateLabel()->searchable(),
@@ -66,6 +66,7 @@ class UserResource extends Resource
                 TextColumn::make("recommends_count")->translateLabel()->counts('recommends'),
                 TextColumn::make("created_at")->translateLabel() //label(__("Created At")),
             ])
+            ->defaultSort("id", "desc")
             ->filters([
                 //
                 Filter::make('created_at')
