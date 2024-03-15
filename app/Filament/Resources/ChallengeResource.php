@@ -16,10 +16,14 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Contracts\View\View;
 
 class ChallengeResource extends Resource
 {
@@ -36,7 +40,7 @@ class ChallengeResource extends Resource
                 // TextInput::make('name'),
                 Select::make('user_id')
                     ->translateLabel()
-                    ->options(User::all()->pluck('name', 'id'))
+                    // ->options(User::all()->pluck('name', 'id'))
                     ->searchable(),
                 // TextInput::make('index_no')->translateLabel(),
                 // TextInput::make('level')->translateLabel(),
@@ -54,13 +58,40 @@ class ChallengeResource extends Resource
             ]);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                TextEntry::make("user_id")->label('User')->translateLabel()
+                    ->formatStateUsing(fn (string $state): View => view(
+                        'filament.infolists.components.user-displayname',
+                        ['state' => $state],
+                    )),
+                TextEntry::make("type")->translateLabel()
+                    ->formatStateUsing(fn (string $state): View => view(
+                        'filament.infolists.components.challenge-type',
+                        ['state' => $state],
+                    )),
+                TextEntry::make("level")->translateLabel(),
+                TextEntry::make("success_at")->translateLabel(),
+                // TextEntry::make("status")->translateLabel(),
+                TextEntry::make("status")->translateLabel()
+                    ->formatStateUsing(fn (string $state): View => view(
+                        'filament.infolists.components.challenge-status',
+                        ['state' => $state],
+                    )),
+            ]);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 //
                 TextColumn::make("id")->translateLabel()->searchable(),
-                TextColumn::make("user.mobile")->translateLabel()->searchable(),
+                // TextColumn::make("user.mobile")->translateLabel()->searchable(),
+                TextColumn::make("user_id")->label('User')->translateLabel()
+                    ->view('filament.tables.columns.user-displayname'),
                 // TextColumn::make("index_no")->translateLabel()->searchable(),
                 // TextColumn::make("level")->translateLabel()->searchable(),
                 ViewColumn::make('level')->translateLabel()
