@@ -55,7 +55,7 @@ class UserHelper{
             return [
                 ['label' => __("Team Members"),     "value" => $team_members],
                 ["label" => __("Direct Members"),   'value' => $direct_members],
-                ["label" => __("Direct Certified Members"), "value" => $certified_members]
+                // ["label" => __("Direct Certified Members"), "value" => $certified_members]
                 // ["label" => __("Yesterday Members"),'value' => $yesterday_members],
                 // ["label" => __("Yesterday Income"), 'value' => money($yesterday_income)],
                 // ["label" => __("Today Income"),     'value' => money($today_income)],

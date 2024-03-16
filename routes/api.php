@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ChallengeController;
 use App\Http\Controllers\API\WechatController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\ImageController;
+use App\Http\Controllers\API\CarManagerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/challenge',  [UserController::class, "startChallenge"]);
     Route::get('/user/team-overview',[UserController::class, "teamOverview"]);
     Route::get('/user/team-detail', [UserController::class, "teamDetail"]);
+    Route::post('/user/id-card',    [UserController::class, "idCard"]);
+
+    // Route::post('/image/upload',    [ImageController::class, "store"]);
 });
 Route::get('/challenge/levels',     [ChallengeController::class, "levels"]);
 Route::get('/challenge/types',      [ChallengeController::class, "types"]);
@@ -37,3 +42,8 @@ Route::get('/challenge/activity',   [ChallengeController::class, "activity"]);
 Route::get('/challenge/range',      [ChallengeController::class, "range"]);
 Route::post('/wxapp/register',      [WechatController::class, 'register']);
 Route::post('/wxapp/login',         [WechatController::class, 'login']);
+
+// car manager
+Route::get('/car-manager/funding-stats', [CarManagerController::class, 'fundingStas']);
+
+// car owner

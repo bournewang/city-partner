@@ -84,6 +84,18 @@ class UserController extends ApiBaseController
         return $this->sendResponse(null);
     }
 
+    public function idCard(Request $request)
+    {
+        $collection = $request->input('collection', 'default');
+        foreach($this->user->getMedia($collection) as $media) {
+            $media->delete();
+        }
+        $this->user
+            ->addMedia($request->file('img'))
+            ->toMediaCollection($collection);
+
+         return $this->sendResponse(true);
+    }
     /**
      * 获取用户二维码
      *
