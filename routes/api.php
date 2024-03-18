@@ -7,6 +7,7 @@ use App\Http\Controllers\API\WechatController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ImageController;
 use App\Http\Controllers\API\CarManagerController;
+use App\Http\Controllers\API\PublicController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,18 +29,20 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/info',       [UserController::class, "profile"]);
     Route::get('/user/challenge',   [UserController::class, "challenge"]);
     Route::post('/user/challenge',  [UserController::class, "startChallenge"]);
+    Route::get('/user/crowdFunding',[UserController::class, "crowdFunding"]);
     Route::get('/user/team-overview',[UserController::class, "teamOverview"]);
     Route::get('/user/team-detail', [UserController::class, "teamDetail"]);
-    Route::post('/user/id-card',    [UserController::class, "idCard"]);
-
+    Route::post('/user/images',     [UserController::class, "images"]);
+    Route::post('/user/apply',      [UserController::class, "apply"]);
     // Route::post('/image/upload',    [ImageController::class, "store"]);
 });
 Route::get('/challenge/levels',     [ChallengeController::class, "levels"]);
 Route::get('/challenge/types',      [ChallengeController::class, "types"]);
 Route::get('/challenge/stats',      [ChallengeController::class, "stats"]);
 Route::get('/challenge/success',    [ChallengeController::class, "success"]);
-Route::get('/challenge/activity',   [ChallengeController::class, "activity"]);
+// Route::get('/challenge/activity',   [ChallengeController::class, "activity"]);
 Route::get('/challenge/range',      [ChallengeController::class, "range"]);
+Route::get('/public/area',          [PublicController::class, "areaData"]);
 Route::post('/wxapp/register',      [WechatController::class, 'register']);
 Route::post('/wxapp/login',         [WechatController::class, 'login']);
 

@@ -24,6 +24,14 @@ return new class extends Migration
             $table->string('qrcode', 64)->nullable();
             $table->string('id_no', 24)->nullable();
             $table->decimal('balance', 10, 2)->nullable();
+
+            $table->string("province_code")->nullable();
+            $table->string("province_name")->nullable();
+            $table->string("city_code")->nullable();
+            $table->string("city_name")->nullable();
+            $table->string("county_code")->nullable();
+            $table->string("county_name")->nullable();
+            $table->string("street")->nullable();
             // $table->decimal('quota', 10, 2)->nullable();
             $table->integer('level')->default(0);
 

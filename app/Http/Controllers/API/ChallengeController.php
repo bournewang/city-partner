@@ -10,22 +10,6 @@ use Log;
 
 class ChallengeController extends ApiBaseController
 {
-    public function activity()
-    {
-        $list = Challenge::orderBy('id', 'desc')->limit(20)->get();
-        $statusOptions = Challenge::statusOptions();
-        $data = [];
-        foreach ($list as $item){
-            // $data[] = "$item->success_at ".$item->user->name ."挑战".$item->user->levelLabel()."成功！";
-            $data[] = [
-                "updated_at" => $item->updated_at ? $item->updated_at->toDateTimeString() : null,
-                "content" => $item->user->displayName() . $statusOptions[$item->status]."!",
-                "avatar" => $item->user->avatar
-            ];
-        }
-
-        return $this->sendResponse($data);
-    }
     public function success(Request $request)
     {
         $list = Challenge::whereNotNull('success_at')->orderBy('success_at', 'desc')->limit(20)->get();
@@ -38,14 +22,30 @@ class ChallengeController extends ApiBaseController
         return $this->sendResponse($data);
     }
 
-    public function stats()
+    public function stats(Request $request)
     {
-        return $this->sendResponse([
-            ['label' => __('Register Consumers'),   'value' => User::count()],
-            ['label' => __('Partner Consumers'),    'value' => User::whereNotNull('certified_at')->count()],
-            ['label' => __('Challengers'),          'value' => Challenge::where('status', Challenge::CHALLENGING)->count()],
-            ['label' => __('Successed Challengers'),'value' => Challenge::where('status', Challenge::SUCCESS)->count()]
-        ]);
+        $data = [
+            'stats' => [
+                ['label' => __('Register Consumers'),   'value' => User::count()],
+                ['label' => __('Partner Consumers'),    'value' => User::whereNotNull('certified_at')->count()],
+                ['label' => __('Challengers'),          'value' => Challenge::where('status', Challenge::CHALLENGING)->count()],
+                ['label' => __('Successed Challengers'),'value' => Challenge::where('status', Challenge::SUCCESS)->count()]
+        ]];
+        if ($request->input('activity', false)) {
+            $list = Challenge::orderBy('id', 'desc')->limit(20)->get();
+            $statusOptions = Challenge::statusOptions();
+            $activity = [];
+            foreach ($list as $item){
+                // $data[] = "$item->success_at ".$item->user->name ."挑战".$item->user->levelLabel()."成功！";
+                $activity[] = [
+                    "updated_at" => $item->updated_at ? $item->updated_at->toDateTimeString() : null,
+                    "content" => $item->user->displayName() . $statusOptions[$item->status]."!",
+                    "avatar" => $item->user->avatar
+                ];
+            }
+            $data['activity'] =$activity;
+        }
+        return $this->sendResponse($data);
     }
 
     public function levels()

@@ -5,48 +5,26 @@ use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Challenge;
+use App\Models\CrowdFunding;
 use App\Helpers\UserHelper;
 use App\Wechat;
 
 class UserController extends ApiBaseController
 {
-    /**
-     * 获取用户信息
-     *
-     * @OA\Get(
-     *  path="/api/user/info",
-     *  tags={"User"},
-     *  @OA\Response(response=200,description="successful operation"),
-     *  security={{ "api_key":{} }}
-     * )
-     */
-    public function info()
+    public function info(Request $request)
     {
-        return $this->sendResponse($this->user->info());
+        $data = $this->user->info();
+        if ($request->input('include_images', false)) {
+            foreach($this->user->getMedia('*') as $media) {
+                $data[$media->collection_name] = [
+                    'preview' => $media->getUrl('preview'),
+                    'original' => $media->getUrl()
+                ];
+            }
+        }
+        return $this->sendResponse($data);
     }
 
-    /**
-     * 修改用户信息
-     *
-     * @OA\Post(
-     *  path="/api/user/info",
-     *  tags={"User"},
-     *   @OA\RequestBody(
-     *       required=false,
-     *       @OA\MediaType(
-     *           mediaType="application/x-www-form-urlencoded",
-     *           @OA\Schema(
-     *               type="object",
-     *               @OA\Property(property="nickname",description="nickname",type="string"),
-     *               @OA\Property(property="avarar",description="avarar",type="url"),
-     *               @OA\Property(property="gender",description="1:male, 2:female",type="integer"),
-     *           )
-     *       )
-     *   ),
-     *  @OA\Response(response=200,description="successful operation"),
-     *  security={{ "api_key":{} }}
-     * )
-     */
     public function profile(Request $request)
     {
         $this->user->update($request->all());
@@ -84,7 +62,15 @@ class UserController extends ApiBaseController
         return $this->sendResponse(null);
     }
 
-    public function idCard(Request $request)
+    public function crowdFunding()
+    {
+        if ($crowdFunding = $this->user->crowdFunding) {
+            return $this->sendResponse($crowdFunding->info());
+        }
+        return $this->sendResponse(null);
+    }
+
+    public function images(Request $request)
     {
         $collection = $request->input('collection', 'default');
         foreach($this->user->getMedia($collection) as $media) {
@@ -94,7 +80,51 @@ class UserController extends ApiBaseController
             ->addMedia($request->file('img'))
             ->toMediaCollection($collection);
 
+        if ($collection == "head-img") {
+            if ($media = $this->user->refresh()->getMedia($collection)->first()) {
+                \Log::debug("++++++ avatar exists!");
+                $this->user->update(['avatar' => $media->getUrl('preview')]);
+            }else{
+                \Log::debug("------ avatar not exists!");
+            }
+
+        }
+
          return $this->sendResponse(true);
+    }
+
+    public function apply(Request $request)
+    {
+        // update profile
+        $this->user->update($request->all());
+
+        // apply challenge or CrowdFunding
+        if ($request->input('apply_type') == 'challenge'){
+            // $challenge = null;
+            if (!$challenge = $this->user->challenge) {
+                $challenge = Challenge::create([
+                    'user_id' => $this->user->id,
+                    // 'index_no',
+                    // 'type' => $request->input('type', null),
+                    'level' => $this->user->level,
+                    'success_at' => null,
+                    'status' => Challenge::APPLYING,
+                ]);
+            }elseif($challenge->status == Challenge::SUCCESS){
+                $challenge->update(['status' => Challenge::CHALLENGING]);
+            }
+            return $this->sendResponse($challenge->info());
+        }else{
+            $crowdFunding = CrowdFunding::create([
+                'user_id' => $this->user->id,
+                'paid_deposit' => !!$this->user->getMedia('pay-receipt')->first(),
+                // 'success_at' => null,
+                // 'returned_at',
+                'status' => CrowdFunding::APPLYING,
+                // 'comment'
+            ]);
+            return $this->sendResponse($crowdFunding->info());
+        }
     }
     /**
      * 获取用户二维码

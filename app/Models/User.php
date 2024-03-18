@@ -49,6 +49,13 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         'certified_at',
         'status',
         'level',
+        "province_code",
+        "province_name",
+        "city_code",
+        "city_name",
+        "county_code",
+        "county_name",
+        "street"
     ];
 
     /**
@@ -92,6 +99,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         return $this->hasOne(Challenge::class);
     }
 
+    public function crowdFunding()
+    {
+        return $this->hasOne(CrowdFunding::class);
+    }
+
     const LEVEL_0 = "consumer";
     const LEVEL_1 = "station_manager";
     const LEVEL_2 = "center_director";
@@ -131,7 +143,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $data = $this->toArray();
         $data['level_label'] = $this->levelLabel();
         // $data['referer_id'] = $this->referer_id ?? 0;
-        $data['referer.name'] = $this->referer->name ?? $this->referer->nickname ?? $this->referer->mobile ?? null;
+        $data['referer_name'] = $this->referer->name ?? $this->referer->nickname ?? $this->referer->mobile ?? null;
         $data['qrcode'] = $this->qrcode ? url($this->qrcode) : null;
         $data['display_name'] = $this->displayName();
         return $data;

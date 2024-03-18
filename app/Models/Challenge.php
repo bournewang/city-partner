@@ -57,7 +57,7 @@ class Challenge extends Model
         $userInfo = $this->user->info();
         return [
             "id" => $this->id,
-            "referer.name" => $userInfo['referer.name'],
+            "referer_name" => $userInfo['referer_name'],
             "current_level" => $userInfo['level'],
             "current_level_label" => $userInfo['level_label'],
             "qrcode" => $userInfo['qrcode'],

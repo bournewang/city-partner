@@ -21,6 +21,9 @@ use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Contracts\View\View;
@@ -67,6 +70,8 @@ class ChallengeResource extends Resource
                         'filament.infolists.components.user-displayname',
                         ['state' => $state],
                     )),
+                SpatieMediaLibraryImageEntry::make('user.xx')->collection('id_card_front')->label('ID Front'),
+                SpatieMediaLibraryImageEntry::make('user.xx')->collection('id_card_end')->label('ID End'),
                 TextEntry::make("type")->translateLabel()
                     ->formatStateUsing(fn (string $state): View => view(
                         'filament.infolists.components.challenge-type',

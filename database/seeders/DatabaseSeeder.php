@@ -45,6 +45,9 @@ class DatabaseSeeder extends Seeder
         }
         foreach (User::all() as $user){
             \App\Models\Challenge::factory()->create(['user_id' => $user->id]);
+            if (rand(0,3) == 1){
+                \App\Models\CrowdFunding::factory()->create(['user_id' => $user->id]);
+            }
         }
         // User::factory()->create([
         //     'name' => 'Test User',
