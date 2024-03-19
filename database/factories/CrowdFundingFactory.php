@@ -38,7 +38,9 @@ class CrowdFundingFactory extends Factory
             //
             // 'user_id' => ,
             'paid_deposit'  => [0,1][rand(0,1)],
-            'success_at'    => $success_at,
+            'using_period'  => 90,
+            'start_at'      => $success_at,
+            'end_at'        => $success_at ? $success_at->addDays(90)->toDateString() : null,
             'returned_at'   => $returned_at,
             'status'        => $status,
             // 'comment'

@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('user_id')->unsigned();
             $table->boolean('paid_deposit')->default(false);
-            $table->datetime('success_at')->nullable();
-            $table->datetime('returned_at')->nullable();
+            $table->integer('using_period')->nullable();
+            $table->date('start_at')->nullable();
+            $table->date('end_at')->nullable();
+            $table->date('returned_at')->nullable();
             $table->enum("status", array_keys(CrowdFunding::statusOptions()))->default(CrowdFunding::APPLYING);
             $table->string('comment')->nullable();
             $table->timestamps();

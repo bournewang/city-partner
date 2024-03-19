@@ -55,7 +55,9 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         "city_name",
         "county_code",
         "county_name",
-        "street"
+        "street",
+        "challenge_id",
+        "crowd_funding_id"
     ];
 
     /**

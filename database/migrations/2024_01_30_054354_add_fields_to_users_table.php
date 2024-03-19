@@ -43,6 +43,8 @@ return new class extends Migration
             $table->timestamp('certified_at')->nullable();
             // $table->enum('status', array_keys(User::statusOptions()))->nullable();
             // $table->string('api_token', 80)->nullable();
+            $table->bigInteger('challenge_id')->unsigned()->nullable();
+            $table->bigInteger('crowd_funding_id')->unsigned()->nullable();
             $table->softDeletes();
 
             $table->foreign('referer_id')->references('id')->on('users');

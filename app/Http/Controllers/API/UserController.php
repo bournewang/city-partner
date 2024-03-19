@@ -27,13 +27,15 @@ class UserController extends ApiBaseController
 
     public function profile(Request $request)
     {
-        $this->user->update($request->all());
-        if ($this->user->name && $this->user->mobile && $this->user->level < 1) {
-            $this->user->update(['level' => User::REGISTER_CONSUMER]);
+        $input = $request->all();
+        $user = $this->user;
+        if (($input['name'] ?? $user->name) && ($input['mobile'] ?? $user->mobile) && $user->level < User::REGISTER_CONSUMER) {
+            \Log::debug("name & mobile exists & level < 1, update level to User::REGISTER_CONSUMER");
+            $input['level'] = User::REGISTER_CONSUMER;
         }
-        \Log::debug("user ".$this->user->id." update ");
-        \Log::debug($request->all());
-        return $this->sendResponse($this->user->info());
+        $user->update(array_filter($input));
+
+        return $this->sendResponse($user->refresh()->info());
     }
 
     // start challenge
@@ -99,10 +101,11 @@ class UserController extends ApiBaseController
     public function apply(Request $request)
     {
         // update profile
-        $this->user->update($request->all());
+        $input = $request->all();
 
         // apply challenge or CrowdFunding or consumer
         $apply_type = $request->input('apply_type');
+        $data = null;
         if ($apply_type == 'challenge'){
             // $challenge = null;
             if (!$challenge = $this->user->challenge) {
@@ -110,6 +113,7 @@ class UserController extends ApiBaseController
                     'user_id' => $this->user->id,
                     // 'index_no',
                     // 'type' => $request->input('type', null),
+                    'partner_role' => $input['partner_role'] ?? null,
                     'level' => $this->user->level,
                     'success_at' => null,
                     'status' => Challenge::APPLYING,
@@ -117,20 +121,30 @@ class UserController extends ApiBaseController
             }elseif($challenge->status == Challenge::SUCCESS){
                 $challenge->update(['status' => Challenge::CHALLENGING]);
             }
-            return $this->sendResponse($challenge->info());
+            $input['challenge_id'] = $challenge->id;
+            // $data = $challenge->info();
+            // return $this->sendResponse();
         }elseif ($apply_type == "funding"){
             $crowdFunding = CrowdFunding::create([
                 'user_id' => $this->user->id,
-                'paid_deposit' => !!$this->user->getMedia('pay-receipt')->first(),
+                'partner_role' => $input['partner_role'] ?? null,
+                'paid_deposit' => !!$this->user->getMedia('pay_receipt_funding')->first(),
                 // 'success_at' => null,
                 // 'returned_at',
                 'status' => CrowdFunding::APPLYING,
                 // 'comment'
             ]);
-            return $this->sendResponse($crowdFunding->info());
+            $input['crowd_funding_id'] = $crowdFunding->id;
+            // $data = $crowdFunding->info();
         }elseif ($apply_type == "consumer"){
-
+            if ($this->user->level < User::PARTNER_CONSUMER) {
+                $input['level'] = User::PARTNER_CONSUMER;
+            }
         }
+
+        $this->user->update($input);
+        $data = $this->user->refresh()->info();
+        return $this->sendResponse($data);
     }
 
     public function recommends()

@@ -12,7 +12,9 @@ class CrowdFunding extends Model
     protected $fillable = [
         'user_id',
         'paid_deposit',
-        'success_at',
+        'using_period',
+        'start_at',
+        'end_at',
         'returned_at',
         'status',
         'comment'
