@@ -1,7 +1,22 @@
 <?php
+use App\Models\User;
 return [
-    [
-        'level' => 1,
+    User::NONE_REGISTER => [
+        'level' => User::NONE_REGISTER,
+        'label' => "未注册用户" // user only have openid
+    ],
+    User::REGISTER_CONSUMER => [
+        'level' => User::REGISTER_CONSUMER,
+        'label' => "消费者",   // register consumer
+        'icon' => 'user',
+    ],
+    User::PARTNER_CONSUMER => [
+        'level' => User::PARTNER_CONSUMER,
+        'label' => "入伙消费者",   // partner Consumer
+        'icon' => 'user',
+    ],
+    User::CONSUMER_MERCHANT => [
+        'level' => User::CONSUMER_MERCHANT,
         'label' => "消费商",
         'icon' => 'user',
         'recommend_members' => 10,
@@ -15,9 +30,9 @@ return [
 ②　线下城市合伙人：消费商召集消费者合伙人终身享受的团购消费0.5%通路服务费。
 "
     ],
-    [
-        'level' => 2,
-        'label' => "服务站.经理",
+    User::COMMUNITY_STATION => [
+        'level' => User::COMMUNITY_STATION,
+        'label' => "社区服务站",
         'icon' => 'usergroup',
         'recommend_members' => 10,
         'total_team_members' => 100,
@@ -30,9 +45,9 @@ return [
 ①　线下城市合伙人：消费商召集消费者合伙人终身享受的团购消费0.5%通路服务费。
 "
     ],
-    [
-        'level' => 3,
-        'label' => "运营中心.总监",
+    User::RUN_CENTER_DIRECTOR => [
+        'level' => User::RUN_CENTER_DIRECTOR,
+        'label' => "商业运营中心",
         'icon' => 'user-avatar',
         'recommend_members' => 20,
         'total_team_members' => 1000,
@@ -48,9 +63,9 @@ return [
 ①　【总监2000位（每人500元，总计100万）】
 "
     ],
-    [
-        'level' => 4,
-        'label' => "县级子公司.总经理",
+    User::COUNTY_MANAGER => [
+        'level' => User::COUNTY_MANAGER,
+        'label' => "县级子公司",
         'icon' => 'user-list',
         'recommend_members' => 30,
         'total_team_members' => 10000,
@@ -68,9 +83,9 @@ return [
 <view class='red-text' style='color: red;'>③　总经理200位（每人5000元，总计100万）</view> <br/>
 "
     ],
-    [
-        'level' => 5,
-        'label' => "地级子公司.总裁",
+    User::AREA_PRESIDENT => [
+        'level' => User::AREA_PRESIDENT,
+        'label' => "地级子公司",
         'icon' => 'user-setting',
         'recommend_members' => 50,
         'total_team_members' => 100000,
@@ -88,9 +103,9 @@ return [
 ③　总经理200位（每人5000元，总计100万）</dir>
 "
     ],
-    [
-        'level' => 6,
-        'label' => "省级执行长.董事",
+    User::PROVINCE_CEO => [
+        'level' => User::PROVINCE_CEO,
+        'label' => "省级巡视长",
         'icon' => 'user-checked-1',
         'recommend_members' => 100,
         'total_team_members' => 1000000,

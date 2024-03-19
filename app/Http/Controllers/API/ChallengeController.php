@@ -50,7 +50,7 @@ class ChallengeController extends ApiBaseController
 
     public function levels()
     {
-        return $this->sendResponse(config('challenge'));
+        return $this->sendResponse(array_slice(config('challenge'), 3));
     }
 
     public function types()

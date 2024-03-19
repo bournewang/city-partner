@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/challenge',  [UserController::class, "startChallenge"]);
     Route::get('/user/crowdFunding',[UserController::class, "crowdFunding"]);
     Route::get('/user/team-overview',[UserController::class, "teamOverview"]);
+    Route::get('/user/recommends',  [UserController::class, "recommends"]);
     Route::get('/user/team-detail', [UserController::class, "teamDetail"]);
     Route::post('/user/images',     [UserController::class, "images"]);
     Route::post('/user/apply',      [UserController::class, "apply"]);
@@ -47,8 +48,8 @@ Route::post('/wxapp/register',      [WechatController::class, 'register']);
 Route::post('/wxapp/login',         [WechatController::class, 'login']);
 
 // car manager
-Route::get('/car-manager/funding-stats', [CarManagerController::class, 'fundingStas']);
-Route::get('/car-manager/funding-rules', [CarManagerController::class, 'fundingRules']);
+Route::get('/car-manager/funding-stats',    [CarManagerController::class, 'fundingStas']);
+Route::get('/car-manager/funding-config',   [CarManagerController::class, 'fundingConfig']);
 
 
 // car owner

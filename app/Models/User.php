@@ -104,23 +104,23 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         return $this->hasOne(CrowdFunding::class);
     }
 
-    const LEVEL_0 = "consumer";
-    const LEVEL_1 = "station_manager";
-    const LEVEL_2 = "center_director";
-    const LEVEL_3 = "county_manager";
-    const LEVEL_4 = "area_president";
-    const LEVEL_5 = "province_management";
+    const NONE_REGISTER     = 0; //"none_register";
+    const REGISTER_CONSUMER = 1; //"register_consumer";
+    const PARTNER_CONSUMER  = 2; //"partner_consumer";
+    const CONSUMER_MERCHANT = 11;
+    const COMMUNITY_STATION = 12;
+    const RUN_CENTER_DIRECTOR = 13;
+    const COUNTY_MANAGER    = 14;
+    const AREA_PRESIDENT    = 15;
+    const PROVINCE_CEO      = 16;
 
     static public function levelOptions()
     {
-        return [
-            __(self::LEVEL_0),
-            __(self::LEVEL_1),
-            __(self::LEVEL_2),
-            __(self::LEVEL_3),
-            __(self::LEVEL_4),
-            __(self::LEVEL_5),
-        ];
+        $options = [];
+        foreach (config('challenge') as $level => $data){
+            $options[$level] = $data['label'];
+        }
+        return $options;
     }
 
     public function levelLabel()
@@ -141,6 +141,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function info()
     {
         $data = $this->toArray();
+        $data['created_at'] = $this->created_at->toDateTimeString();
         $data['level_label'] = $this->levelLabel();
         // $data['referer_id'] = $this->referer_id ?? 0;
         $data['referer_name'] = $this->referer->name ?? $this->referer->nickname ?? $this->referer->mobile ?? null;

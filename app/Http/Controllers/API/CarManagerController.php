@@ -45,9 +45,9 @@ class CarManagerController extends ApiBaseController
         return $this->sendResponse($data);
     }
 
-    public function fundingRules()
+    public function fundingConfig()
     {
-        return $this->sendResponse(config("car-manager.funding.rules"));
+        return $this->sendResponse(config("car-manager.funding"));
     }
 
 }

@@ -1,7 +1,22 @@
 <?php
 
+use App\Models\CrowdFunding;
 return [
     'funding' => [
+        'prompt' => [
+                CrowdFunding::APPLYING  => "您的互助已提交，请您耐心等待审核通过。<br/>一般情况下，审核将在一个工作日内完成。",
+                CrowdFunding::WAITING   => "您的互助申请已经审批通过，已进入排队序列轮后，请及时关注互助进展。",
+                CrowdFunding::USING     => "您正在使用互助金，请您在到期日前归还。",
+                CrowdFunding::COMPLETED => "您的互助已完成，已归还互助金。<br/>感谢您的参与！",
+                CrowdFunding::CANCELED  => "您的互助已取消，详情请资讯客服。<br/>感谢您的参与！"
+        ],
+        'icon' => [
+                CrowdFunding::APPLYING  => "time",
+                CrowdFunding::WAITING   => "pending",
+                CrowdFunding::USING     => "vehicle",
+                CrowdFunding::COMPLETED => "fact-check",
+                CrowdFunding::CANCELED  => "close-rectangle"
+        ],
         'rules' => "
         <ol>
             <li>公享汽车互助社是由东家公享汽车车管家合伙人共同约定设立的，并为车管家众筹汽车使用费提供互助服务。</li>

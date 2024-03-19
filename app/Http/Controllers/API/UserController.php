@@ -28,6 +28,9 @@ class UserController extends ApiBaseController
     public function profile(Request $request)
     {
         $this->user->update($request->all());
+        if ($this->user->name && $this->user->mobile && $this->user->level < 1) {
+            $this->user->update(['level' => User::REGISTER_CONSUMER]);
+        }
         \Log::debug("user ".$this->user->id." update ");
         \Log::debug($request->all());
         return $this->sendResponse($this->user->info());
@@ -98,8 +101,9 @@ class UserController extends ApiBaseController
         // update profile
         $this->user->update($request->all());
 
-        // apply challenge or CrowdFunding
-        if ($request->input('apply_type') == 'challenge'){
+        // apply challenge or CrowdFunding or consumer
+        $apply_type = $request->input('apply_type');
+        if ($apply_type == 'challenge'){
             // $challenge = null;
             if (!$challenge = $this->user->challenge) {
                 $challenge = Challenge::create([
@@ -114,7 +118,7 @@ class UserController extends ApiBaseController
                 $challenge->update(['status' => Challenge::CHALLENGING]);
             }
             return $this->sendResponse($challenge->info());
-        }else{
+        }elseif ($apply_type == "funding"){
             $crowdFunding = CrowdFunding::create([
                 'user_id' => $this->user->id,
                 'paid_deposit' => !!$this->user->getMedia('pay-receipt')->first(),
@@ -124,18 +128,20 @@ class UserController extends ApiBaseController
                 // 'comment'
             ]);
             return $this->sendResponse($crowdFunding->info());
+        }elseif ($apply_type == "consumer"){
+
         }
     }
-    /**
-     * 获取用户二维码
-     *
-     * @OA\Get(
-     *  path="/api/user/qrcode",
-     *  tags={"User"},
-     *  @OA\Response(response=200,description="successful operation"),
-     *  security={{ "api_key":{} }}
-     * )
-     */
+
+    public function recommends()
+    {
+        $data = [];
+        foreach ($this->user->recommends as $user) {
+            $data[] = $user->info();
+        }
+        return $this->sendResponse($data);
+    }
+
     public function qrcode()
     {
         if ($this->user->qrcode){
