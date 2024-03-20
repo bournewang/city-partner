@@ -26,7 +26,7 @@ class PublicController extends ApiBaseController
                 ['label' => __('Challengers'),          'value' => Challenge::where('status', Challenge::CHALLENGING)->count()],
                 ['label' => __('Successed Challengers'),'value' => Challenge::where('status', Challenge::SUCCESS)->count()]
             ],
-            'challengeLevels' => array_slice(config('challenge'), 3),
+            'challengeLevels' => array_slice(config('challenge.levels'), 3),
             'fundingStats' => [
                 ['label' => __('Mutual Community People'),  'value' => User::count()],
                 ['label' => __('Mutual Funding People'),    'value' => User::whereNotNull('certified_at')->count()],

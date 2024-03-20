@@ -123,7 +123,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     static public function levelOptions()
     {
         $options = [];
-        foreach (config('challenge') as $level => $data){
+        foreach (config('challenge.levels') as $level => $data){
             $options[$level] = $data['label'];
         }
         return $options;

@@ -49,12 +49,15 @@ class UserController extends ApiBaseController
                 'user_id' => $this->user->id,
                 // 'index_no',
                 'type' => $request->input('type', null),
-                'level' => $this->user->level,
+                'level' => UserHelper::nextLevel($this->user),
                 'success_at' => null,
                 'status' => Challenge::APPLYING,
             ]);
         }elseif($challenge->status == Challenge::SUCCESS){
-            $challenge->update(['status' => Challenge::CHALLENGING]);
+            $challenge->update([
+                'status' => Challenge::CHALLENGING,
+                'level' => UserHelper::nextLevel($this->user)
+            ]);
         }
         return $this->sendResponse($challenge->info());
     }
@@ -114,7 +117,7 @@ class UserController extends ApiBaseController
                     // 'index_no',
                     // 'type' => $request->input('type', null),
                     'partner_role' => $input['partner_role'] ?? null,
-                    'level' => $this->user->level,
+                    'level' => User::CONSUMER_MERCHANT,
                     'success_at' => null,
                     'status' => Challenge::APPLYING,
                 ]);

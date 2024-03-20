@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('crowd_fundings', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
+            $table->string('partner_role')->nullable();
             $table->boolean('paid_deposit')->default(false);
             $table->integer('using_period')->nullable();
             $table->date('start_at')->nullable();

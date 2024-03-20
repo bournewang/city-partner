@@ -79,4 +79,16 @@ class UserHelper{
         }, 3600 * 12);
         return json_decode($str);
     }
+
+    static public function nextLevel($user)
+    {
+        $levels = array_keys(config("challenge.levels"));
+        $index = array_search($user->level, $levels);
+        if ($index === false){
+            return $level;
+        }
+        $index++;
+        $next = $index < count($levels) ? $index : (count($levels)-1);
+        return $levels[$next];
+    }
 }

@@ -19,10 +19,10 @@ class ChallengeHelper
     {
         echo __FUNCTION__." $challenge->id \n";
         // $challenge->user
-        if ($challenge->level > count(config("challenge"))) {
-            throw new \Exception("invalid level: {$challenge->level}");
-        }
-        $config = config("challenge")[$challenge->level - 1] ?? null;
+        // if ($challenge->level > count(config('challenge.levels'))) {
+        //     throw new \Exception("invalid level: {$challenge->level}");
+        // }
+        $config = config('challenge.levels')[$challenge->level] ?? null;
         if (!$config) {
         }
         // var_dump($config);
@@ -62,13 +62,33 @@ class ChallengeHelper
         return json_decode($str);
     }
 
+    static public function getRank(Challenge $challenge)
+    {
+        $res = Db::select("select count(id) as total from challenges where status ='challenging';");
+        $total = $res[0]->total;
 
-    // 'recommend_members' => 10,
-    // 'total_team_members' => 100,
-    // 'rules' => "	召集10个消费者合伙人，晋级为消费者服务商，简称：消费商。",
-    // 'rules' => "	消费者总人数达100人，且保持10个消费者，晋升为社区服务站经理。",
-    // 'rules' => "	消费者总人数达1000+1人，且发起20个消费者，晋升为县级运营中心总监。",
-    // 'rules' => "	消费者总人数达10000+1人，且发起30个消费者，晋升为县级子公司。",
-    // 'rules' => "	消费者总人数达100000+1人，且发起50个消费者，晋升为地级子公司。",
-    // 'rules' => "	消费者总人数达1000000+1人，且发起100个消费者，晋升为省级巡视。",
+        $sql = "select row_num from (
+                    SELECT row_number() over (order by level desc, id asc) row_num, id, level
+                    FROM challenges
+                    where status ='challenging'
+                    order by level desc, id asc
+                    ) as t
+                    where t.id={$challenge->id};";
+        $res = DB::select($sql);
+        $rank = $res[0]->row_num ?? null;
+
+        $behind = $total - $rank;
+
+        $str = str_replace(
+                ["{total}", "{rank}", "{behind}"],
+                [$total, $rank, $behind],
+                config("challenge.ranking.overview")
+            );
+
+        $percent = $rank * 100 / $total;
+        return [
+            "percent" => $percent,
+            "text" => $str
+        ];
+    }
 }

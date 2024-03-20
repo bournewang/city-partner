@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\ChallengeHelper;
 
 class Challenge extends Model
 {
@@ -11,7 +12,7 @@ class Challenge extends Model
 
     protected $fillable = [
         'user_id',
-        'index_no',
+        'partner_role',
         'type',
         'level',
         'success_at',
@@ -55,7 +56,7 @@ class Challenge extends Model
     public function info()
     {
         $userInfo = $this->user->info();
-        return [
+        $data = [
             "id" => $this->id,
             "referer_name" => $userInfo['referer_name'],
             "current_level" => $userInfo['level'],
@@ -67,5 +68,21 @@ class Challenge extends Model
             "status" => $this->status,
             "status_label" => self::statusOptions()[$this->status]
         ];
+
+        if ($this->status == self::CHALLENGING) {
+            $data['overview'] = ChallengeHelper::getRank($this);
+        }elseif ($this->status == self::SUCCESS) {
+            $data['status_prompt'] = config("challenge.levels")[$this->level]['success_text'] ?? null;
+        }
+        $levelOptions = User::levelOptions();
+        if ($str = config("challenge.status")[$this->status]['text']) {
+            $data["status_prompt"] = str_replace(
+                ["{level}", "{new_level}"],
+                [$levelOptions[$this->user->level], $levelOptions[$this->level]],
+                $str);
+        }
+        $data['status_icon'] = config("challenge.status")[$this->status]['icon'] ?? null;
+
+        return $data;
     }
 }
