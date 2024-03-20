@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/apply',      [UserController::class, "apply"]);
     // Route::post('/image/upload',    [ImageController::class, "store"]);
 });
+Route::get('/public/index',         [PublicController::class, "index"]);
 Route::get('/challenge/levels',     [ChallengeController::class, "levels"]);
 Route::get('/challenge/types',      [ChallengeController::class, "types"]);
 Route::get('/challenge/stats',      [ChallengeController::class, "stats"]);
