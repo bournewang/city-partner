@@ -11,6 +11,7 @@ class CrowdFunding extends Model
 
     protected $fillable = [
         'user_id',
+        'partner_role',
         'paid_deposit',
         'using_period',
         'start_at',

@@ -17,6 +17,7 @@ class UserController extends ApiBaseController
         if ($request->input('include_images', false)) {
             foreach($this->user->getMedia('*') as $media) {
                 $data[$media->collection_name] = [
+                    'thumb' => $media->getUrl('thumb'),
                     'preview' => $media->getUrl('preview'),
                     'original' => $media->getUrl()
                 ];
@@ -87,8 +88,7 @@ class UserController extends ApiBaseController
 
         if ($collection == "head-img") {
             if ($media = $this->user->refresh()->getMedia($collection)->first()) {
-                \Log::debug("++++++ avatar exists!");
-                $this->user->update(['avatar' => $media->getUrl('preview')]);
+                $this->user->update(['avatar' => $media->getUrl('thumb')]);
             }else{
                 \Log::debug("------ avatar not exists!");
             }

@@ -26,6 +26,10 @@ class User extends Authenticatable implements FilamentUser, HasMedia
             ->addMediaConversion('preview')
             ->fit(Fit::Contain, 300, 300)
             ->nonQueued();
+        $this
+            ->addMediaConversion('thumb')
+            ->fit(Fit::Contain, 100, 100)
+            ->nonQueued();
     }
     /**
      * The attributes that are mass assignable.
@@ -155,5 +159,15 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function displayName()
     {
         return $this->name ?? $this->nickname ?? $this->mobile ?? __("User").$this->id;
+    }
+
+    public function displayArea()
+    {
+        return $this->province_name . ($this->city_name ?? '') . $this->county_name;
+    }
+
+    public function displayAddress()
+    {
+        return $this->displayArea() . $this->street;
     }
 }

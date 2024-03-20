@@ -21,7 +21,7 @@ class UserHelper{
             $app = Wechat::app();
             $response = $app->getClient()->postJson('/wxa/getwxacodeunlimit', [
                 'scene' => "referer_id={$user->id}",
-                'page' => 'pages/projects/page',
+                'page' => 'pages/profile/page',
                 'width' => 430,
                 'check_path' => false,
             ]);
