@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('challenges', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
+            $table->string('index_no')->nullable();
             $table->string('partner_role')->nullable();
             // $table->
             $table->enum('type', array_keys(Challenge::typeOptions()));
