@@ -24,13 +24,7 @@ class ChallengeController extends ApiBaseController
 
     public function stats(Request $request)
     {
-        $data = [
-            'stats' => [
-                ['label' => __('Register Consumers'),   'value' => User::count()],
-                ['label' => __('Partner Consumers'),    'value' => User::whereNotNull('certified_at')->count()],
-                ['label' => __('Challengers'),          'value' => Challenge::where('status', Challenge::CHALLENGING)->count()],
-                ['label' => __('Successed Challengers'),'value' => Challenge::where('status', Challenge::SUCCESS)->count()]
-        ]];
+        $data = ['stats' => ChallengeHelper::stats()];
         if ($request->input('activity', false)) {
             $list = Challenge::orderBy('id', 'desc')->limit(20)->get();
             $statusOptions = Challenge::statusOptions();

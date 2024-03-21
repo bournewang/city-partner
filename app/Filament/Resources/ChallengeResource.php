@@ -15,10 +15,12 @@ use Filament\Tables;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -27,6 +29,7 @@ use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Contracts\View\View;
+use Filament\Infolists\Components\Section;
 
 class ChallengeResource extends Resource
 {
@@ -65,26 +68,26 @@ class ChallengeResource extends Resource
     {
         return $infolist
             ->schema([
-                TextEntry::make("user_id")->label('User')->translateLabel()
-                    ->formatStateUsing(fn (string $state): View => view(
-                        'filament.infolists.components.user-displayname',
-                        ['state' => $state],
-                    )),
-                SpatieMediaLibraryImageEntry::make('user.xx')->collection('id_card_front')->label('ID Front'),
-                SpatieMediaLibraryImageEntry::make('user.xx')->collection('id_card_end')->label('ID End'),
-                TextEntry::make("type")->translateLabel()
-                    ->formatStateUsing(fn (string $state): View => view(
-                        'filament.infolists.components.challenge-type',
-                        ['state' => $state],
-                    )),
-                TextEntry::make("level")->translateLabel(),
-                TextEntry::make("success_at")->translateLabel(),
-                // TextEntry::make("status")->translateLabel(),
-                TextEntry::make("status")->translateLabel()
-                    ->formatStateUsing(fn (string $state): View => view(
-                        'filament.infolists.components.challenge-status',
-                        ['state' => $state],
-                    )),
+                Section::make()
+                ->columns(3)
+                ->schema([
+                    TextEntry::make("user_id")->label('User ID')->translateLabel(),
+                    TextEntry::make("user_id")->label('Name')->translateLabel()
+                        ->formatStateUsing(fn (string $state): View =>
+                        view('filament.infolists.components.user-displayname',['state' => $state])),
+                    TextEntry::make("user.mobile")->label('Mobile')->translateLabel(),
+                    // ImageEntry::make("user.avatar")->label('Avatar')->translateLabel()->circular(),
+                    SpatieMediaLibraryImageEntry::make('user.id_card_front')->translateLabel()->collection('id_card_front')->label('ID Front'),
+                    SpatieMediaLibraryImageEntry::make('user.id_card_end')->translateLabel()->collection('id_card_end')->label('ID End'),
+                    SpatieMediaLibraryImageEntry::make('user.pay_receipt_funding')->translateLabel()->collection('pay_receipt_challenge')->label('Pay Receipt'),
+
+                    TextEntry::make("level")->translateLabel(),
+                    TextEntry::make("success_at")->translateLabel(),
+                    TextEntry::make("created_at")->translateLabel(),
+                    TextEntry::make("status")->translateLabel()
+                        ->formatStateUsing(fn (string $state): View =>
+                        view('filament.infolists.components.challenge-status', ['state' => $state])),
+                ])
             ]);
     }
 
@@ -94,9 +97,13 @@ class ChallengeResource extends Resource
             ->columns([
                 //
                 TextColumn::make("id")->translateLabel()->searchable(),
+                ImageColumn::make("user.avatar")->label("Avatar")->translateLabel()->circular()
+                    ->defaultImageUrl(url("/images/default-avatar-1.png")),
                 // TextColumn::make("user.mobile")->translateLabel()->searchable(),
                 TextColumn::make("user_id")->label('User')->translateLabel()
                     ->view('filament.tables.columns.user-displayname'),
+                TextColumn::make("user.mobile")->label('Mobile')->translateLabel(),
+
                 // TextColumn::make("index_no")->translateLabel()->searchable(),
                 // TextColumn::make("level")->translateLabel()->searchable(),
                 ViewColumn::make('level')->translateLabel()
@@ -105,24 +112,17 @@ class ChallengeResource extends Resource
                         ->view('filament.tables.columns.challenge-type'),
                 TextColumn::make("success_at")->translateLabel()->searchable(),
                 // TextColumn::make("status")->translateLabel()->searchable(),
+                TextColumn::make("created_at")->translateLabel(),
                 ViewColumn::make('status')->translateLabel()
                     ->view('filament.tables.columns.challenge-status'),
             ])
             ->defaultSort("id", "desc")
             ->filters([
-                Filter::make('created_at')
-                    ->form([
-                        DatePicker::make('created_from')->translateLabel(),
-                        DatePicker::make('created_until')->translateLabel(),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when($data['created_from'], fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date))
-                            ->when($data['created_until'], fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date));
-                    })
+                BasicResource::dateRangeFilter()
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()->translateLabel(),
+                Tables\Actions\EditAction::make()->translateLabel(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -143,7 +143,7 @@ class ChallengeResource extends Resource
         return [
             'index' => Pages\ListChallenges::route('/'),
             // 'create' => Pages\CreateChallenge::route('/create'),
-            // 'edit' => Pages\EditChallenge::route('/{record}/edit'),
+            'edit' => Pages\EditChallenge::route('/{record}/edit'),
             'view' => Pages\ViewChallenge::route('/{record}'),
         ];
     }

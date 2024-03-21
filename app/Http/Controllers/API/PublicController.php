@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Challenge;
 use App\Models\CrowdFunding;
 use App\Helpers\UserHelper;
+use App\Helpers\ChallengeHelper;
 use App\Wechat;
 
 class PublicController extends ApiBaseController
@@ -16,16 +17,16 @@ class PublicController extends ApiBaseController
          return $this->sendResponse(json_decode(file_get_contents(database_path("areadata.json"))));
     }
 
+    public function privacy()
+    {
+        return $this->sendResponse(file_get_contents(database_path("privacy.txt")));
+    }
+
     // combine index page data in one api
     public function index()
     {
         $data = [
-            'challengeStats' => [
-                ['label' => __('Register Consumers'),   'value' => User::count()],
-                ['label' => __('Partner Consumers'),    'value' => User::whereNotNull('certified_at')->count()],
-                ['label' => __('Challengers'),          'value' => Challenge::where('status', Challenge::CHALLENGING)->count()],
-                ['label' => __('Successed Challengers'),'value' => Challenge::where('status', Challenge::SUCCESS)->count()]
-            ],
+            'challengeStats' => ChallengeHelper::stats(),
             'challengeLevels' => array_slice(config('challenge.levels'), 3),
             'fundingStats' => [
                 ['label' => __('Mutual Community People'),  'value' => User::count()],
