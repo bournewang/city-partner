@@ -14,10 +14,9 @@ class CarManagerController extends ApiBaseController
     {
         $data = [
                 'stats' => [
-                    ['label' => __('Mutual Community People'),  'value' => User::count()],
-                    ['label' => __('Mutual Funding People'),    'value' => User::whereNotNull('certified_at')->count()],
-                    ['label' => __('Get Funding People'),       'value' =>
-                                    CrowdFunding::whereIn('status', [CrowdFunding::USING, CrowdFunding::COMPLETED])->count()],
+                    ['label' => __('Mutual Community People'),  'value' => CrowdFunding::count()],
+                    ['label' => __('Mutual Funding People'),    'value' => CrowdFunding::where("status", CrowdFunding::APPLYING)->count()],
+                    ['label' => __('Get Funding People'),       'value' => CrowdFunding::where("status", CrowdFunding::USING)->count()],
                     ['label' => __('Return Funding People'),    'value' => CrowdFunding::where('status', CrowdFunding::COMPLETED)->count()]
                 ]
         ];
