@@ -62,6 +62,8 @@ class WechatController extends ApiBaseController
                 \Log::debug("try to create user: " . json_encode($info));
                 // $info['referer_id'] = $referer_id;
                 $user = User::create($info);
+
+                UserHelper::createQrCode($user);
             }
 
             $info = $user->info();

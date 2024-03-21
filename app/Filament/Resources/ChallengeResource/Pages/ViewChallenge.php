@@ -24,7 +24,7 @@ class ViewChallenge extends ViewRecord
                     if ($record->status == Challenge::APPLYING) {
                         $record->update(['status' => Challenge::CHALLENGING]);
                         $this->refreshFormData(['status']);
-                        UserHelper::createQrCode($record->user);
+                        // UserHelper::createQrCode($record->user);
                     }
                 })
         ];
