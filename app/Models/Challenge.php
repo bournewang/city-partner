@@ -72,7 +72,9 @@ class Challenge extends Model
         if ($this->status == self::CHALLENGING) {
             $data['overview'] = ChallengeHelper::getRank($this);
         }elseif ($this->status == self::SUCCESS) {
-            $data['status_prompt'] = config("challenge.levels")[$this->level]['success_text'] ?? null;
+            $data['status_prompt'] =
+                (config("challenge.levels")[$this->level]['bonus_text'] ?? null) . "<br/><br/><hr><br/>" .
+                (config("challenge.levels")[$this->level]['success_text'] ?? null);
         }
         $levelOptions = User::levelOptions();
         if ($str = config("challenge.status")[$this->status]['text']) {

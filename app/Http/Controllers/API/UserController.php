@@ -105,6 +105,9 @@ class UserController extends ApiBaseController
     {
         // update profile
         $input = $request->all();
+        if ($input['challenge_type'] ?? null) {
+            $input['challenge_type_label'] = Challenge::typeOptions()[$input['challenge_type']];
+        }
 
         // apply challenge or CrowdFunding or consumer
         $apply_type = $request->input('apply_type');
@@ -115,7 +118,7 @@ class UserController extends ApiBaseController
                 $challenge = Challenge::create([
                     'user_id' => $this->user->id,
                     // 'index_no',
-                    // 'type' => $request->input('type', null),
+                    'type' => $request->input('challenge_type', null),
                     'partner_role' => $input['partner_role'] ?? null,
                     'level' => User::CONSUMER_MERCHANT,
                     'success_at' => null,

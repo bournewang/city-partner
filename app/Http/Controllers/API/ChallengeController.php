@@ -16,7 +16,7 @@ class ChallengeController extends ApiBaseController
         $data = [];
         foreach ($list as $item){
             // $data[] = "$item->success_at ".$item->user->name ."挑战".$item->user->levelLabel()."成功！";
-            $data[] = [ "success_at" => $item->success_at, "content" => $item->user->name ."挑战".$item->user->levelLabel()."成功！"];
+            $data[] = [ "success_at" => $item->success_at, "content" => $item->user->name ."征召".$item->user->levelLabel()."成功！"];
         }
 
         return $this->sendResponse($data);

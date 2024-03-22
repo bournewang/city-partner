@@ -52,6 +52,10 @@ class ChallengeResource extends Resource
                 // TextInput::make('level')->translateLabel(),
                 Select::make('type')->translateLabel()
                         ->options(Challenge::typeOptions()),
+                Select::make("partner_role")->multiple()->options([
+                        'common_partner' => ___('common_partner'),
+                        'company_launcher' => ___('company_launcher'),
+                    ])->translateLabel(),
                 Select::make('level')
                     ->translateLabel()
                     ->options(User::levelOptions()),
@@ -81,6 +85,12 @@ class ChallengeResource extends Resource
                     SpatieMediaLibraryImageEntry::make('user.id_card_end')->translateLabel()->collection('id_card_end')->label('ID End'),
                     SpatieMediaLibraryImageEntry::make('user.pay_receipt_funding')->translateLabel()->collection('pay_receipt_challenge')->label('Pay Receipt'),
 
+                    TextEntry::make("type")->label("Challenge Type")->translateLabel()
+                        ->formatStateUsing(fn (string $state): View =>
+                        view('filament.infolists.components.challenge-type', ['state' => $state])),
+                    TextEntry::make("partner_role")->translateLabel()
+                        ->formatStateUsing(fn (string $state): View =>
+                        view('filament.infolists.components.partner-role', ['state' => $state])),
                     TextEntry::make("level")->translateLabel(),
                     TextEntry::make("success_at")->translateLabel(),
                     TextEntry::make("created_at")->translateLabel(),

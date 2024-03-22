@@ -48,6 +48,10 @@ class WechatController extends ApiBaseController
             if ($user = User::firstWhere('openid', $openid)) {
                 \Auth::login($user);
             }else{
+                $referer = null;
+                if ($referer_id = $request->input('referer_id', null)) {
+                    $referer = User::find($referer_id);
+                }
                 $info = [
                     // 'store_id'  => $store_id,
                     'openid'    => $openid,
@@ -55,7 +59,8 @@ class WechatController extends ApiBaseController
                     // 'name'      => null,
                     'email'     => $openid."@wechat.com",
                     'password'  => bcrypt($openid),
-                    'referer_id'=> $request->input('referer_id'),
+                    'referer_id'=> $referer_id,
+                    'challenge_type' => $referer->challenge_type ?? null,
                     // 'rewards_expires_at' => Carbon::today()->addDays($setting->level_0_rewards_days),
                     'level'     => 0
                 ];
