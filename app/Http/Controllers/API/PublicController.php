@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Challenge;
 use App\Models\CrowdFunding;
+use App\Models\Company;
 use App\Helpers\UserHelper;
 use App\Helpers\ChallengeHelper;
 use App\Wechat;
@@ -37,6 +38,42 @@ class PublicController extends ApiBaseController
             ],
             'fundingConfig' => config("car-manager.funding")
         ];
+        return $this->sendResponse($data);
+    }
+
+    public function companyOptions()
+    {
+        $typeOptions = [];
+        foreach (Challenge::typeOptions() as $value => $label) {
+            $typeOptions[] = ["value" => $value, "label" => $label];
+        }
+        $roleOptions = [];
+        foreach (Company::partnerRoleOptions() as $value => $label) {
+            $roleOptions[] = ["value" => $value, "label" => $label];
+        }
+        $bankOptions = [];
+        foreach (config("banks") as $code => $name) {
+            $bankOptions[] = ["value" => $code, "label" => $name];
+        }
+        $data = [
+            "company_types" => $typeOptions,
+            "partner_roles" => $roleOptions,
+            "fieldOptions"  => [
+                ["icon" => "app", "name" => "company_type",     "label" =>  "公司类型",  "required" => true,   "type" => "radio",  "options" => $typeOptions],
+                ["icon" => "app", "name" => "execute_partner",  "label" =>  "执行合伙人", "disabled" => true, "value" => "深圳市千百惠投资管理有限公司"],
+                ["icon" => "app", "name" => "partner_role",     "label" =>  "合伙人身份", "required" => true,   "type" => "checkbox", "options"=>$roleOptions],
+                ["icon" => "app", "name" => "company_name",     "label" =>  "公司名称", "required" => true],
+                ["icon" => "app", "name" => "credit_code",      "label" =>  "信用代码"],
+                ["icon" => "app", "name" => "legal_person_name","label" =>  "法人", "required" => true],
+                ["icon" => "app", "name" => "registered_at",    "label" =>  "注册日期"],
+                ["icon" => "app", "name" => "partner_years",    "label" =>  "合伙年限"],
+                ["icon" => "app", "name" => "partner_start_at", "label" =>  "合伙开始日期"],
+                ["icon" => "app", "name" => "partner_end_at",   "label" =>  "合伙结束日期"],
+                ["icon" => "app", "name" => "bank",             "label" =>  "银行",       "type" => "picker", "options" => $bankOptions],
+                ["icon" => "app", "name" => "sub_bank",         "label" =>  "其他银行/支行"],
+                ["icon" => "app", "name" => "account_name",     "label" =>  "账户名称"],
+                ["icon" => "app", "name" => "account_no",     "label" =>  "账号"]
+        ]];
         return $this->sendResponse($data);
     }
 }

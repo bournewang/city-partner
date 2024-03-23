@@ -79,6 +79,13 @@ class UserController extends ApiBaseController
         return $this->sendResponse(null);
     }
 
+    public function company()
+    {
+        if ($company = $this->user->company) {
+            return $this->sendResponse($company->info());
+        }
+        return $this->sendResponse(null);
+    }
     public function images(Request $request)
     {
         $collection = $request->input('collection', 'default');

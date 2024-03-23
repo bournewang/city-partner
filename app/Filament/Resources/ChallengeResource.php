@@ -46,16 +46,13 @@ class ChallengeResource extends Resource
                 // TextInput::make('name'),
                 Select::make('user_id')
                     ->translateLabel()
-                    // ->options(User::all()->pluck('name', 'id'))
+                    ->options(User::all()->pluck('name', 'id'))
                     ->searchable(),
                 // TextInput::make('index_no')->translateLabel(),
                 // TextInput::make('level')->translateLabel(),
                 Select::make('type')->translateLabel()
                         ->options(Challenge::typeOptions()),
-                Select::make("partner_role")->multiple()->options([
-                        'common_partner' => ___('common_partner'),
-                        'company_launcher' => ___('company_launcher'),
-                    ])->translateLabel(),
+                Select::make("partner_role")->multiple()->options(\App\Models\Company::partnerRoleOptions())->translateLabel(),
                 Select::make('level')
                     ->translateLabel()
                     ->options(User::levelOptions()),
@@ -90,7 +87,7 @@ class ChallengeResource extends Resource
                         view('filament.infolists.components.challenge-type', ['state' => $state])),
                     TextEntry::make("partner_role")->translateLabel()
                         ->formatStateUsing(fn (string $state): View =>
-                        view('filament.infolists.components.partner-role', ['state' => $state])),
+                        view('filament.infolists.components.partner-roles', ['state' => $state])),
                     TextEntry::make("level")->translateLabel(),
                     TextEntry::make("success_at")->translateLabel(),
                     TextEntry::make("created_at")->translateLabel(),

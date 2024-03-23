@@ -112,6 +112,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         return $this->hasOne(CrowdFunding::class);
     }
 
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'legal_person_id');
+    }
+
     const NONE_REGISTER     = 0; //"none_register";
     const REGISTER_CONSUMER = 1; //"register_consumer";
     const PARTNER_CONSUMER  = 2; //"partner_consumer";

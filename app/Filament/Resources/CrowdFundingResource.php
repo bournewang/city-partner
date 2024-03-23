@@ -57,10 +57,7 @@ function statusColor($state){
                 //
                 TextInput::make("user_id")->translateLabel()->disabled(),
                 // Select::make("user_id")->label('User')->translateLabel()->searchable()->options(\App\Models\User::all()->pluck('name', 'id')),
-                Select::make("partner_role")->multiple()->options([
-                        'common_partner' => ___('common_partner'),
-                        'company_launcher' => ___('company_launcher'),
-                    ])->translateLabel(),
+                Select::make("partner_role")->multiple()->options(\App\Models\Company::partnerRoleOptions())->translateLabel(),
                 TextInput::make("paid_deposit")->translateLabel(),
                 TextInput::make("using_period")->translateLabel(),
 
@@ -130,7 +127,10 @@ function statusColor($state){
                     SpatieMediaLibraryImageEntry::make('user.driver_licence_front')->collection('driver_licence_front')->label('Driver Licence Front')->translateLabel(),
                     SpatieMediaLibraryImageEntry::make('user.driver_licence_end')->collection('driver_licence_end')->label('Driver Licence End')->translateLabel(),
 
-                    TextEntry::make("partner_role")->translateLabel(),
+                    // TextEntry::make("partner_role")->translateLabel(),
+                    TextEntry::make("partner_role")->translateLabel()
+                        ->formatStateUsing(fn (string $state): View =>
+                        view('filament.infolists.components.partner-roles', ['state' => $state])),
                     TextEntry::make("paid_deposit")->translateLabel(),
                     TextEntry::make("using_period")->translateLabel(),
                     TextEntry::make("start_at")->translateLabel(),

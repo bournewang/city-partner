@@ -8,7 +8,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ImageController;
 use App\Http\Controllers\API\CarManagerController;
 use App\Http\Controllers\API\PublicController;
-
+use App\Http\Controllers\API\CompanyController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,16 +30,20 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user/challenge',   [UserController::class, "challenge"]);
     Route::post('/user/challenge',  [UserController::class, "startChallenge"]);
     Route::get('/user/crowdFunding',[UserController::class, "crowdFunding"]);
+    Route::get('/user/company',     [UserController::class, "company"]);
     Route::get('/user/team-overview',[UserController::class, "teamOverview"]);
     Route::get('/user/recommends',  [UserController::class, "recommends"]);
     Route::get('/user/team-detail', [UserController::class, "teamDetail"]);
     Route::post('/user/images',     [UserController::class, "images"]);
     Route::post('/user/apply',      [UserController::class, "apply"]);
+
+    Route::post('/company',         [CompanyController::class, "store"]);
     // Route::post('/image/upload',    [ImageController::class, "store"]);
 });
 Route::get('/public/index',         [PublicController::class, "index"]);
 Route::get('/public/area',          [PublicController::class, "areaData"]);
 Route::get('/public/privacy',       [PublicController::class, "privacy"]);
+Route::get('/public/company-options',[PublicController::class, "companyOptions"]);
 
 Route::get('/challenge/levels',     [ChallengeController::class, "levels"]);
 Route::get('/challenge/types',      [ChallengeController::class, "types"]);
