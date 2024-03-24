@@ -13,6 +13,9 @@ class UserController extends ApiBaseController
 {
     public function info(Request $request)
     {
+        if (!$this->user->qrcode) {
+            UserHelper::createQrCode($this->user);
+        }
         $data = $this->user->info();
         if ($request->input('include_images', false)) {
             foreach($this->user->getMedia('*') as $media) {
