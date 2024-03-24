@@ -33,13 +33,13 @@ class Company extends Model
     }
 
     const COMMON_PARTNER = 'common_partner';
-    const COMPANY_LAUNCHER = 'company_launcher';
+    const LIMITED_PARTNER = 'limited_partner';
 
     static public function partnerRoleOptions()
     {
         return [
-            self::COMMON_PARTNER => ___(self::COMMON_PARTNER),
-            self::COMPANY_LAUNCHER => ___(self::COMPANY_LAUNCHER)
+            self::COMMON_PARTNER    => ___(self::COMMON_PARTNER),
+            self::LIMITED_PARTNER   => ___(self::LIMITED_PARTNER)
         ];
     }
 
