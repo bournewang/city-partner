@@ -52,6 +52,8 @@ class Company extends Model
         if ($this->bank) {
             $data['bank_label'] = config('banks')[$this->bank] ?? null;
         }
+        $data['company_type_label'] = Challenge::typeOptions()[$this->company_type] ?? null;
+        $data['partner_role_label'] = self::partnerRoleOptions()[$this->partner_role] ?? null;
         return $data;
     }
 }

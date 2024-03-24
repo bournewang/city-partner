@@ -61,10 +61,10 @@ class PublicController extends ApiBaseController
             "fieldOptions"  => [
                 // ["icon" => "app",           "name" => "company_type",     "label" =>  "公司类型",  "type" => "radio", "options" => $typeOptions,
                 //                                                           "required" => true, "disabled" => true, "defaultValue" => ($this->user->challenge_type?? null)],
-                ["icon" => "app",           "name" => "company_type",     "label" =>  "公司类型", "disabled" => true, "defaultValue" => ($this->user->challenge_type_label ?? null)],
+                ["icon" => "app",           "name" => "company_type_label",     "label" =>  "公司类型", "disabled" => true, "defaultValue" => ($this->user->challenge_type_label ?? null)],
                 ["icon" => "gesture-click", "name" => "execute_partner",  "label" =>  "执行合伙人", "disabled" => true, "defaultValue" => "深圳市千百惠投资管理有限公司"],
                 // ["icon" => "app",           "name" => "partner_role",     "label" =>  "合伙人身份", "required" => true, "type" => "checkbox", "options"=>$roleOptions, "defaultValue" => Company::COMMON_PARTNER],
-                ["icon" => "star",          "name" => "partner_role",     "label" =>  "合伙人身份", "disabled" => true, "defaultValue" => Company::partnerRoleOptions()[Company::COMMON_PARTNER]],
+                ["icon" => "star",          "name" => "partner_role_label",     "label" =>  "合伙人身份", "disabled" => true, "defaultValue" => Company::partnerRoleOptions()[Company::COMMON_PARTNER]],
                 ["icon" => "info-circle",   "name" => "company_name",     "label" =>  "公司名称", "required" => true],
                 ["icon" => "data-display",  "name" => "credit_code",      "label" =>  "信用代码"],
                 ["icon" => "user-marked",   "name" => "legal_person_name","label" =>  "法人", "required" => true],
