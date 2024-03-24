@@ -56,23 +56,23 @@ class PublicController extends ApiBaseController
             $bankOptions[] = ["value" => $code, "label" => $name];
         }
         $data = [
-            "company_types" => $typeOptions,
-            "partner_roles" => $roleOptions,
+            // "company_types" => $typeOptions,
+            // "partner_roles" => $roleOptions,
             "fieldOptions"  => [
-                ["icon" => "app", "name" => "company_type",     "label" =>  "公司类型",  "required" => true,   "type" => "radio",  "options" => $typeOptions],
-                ["icon" => "app", "name" => "execute_partner",  "label" =>  "执行合伙人", "disabled" => true, "value" => "深圳市千百惠投资管理有限公司"],
-                ["icon" => "app", "name" => "partner_role",     "label" =>  "合伙人身份", "required" => true,   "type" => "checkbox", "options"=>$roleOptions],
-                ["icon" => "app", "name" => "company_name",     "label" =>  "公司名称", "required" => true],
-                ["icon" => "app", "name" => "credit_code",      "label" =>  "信用代码"],
-                ["icon" => "app", "name" => "legal_person_name","label" =>  "法人", "required" => true],
-                ["icon" => "app", "name" => "registered_at",    "label" =>  "注册日期"],
-                ["icon" => "app", "name" => "partner_years",    "label" =>  "合伙年限"],
-                ["icon" => "app", "name" => "partner_start_at", "label" =>  "合伙开始日期"],
-                ["icon" => "app", "name" => "partner_end_at",   "label" =>  "合伙结束日期"],
-                ["icon" => "app", "name" => "bank",             "label" =>  "银行",       "type" => "picker", "options" => $bankOptions],
-                ["icon" => "app", "name" => "sub_bank",         "label" =>  "其他银行/支行"],
-                ["icon" => "app", "name" => "account_name",     "label" =>  "账户名称"],
-                ["icon" => "app", "name" => "account_no",     "label" =>  "账号"]
+                ["icon" => "app",           "name" => "company_type",     "label" =>  "公司类型",  "required" => true,   "type" => "radio",  "options" => $typeOptions],
+                ["icon" => "gesture-click", "name" => "execute_partner",  "label" =>  "执行合伙人", "disabled" => true, "defaultValue" => "深圳市千百惠投资管理有限公司"],
+                ["icon" => "app",           "name" => "partner_role",     "label" =>  "合伙人身份", "required" => true,   "type" => "checkbox", "options"=>$roleOptions],
+                ["icon" => "info-circle",   "name" => "company_name",     "label" =>  "公司名称", "required" => true],
+                ["icon" => "data-display",  "name" => "credit_code",      "label" =>  "信用代码"],
+                ["icon" => "user-marked",   "name" => "legal_person_name","label" =>  "法人", "required" => true],
+                ["icon" => "calendar-edit", "name" => "registered_at",    "label" =>  "注册日期"],
+                ["icon" => "cooperate",     "name" => "partner_years",    "label" =>  "合伙年限"],
+                ["icon" => "calendar-2",    "name" => "partner_start_at", "label" =>  "合伙开始日期"],
+                ["icon" => "calendar-event", "name" => "partner_end_at",   "label" =>  "合伙结束日期"],
+                ["icon" => "institution-checked", "name" => "bank",             "label" =>  "开户银行",       "type" => "picker", "options" => $bankOptions],
+                ["icon" => "institution",   "name" => "sub_bank",         "label" =>  "支行（或其他银行）"],
+                ["icon" => "verify",        "name" => "account_name",     "label" =>  "账户名称"],
+                ["icon" => "data-display",  "name" => "account_no",     "label" =>  "账号"]
         ]];
         return $this->sendResponse($data);
     }

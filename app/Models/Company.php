@@ -49,6 +49,9 @@ class Company extends Model
         if ($this->legalPerson) {
             $data['legal_person_name'] = $this->legalPerson->name;
         }
+        if ($this->bank) {
+            $data['bank_label'] = config('banks')[$this->bank] ?? null;
+        }
         return $data;
     }
 }
