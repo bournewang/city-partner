@@ -1,3 +1,3 @@
 <span>
-    {{App\Models\Company::partnerRoleOptions()[$state]}}
+    {{App\Models\Company::partnerRoleOptions()[$state] ?? null}}
 </span>

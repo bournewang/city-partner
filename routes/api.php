@@ -31,7 +31,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/challenge',  [UserController::class, "startChallenge"]);
     Route::get('/user/crowdFunding',[UserController::class, "crowdFunding"]);
     Route::get('/user/company',     [UserController::class, "company"]);
-    Route::get('/user/team-overview',[UserController::class, "teamOverview"]);
+    Route::get('/user/agent',       [UserController::class, "agent"]);
+    Route::get('/user/team-overview',[UserController::class,"teamOverview"]);
     Route::get('/user/recommends',  [UserController::class, "recommends"]);
     Route::get('/user/team-detail', [UserController::class, "teamDetail"]);
     Route::post('/user/images',     [UserController::class, "images"]);

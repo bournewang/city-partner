@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Challenge;
 use App\Models\CrowdFunding;
+use App\Models\Agent;
 use App\Helpers\UserHelper;
 use App\Wechat;
 
@@ -89,6 +90,15 @@ class UserController extends ApiBaseController
         }
         return $this->sendResponse(null);
     }
+
+    public function agent()
+    {
+        if ($agent = $this->user->agent) {
+            return $this->sendResponse($agent->info());
+        }
+        return $this->sendResponse(null);
+    }
+    
     public function images(Request $request)
     {
         $collection = $request->input('collection', 'default');
@@ -152,6 +162,18 @@ class UserController extends ApiBaseController
             ]);
             $input['crowd_funding_id'] = $crowdFunding->id;
             // $data = $crowdFunding->info();
+        }elseif ($apply_type == "agent") {
+            // $input['user_id'] = $this->user->id;
+            $agent = Agent::create([
+                "user_id" => $this->user->id,
+                "province_code" => $input['agent_province_code'] ?? null,
+                "province_name" => $input['agent_province_name'] ?? null,
+                "city_code"     => $input['agent_city_code'] ?? null,
+                "city_name"     => $input['agent_city_name'] ?? null,
+                "county_code"   => $input['agent_county_code'] ?? null,
+                "county_name"   => $input['agent_county_name'] ?? null,
+                "status"        => Agent::APPLYING
+            ]);
         }elseif ($apply_type == "consumer"){
             if ($this->user->level < User::PARTNER_CONSUMER) {
                 $input['level'] = User::PARTNER_CONSUMER;

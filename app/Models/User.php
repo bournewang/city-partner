@@ -117,6 +117,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         return $this->hasOne(Company::class, 'legal_person_id');
     }
 
+    public function agent()
+    {
+        return $this->hasOne(Agent::class);
+    }
+
     const NONE_REGISTER     = 0; //"none_register";
     const REGISTER_CONSUMER = 1; //"register_consumer";
     const PARTNER_CONSUMER  = 2; //"partner_consumer";
@@ -160,6 +165,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $data['referer_name'] = $this->referer->name ?? $this->referer->nickname ?? $this->referer->mobile ?? null;
         $data['qrcode'] = $this->qrcode ? url($this->qrcode) : null;
         $data['display_name'] = $this->displayName();
+        $data['agent_id'] = $this->agent->id ?? null;
         return $data;
     }
 
