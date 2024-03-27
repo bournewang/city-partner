@@ -79,4 +79,14 @@ class PublicController extends ApiBaseController
         ]];
         return $this->sendResponse($data);
     }
+
+    public function apps()
+    {
+        $apps = \App\Models\App::where('status', 1)->get();
+        $data = [];
+        foreach ($apps as $app) {
+            $data[] = $app->info();
+        }
+        return $this->sendResponse($data);
+    }
 }

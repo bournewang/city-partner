@@ -50,6 +50,8 @@ class DatabaseSeeder extends Seeder
                 \App\Models\CrowdFunding::factory()->create(['user_id' => $user->id]);
             }
         }
+
+        \App\Models\App::factory(10)->create();
         // User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',

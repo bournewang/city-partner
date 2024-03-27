@@ -45,6 +45,7 @@ Route::get('/public/index',         [PublicController::class, "index"]);
 Route::get('/public/area',          [PublicController::class, "areaData"]);
 Route::get('/public/privacy',       [PublicController::class, "privacy"]);
 Route::get('/public/company-options',[PublicController::class, "companyOptions"]);
+Route::get('/public/apps',          [PublicController::class, "apps"]);
 
 Route::get('/challenge/levels',     [ChallengeController::class, "levels"]);
 Route::get('/challenge/types',      [ChallengeController::class, "types"]);
