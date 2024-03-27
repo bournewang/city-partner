@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
-            $table->enum("type", array_keys(\App\Models\Banner::typeOptions()));
-            $table->string("url");
+            $table->enum("type", array_keys(\App\Models\Banner::typeOptions()))->nullable();
+            $table->string("url")->nullable();
             $table->boolean('status')->default(1);
             $table->timestamps();
 
