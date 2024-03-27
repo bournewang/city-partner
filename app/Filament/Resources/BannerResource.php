@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AppResource\Pages;
-use App\Filament\Resources\AppResource\RelationManagers;
-use App\Models\App;
+use App\Filament\Resources\BannerResource\Pages;
+use App\Filament\Resources\BannerResource\RelationManagers;
+use App\Models\Banner;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
@@ -25,10 +25,10 @@ use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class AppResource extends Resource
+class BannerResource extends Resource
 {
-    protected static ?string $model = App::class;
-    protected static ?string $label = "商务App";
+    protected static ?string $model = Banner::class;
+    protected static ?string $label = "轮播图";
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -36,10 +36,10 @@ class AppResource extends Resource
         return $form
             ->schema([
                 //
-                TextInput::make('name')->label("App Name")->translateLabel(),
-                Select::make('type')->options(\App\Models\App::typeOptions())->translateLabel(),
+                // TextInput::make('name')->label("App Name")->translateLabel(),
+                Select::make('type')->options(\App\Models\Banner::typeOptions())->translateLabel(),
                 TextInput::make('url')->label("Url/AppId")->translateLabel(),
-                SpatieMediaLibraryFileUpload::make("attachments")->label("Icon")->translateLabel()->collection("icon")->conversion("thumb"),
+                SpatieMediaLibraryFileUpload::make("attachments")->label("Image")->translateLabel()->collection("image")->conversion("preview"),
                 Select::make('status')->options([0 => "Disabled", 1 => "Enabled", ])->translateLabel(),
             ]);
     }
@@ -50,10 +50,10 @@ class AppResource extends Resource
                 Section::make()
                 ->columns(3)
                 ->schema([
-                    TextEntry::make("name")->label('App Name')->translateLabel(),
+                    // TextEntry::make("name")->label('App Name')->translateLabel(),
                     TextEntry::make("type")->translateLabel(),
                     TextEntry::make("url")->label('Url/AppId')->translateLabel(),
-                    SpatieMediaLibraryImageEntry::make('attachments')->label("Icon")->translateLabel()->collection('icon'),
+                    SpatieMediaLibraryImageEntry::make('attachments')->label("Image")->translateLabel()->collection('image'),
 
                     TextEntry::make("created_at")->translateLabel(),
                 ])
@@ -63,7 +63,7 @@ class AppResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make("name")->label("App Name")->translateLabel(),
+                // TextColumn::make("name")->label("App Name")->translateLabel(),
                 TextColumn::make("type")->translateLabel(),
                 TextColumn::make("url")->label("Url/AppId")->translateLabel(),
                 ToggleColumn::make("status")->translateLabel(),
@@ -93,10 +93,10 @@ class AppResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListApps::route('/'),
-            'create' => Pages\CreateApp::route('/create'),
-            'view' => Pages\ViewApp::route('/{record}'),
-            'edit' => Pages\EditApp::route('/{record}/edit'),
+            'index' => Pages\ListBanners::route('/'),
+            'create' => Pages\CreateBanner::route('/create'),
+            'view' => Pages\ViewBanner::route('/{record}'),
+            'edit' => Pages\EditBanner::route('/{record}/edit'),
         ];
     }
 }
