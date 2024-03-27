@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->enum("type", array_keys(\App\Models\App::typeOptions()));
-            $table->string("data");
-            $table->boolean("status");
+            $table->string("url");
+            $table->boolean("status")->default(1);
             $table->timestamps();
         });
     }

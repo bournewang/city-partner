@@ -17,7 +17,7 @@ class App extends Model implements HasMedia
     protected $fillable = [
         "name",
         "type",
-        "data",
+        "url",
         "status"
     ];
 

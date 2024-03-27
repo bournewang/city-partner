@@ -37,9 +37,9 @@ class AppResource extends Resource
             ->schema([
                 //
                 TextInput::make('name')->label("App Name")->translateLabel(),
-                TextInput::make('data')->label("App Data")->translateLabel(),
-                SpatieMediaLibraryFileUpload::make("attachments")->label("Icon")->collection("icon")->conversion("thumb"),
-                // TextInput::make('mobile')->translateLabel(),
+                Select::make('type')->options(\App\Models\App::typeOptions())->translateLabel(),
+                TextInput::make('url')->label("Url/AppId")->translateLabel(),
+                SpatieMediaLibraryFileUpload::make("attachments")->label("Icon")->translateLabel()->collection("icon")->conversion("thumb"),
                 Select::make('status')->options([0 => "Disabled", 1 => "Enabled", ])->translateLabel(),
             ]);
     }
@@ -51,13 +51,11 @@ class AppResource extends Resource
                 ->columns(3)
                 ->schema([
                     TextEntry::make("name")->label('App Name')->translateLabel(),
-                    TextEntry::make("data")->label('App Data')->translateLabel(),
+                    TextEntry::make("type")->translateLabel(),
+                    TextEntry::make("url")->label('Url/AppId')->translateLabel(),
                     SpatieMediaLibraryImageEntry::make('attachments')->label("Icon")->translateLabel()->collection('icon'),
 
                     TextEntry::make("created_at")->translateLabel(),
-                    // TextEntry::make("status")->translateLabel()
-                        // ->formatStateUsing(fn (string $state): View =>
-                        // view('filament.infolists.components.challenge-status', ['state' => $state])),
                 ])
             ]);
     }
@@ -66,9 +64,10 @@ class AppResource extends Resource
         return $table
             ->columns([
                 TextColumn::make("name")->label("App Name")->translateLabel(),
-                TextColumn::make("data")->label("App Data")->translateLabel(),
+                TextColumn::make("type")->translateLabel(),
+                TextColumn::make("url")->label("Url/AppId")->translateLabel(),
                 ToggleColumn::make("status")->translateLabel(),
-                    // ->view('filament.tables.columns.challenge-status')
+                TextColumn::make("created_at")->translateLabel(),
             ])
             ->filters([
                 //
