@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Relation;
+use App\Helpers\UserHelper;
 use App\Wechat;
 use Log;
 
@@ -55,8 +56,10 @@ class WechatController extends ApiBaseController
                 $info = [
                     // 'store_id'  => $store_id,
                     'openid'    => $openid,
-                    // 'mobile'    => $phone_number,
-                    // 'name'      => null,
+                    'mobile'    => $request->input('mobile', null),
+                    'name'      => $request->input('name', null),
+                    'nickname'  => $request->input('nickname', null),
+                    'avatar'    => $request->input('avatar', null),
                     'email'     => $openid."@wechat.com",
                     'password'  => bcrypt($openid),
                     'referer_id'=> $referer_id,
