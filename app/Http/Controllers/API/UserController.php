@@ -7,6 +7,9 @@ use App\Models\User;
 use App\Models\Challenge;
 use App\Models\CrowdFunding;
 use App\Models\Agent;
+use App\Models\Car;
+use App\Models\CarModel;
+use App\API\VinApi;
 use App\Helpers\UserHelper;
 use App\Wechat;
 
@@ -98,7 +101,47 @@ class UserController extends ApiBaseController
         }
         return $this->sendResponse(null);
     }
-    
+
+    public function car()
+    {
+        if ($model = $this->user->car) {
+            return $this->sendResponse($model->info());
+        }
+        return $this->sendResponse(null);
+    }
+
+    public function addCar(Request $request)
+    {
+        $input = $request->all();
+        $input['user_id'] = $this->user->id;
+        if (!($input['vin'] ?? null)) {
+            return $this->sendError("no vin");
+        }
+        // check car model id with vin
+        if (!$model = CarModel::firstWhere("vin", $input['vin'])){
+            try{
+                $res = VinApi::get($input['vin']);
+                $data = [];
+                foreach($res as $key => $val){
+                    if (is_array($val))
+                        $val =json_encode($val);
+                    $data[$key] = $val;
+                }
+                $model = CarModel::create($data);
+            }catch(\Exception $e) {
+                // return $this->sendError("no vin");
+                \Log::debug($e->getMessage());
+            }
+        }
+        if (!$model) {
+            return $this->sendError("车架号码（VIN码）不正确");
+        }
+        $input['car_model_id'] = $model->id ?? null;
+        $car = Car::create($input);
+
+        return $this->sendResponse($car->info());
+    }
+
     public function images(Request $request)
     {
         $collection = $request->input('collection', 'default');

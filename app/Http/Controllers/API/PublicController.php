@@ -80,6 +80,27 @@ class PublicController extends ApiBaseController
         return $this->sendResponse($data);
     }
 
+    public function carOptions()
+    {
+        $data = [
+            "viewOptions" => [
+                ["icon" => "data-display", "name" => "plate_no", "label" => "车牌号", "disabled" => true],
+                ["icon" => "barcode-1", "name" => "vin", "label" => "车架号", "disabled" => true],
+                ["icon" => "flag-1", "name" => "car_model_brand", "label" => "品牌", "disabled" => true],
+                ["icon" => "catalog", "name" => "car_model_name", "label" => "车型", "disabled" => true],
+                ["icon" => "calendar-event", "name" => "car_model_yeartype", "label" => "年份", "disabled" => true],
+                ["icon" => "undertake-environment-protection", "name" => "car_model_fuelgrade", "label" => "汽油型号", "disabled" => true],
+
+            ],
+            "formOptions" => [
+                ["icon" => "vehicle", "name" => "plate_no", "label" => "车牌号", "required" => true],
+                ["icon" => "vehicle", "name" => "vin", "label" => "车架号", "required" => true]
+            ]
+        ];
+
+        return $this->sendResponse($data);
+    }
+
     public function apps()
     {
         $apps = \App\Models\App::where('status', 1)->get();
