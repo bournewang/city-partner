@@ -23,7 +23,7 @@ class AppSeeder extends Seeder
         $apps = [
             ["name" => "东家通路", "sort" => 1, "type" => "mpp", "category" => "app", "icon" => "tonglu.jpg", "url" => "wx330488813101da7a", "status" => 1],
             ["name" => "一车一碳", "sort" => 2, "type" => "mpp", "category" => "app", "icon" => "onecar.jpg", "url" => "wx330488813101da7a", "status" => 1],
-            ["name" => "华兴益购", "sort" => 3, "type" => "mpp", "category" => "app", "icon" => "huaxing.jpg", "url" => "https://wx.yzsmjkkjcom.com/", "status" => 1],
+            ["name" => "华兴益购", "sort" => 3, "type" => "web", "category" => "app", "icon" => "huaxing.jpg", "url" => "https://wx.yzsmjkkjcom.com/", "status" => 1],
 
             ["name" => "数字人民币","sort" => 1, "type" => "mpp", "category" => "tool", "icon" => "rmb.png", "status" => 1],
             ["name" => "邮储银行",  "sort" => 2, "type" => "mpp", "category" => "tool", "icon" => "youchu.png", "status" => 1],
