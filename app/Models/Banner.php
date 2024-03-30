@@ -17,7 +17,11 @@ class Banner extends Model implements HasMedia
     protected $fillable = [
         // "name",
         "type",
+        "category",
+        "ad_position",
+        "height",
         "url",
+        "sort",
         "status"
     ];
 
@@ -30,6 +34,16 @@ class Banner extends Model implements HasMedia
             self::INNER_URL => ___(self::INNER_URL),
             self::OUTER_URL => ___(self::OUTER_URL),
             self::MPP => ___(self::MPP)
+        ];
+    }
+
+    const BANNER = "banner";
+    const AD = "ad";
+    static public function categoryOptions()
+    {
+        return [
+            self::BANNER => __(self::BANNER),
+            self::AD => __(self::AD)
         ];
     }
 

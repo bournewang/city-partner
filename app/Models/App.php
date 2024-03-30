@@ -17,7 +17,9 @@ class App extends Model implements HasMedia
     protected $fillable = [
         "name",
         "type",
+        "category",
         "url",
+        "sort",
         "status"
     ];
 
@@ -28,6 +30,16 @@ class App extends Model implements HasMedia
         return [
             self::WEB => __(self::WEB),
             self::MPP => __(self::MPP)
+        ];
+    }
+
+    const APP = "app";
+    const TOOL = "tool";
+    static public function categoryOptions()
+    {
+        return [
+            self::APP => __(self::APP),
+            self::TOOL => __(self::TOOL)
         ];
     }
 

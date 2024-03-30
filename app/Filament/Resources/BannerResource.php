@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class BannerResource extends Resource
 {
     protected static ?string $model = Banner::class;
-    protected static ?string $label = "轮播图";
+    protected static ?string $label = "轮播/广告位";
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -38,7 +38,11 @@ class BannerResource extends Resource
                 //
                 // TextInput::make('name')->label("App Name")->translateLabel(),
                 Select::make('type')->options(\App\Models\Banner::typeOptions())->translateLabel(),
+                Select::make('category')->options(\App\Models\Banner::categoryOptions())->translateLabel(),
+                TextInput::make('ad_position')->translateLabel(),
+                TextInput::make('height')->translateLabel(),
                 TextInput::make('url')->label("Url/AppId")->translateLabel(),
+                TextInput::make('sort')->translateLabel(),
                 SpatieMediaLibraryFileUpload::make("attachments")->label("Image")->translateLabel()->collection("image")->conversion("preview"),
                 Select::make('status')->options([0 => "Disabled", 1 => "Enabled", ])->translateLabel(),
             ]);
@@ -52,7 +56,11 @@ class BannerResource extends Resource
                 ->schema([
                     // TextEntry::make("name")->label('App Name')->translateLabel(),
                     TextEntry::make("type")->translateLabel(),
+                    TextEntry::make("category")->translateLabel(),
+                    TextEntry::make("ad_position")->translateLabel(),
+                    TextEntry::make("height")->translateLabel(),
                     TextEntry::make("url")->label('Url/AppId')->translateLabel(),
+                    TextEntry::make("sort")->translateLabel(),
                     SpatieMediaLibraryImageEntry::make('attachments')->label("Image")->translateLabel()->collection('image'),
 
                     TextEntry::make("created_at")->translateLabel(),
@@ -65,7 +73,10 @@ class BannerResource extends Resource
             ->columns([
                 // TextColumn::make("name")->label("App Name")->translateLabel(),
                 TextColumn::make("type")->translateLabel(),
+                TextColumn::make("category")->translateLabel(),
+                TextColumn::make("ad_position")->translateLabel(),
                 TextColumn::make("url")->label("Url/AppId")->translateLabel(),
+                TextColumn::make("sort")->translateLabel(),
                 ToggleColumn::make("status")->translateLabel(),
                 TextColumn::make("created_at")->translateLabel(),
             ])

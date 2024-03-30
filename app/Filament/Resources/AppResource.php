@@ -38,7 +38,9 @@ class AppResource extends Resource
                 //
                 TextInput::make('name')->label("App Name")->translateLabel(),
                 Select::make('type')->options(\App\Models\App::typeOptions())->translateLabel(),
+                Select::make('category')->options(\App\Models\App::categoryOptions())->translateLabel(),
                 TextInput::make('url')->label("Url/AppId")->translateLabel(),
+                TextInput::make('sort')->translateLabel(),
                 SpatieMediaLibraryFileUpload::make("attachments")->label("Icon")->translateLabel()->collection("icon")->conversion("thumb"),
                 Select::make('status')->options([0 => "Disabled", 1 => "Enabled", ])->translateLabel(),
             ]);
@@ -52,7 +54,9 @@ class AppResource extends Resource
                 ->schema([
                     TextEntry::make("name")->label('App Name')->translateLabel(),
                     TextEntry::make("type")->translateLabel(),
+                    TextEntry::make("category")->translateLabel(),
                     TextEntry::make("url")->label('Url/AppId')->translateLabel(),
+                    TextEntry::make("sort")->translateLabel(),
                     SpatieMediaLibraryImageEntry::make('attachments')->label("Icon")->translateLabel()->collection('icon'),
 
                     TextEntry::make("created_at")->translateLabel(),
@@ -65,7 +69,9 @@ class AppResource extends Resource
             ->columns([
                 TextColumn::make("name")->label("App Name")->translateLabel(),
                 TextColumn::make("type")->translateLabel(),
+                TextColumn::make("category")->translateLabel(),
                 TextColumn::make("url")->label("Url/AppId")->translateLabel(),
+                TextColumn::make("sort")->translateLabel(),
                 ToggleColumn::make("status")->translateLabel(),
                 TextColumn::make("created_at")->translateLabel(),
             ])

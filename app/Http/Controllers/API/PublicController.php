@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Challenge;
 use App\Models\CrowdFunding;
 use App\Models\Company;
+use App\Models\Banner;
+use App\Models\App;
 use App\Helpers\UserHelper;
 use App\Helpers\ChallengeHelper;
 use App\Wechat;
@@ -87,7 +89,7 @@ class PublicController extends ApiBaseController
                 ["icon" => "data-display", "name" => "plate_no", "label" => "车牌号", "disabled" => true],
                 ["icon" => "barcode-1", "name" => "vin", "label" => "车架号", "disabled" => true],
                 ["icon" => "flag-1", "name" => "car_model_brand", "label" => "品牌", "disabled" => true],
-                ["icon" => "catalog", "name" => "car_model_name", "label" => "车型", "disabled" => true],
+                ["icon" => "vehicle", "name" => "car_model_name", "label" => "车型", "disabled" => true],
                 ["icon" => "calendar-event", "name" => "car_model_yeartype", "label" => "年份", "disabled" => true],
                 ["icon" => "undertake-environment-protection", "name" => "car_model_fuelgrade", "label" => "汽油型号", "disabled" => true],
 
@@ -113,11 +115,47 @@ class PublicController extends ApiBaseController
 
     public function banners()
     {
-        $apps = \App\Models\Banner::where('status', 1)->get();
+        $apps = Banner::where('status', 1)->where("category", Banner::BANNER)->get();
         $data = [];
         foreach ($apps as $app) {
             $data[] = $app->info();
         }
         return $this->sendResponse($data);
+    }
+
+    public function ads()
+    {
+        $apps = Banner::where('status', 1)->where("category", Banner::AD)->get();
+        $data = [];
+        foreach ($apps as $app) {
+            $data[] = $app->info();
+        }
+        return $this->sendResponse($data);
+    }
+
+    public function market()
+    {
+        $banners = Banner::where('status', 1)->orderBy("sort")->get();
+        $data = [
+            Banner::BANNER => [],
+            Banner::AD => [],
+            App::APP => [],
+            App::TOOL => []
+        ];
+        foreach ($banners as $banner) {
+            $data[$banner->category][] = $banner->info();
+        }
+
+        $apps = \App\Models\App::where('status', 1)->orderBy("sort")->get();
+        foreach ($apps as $app) {
+            $data[$app->category][] = $app->info();
+        }
+
+        return $this->sendResponse($data);
+    }
+
+    public function rules()
+    {
+        return $this->sendResponse(config("rules"));
     }
 }

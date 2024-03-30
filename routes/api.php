@@ -50,6 +50,8 @@ Route::get('/public/company-options',[PublicController::class, "companyOptions"]
 Route::get('/public/car-options',   [PublicController::class, "carOptions"]);
 Route::get('/public/apps',          [PublicController::class, "apps"]);
 Route::get('/public/banners',       [PublicController::class, "banners"]);
+Route::get('/public/market',        [PublicController::class, "market"]);
+Route::get('/public/rules',        [PublicController::class, "rules"]);
 
 Route::get('/challenge/levels',     [ChallengeController::class, "levels"]);
 Route::get('/challenge/types',      [ChallengeController::class, "types"]);
