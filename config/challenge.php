@@ -7,11 +7,11 @@ return [
     ],
     "current_text" => [
         User::CONSUMER_MERCHANT     => "当前您已被授职为【{challenge_type_label}】消费者管家身份并授予相应的【{challenge_type_label}】经营权。",
-        User::COMMUNITY_STATION     => "被授职为【征召城市合伙人】社区服务站身份，并授予相应【城市合伙人】征召权。",
-        User::RUN_CENTER_DIRECTOR   => "被授职为【征召城市合伙人】商业运营中心，并授予相应【城市合伙人】经营权。",
-        User::COUNTY_MANAGER        => "被授职为【征召城市合伙人】县级子公司，并授予相应【城市合伙人】经营权。",
-        User::AREA_PRESIDENT        => "被授职为【征召城市合伙人】地级子公司，并授予相应【城市合伙人】经营权。",
-        User::PROVINCE_CEO          => "被授职为【征召城市合伙人】省级巡视，并授予相应【城市合伙人】经营权。"
+        User::COMMUNITY_STATION     => "被授职为【征召城市合伙人】社区服务站身份，并授予相应征召城市合伙人【社区服务站】征召权。",
+        User::RUN_CENTER_DIRECTOR   => "被授职为【征召城市合伙人】商业运营中心身份，并授予相应【商业运营中心】经营权。",
+        User::COUNTY_MANAGER        => "被授职为【征召城市合伙人】县级子公司身份，并授予相应【县级子公司】经营权。",
+        User::AREA_PRESIDENT        => "被授职为【征召城市合伙人】地级子公司身份，并授予相应【地级子公司】经营权。",
+        User::PROVINCE_CEO          => "被授职为【征召城市合伙人】省级巡视身份，并授予相应【省级巡视】执行权。"
      ],
     "status" => [
         Challenge::APPLYING     => ["icon" => "time", "text" => "您的挑战已提交，请您耐心等待审核通过。"],
