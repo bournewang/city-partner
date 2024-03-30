@@ -5,9 +5,21 @@ return [
     "ranking" => [
         "overview" => "共有{total}名挑战者参与，<br/>您处在{rank}位，您后面还有{behind}位挑战者。<br/>请继续努力。"
     ],
+    "current_text" => [
+        User::CONSUMER_MERCHANT     => "当前您已被授职为【{challenge_type_label}】消费者管家身份并授予相应的【{challenge_type_label}】经营权。",
+        User::COMMUNITY_STATION     => "被授职为【征召城市合伙人】社区服务站身份，并授予相应【城市合伙人】征召权。",
+        User::RUN_CENTER_DIRECTOR   => "被授职为【征召城市合伙人】商业运营中心，并授予相应【城市合伙人】经营权。",
+        User::COUNTY_MANAGER        => "被授职为【征召城市合伙人】县级子公司，并授予相应【城市合伙人】经营权。",
+        User::AREA_PRESIDENT        => "被授职为【征召城市合伙人】地级子公司，并授予相应【城市合伙人】经营权。",
+        User::PROVINCE_CEO          => "被授职为【征召城市合伙人】省级巡视，并授予相应【城市合伙人】经营权。"
+     ],
     "status" => [
         Challenge::APPLYING     => ["icon" => "time", "text" => "您的挑战已提交，请您耐心等待审核通过。"],
-        Challenge::CHALLENGING  => ["icon" => "rocket", "text" => "您的挑战资格已确认。<br/>目前等级为{level}，正在挑战{new_level}。<br/>可截屏保存保荐码转发给其他人开始挑战。"],
+        Challenge::CHALLENGING  => ["icon" => "rocket", "text" => "尊敬的{name}, 您的征召挑战资格已核准。<br/>
+                                    {current_text}<br/>
+                                    接下来，您已正式进入【{new_level}】资格挑战区。您可截屏保存保荐码转发给其他人开始征召者"
+                                ],
+        // 您的挑战资格已确认。<br/>目前等级为{level}，正在挑战{new_level}。<br/>可截屏保存保荐码转发给其他人开始挑战。
         Challenge::SUCCESS      => ["icon" => "check-circle", "text" => null],
         Challenge::CANCELED     => ["icon" => "close-octagon", "text" => "您已挑战资格已取消。"]
     ],
@@ -28,7 +40,7 @@ return [
         ],
         User::CONSUMER_MERCHANT => [
             'level' => User::CONSUMER_MERCHANT,
-            'label' => "消费商",
+            'label' => "消费者管家",
             'icon' => 'user',
             'recommend_members' => 10,
             'total_team_members' => 10,
@@ -45,7 +57,7 @@ return [
                     <b>（二）【消费商】身份收益</b><br/>
                     ①　消费商召集的消费者，终身享受的团购消费1%通路导客引流费。<br/>
                     ②　在【我的征召】过程中，征召者有权选择中途退出，我们将在七个工作日内全额退还挑战金。<br/>
-                    <br/><br/><br/>
+
                     "
         ],
         User::COMMUNITY_STATION => [
@@ -70,7 +82,7 @@ return [
                     ②　【社区服务站】享受电商代运营收益<br/>
                     ③　【社区服务站】享受第3方支付推广费收益<br/>
                     ④　【社区服务站】授职权益可通过竞标拍卖转让，收益与平台5：5分成。<br/>
-                    <br/><br/><br/>
+
                     "
         ],
         User::RUN_CENTER_DIRECTOR => [
@@ -96,7 +108,7 @@ return [
                     	<b>颁奖条件说明：</b><br/>
                     地级别颁奖（前20名次）：全网满足10万+20合伙消费者，召开一次表彰大会<br/>
                     省级别颁奖（前2名次）：全网满足100万+2合伙消费者，召开一次表彰大会<br/>
-                    <br/><br/><br/>
+
                     "
         ],
         User::COUNTY_MANAGER => [
@@ -124,7 +136,7 @@ return [
                     	<b>颁奖条件说明：</b><br/>
                     地级别颁奖（前20名次）：全网满足10万+20合伙消费者，召开一次表彰大会<br/>
                     省级别颁奖（前2名次）：全网满足100万+2合伙消费者，召开一次表彰大会<br/>
-                    <br/><br/><br/>
+
                     "
         ],
         User::AREA_PRESIDENT => [
@@ -152,7 +164,7 @@ return [
                     	<b>颁奖条件说明：</b><br/>
                     地级别颁奖（前20名次）：全网满足10万+20合伙消费者，召开一次表彰大会<br/>
                     省级别颁奖（前2名次）：全网满足100万+2合伙消费者，召开一次表彰大会<br/>
-                    <br/><br/><br/>
+
                     "
         ],
         User::PROVINCE_CEO => [
@@ -178,7 +190,7 @@ return [
                     	<b>颁奖条件说明：</b><br/>
                     地级别颁奖（前20名次）：全网满足10万+20合伙消费者，召开一次表彰大会<br/>
                     省级别颁奖（前2名次）：全网满足100万+2合伙消费者，召开一次表彰大会<br/>
-                    <br/><br/><br/>
+
                     "
         ],
     ]

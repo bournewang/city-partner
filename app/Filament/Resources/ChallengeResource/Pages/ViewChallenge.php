@@ -6,6 +6,7 @@ use App\Filament\Resources\ChallengeResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use App\Models\Challenge;
+use App\Models\User;
 use App\Helpers\UserHelper;
 
 class ViewChallenge extends ViewRecord
@@ -22,6 +23,7 @@ class ViewChallenge extends ViewRecord
                 ->action(function () {
                     $record = $this->getRecord();
                     if ($record->status == Challenge::APPLYING) {
+                        $record->user->update(["level" => User::CONSUMER_MERCHANT]);
                         $record->update(['status' => Challenge::CHALLENGING]);
                         $this->refreshFormData(['status']);
                         // UserHelper::createQrCode($record->user);

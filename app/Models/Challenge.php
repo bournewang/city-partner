@@ -73,14 +73,20 @@ class Challenge extends Model
             $data['overview'] = ChallengeHelper::getRank($this);
         }elseif ($this->status == self::SUCCESS) {
             $data['status_prompt'] =
-                (config("challenge.levels")[$this->level]['bonus_text'] ?? null) . "<br/><br/><hr><br/>" .
+                // (config("challenge.levels")[$this->level]['bonus_text'] ?? null) . "<br/><hr><br/>" .
                 (config("challenge.levels")[$this->level]['success_text'] ?? null);
         }
         $levelOptions = User::levelOptions();
         if ($str = config("challenge.status")[$this->status]['text']) {
+            $current_text = config("challenge.current_text")[$this->user->level] ?? null;
             $data["status_prompt"] = str_replace(
-                ["{level}", "{new_level}"],
-                [$levelOptions[$this->user->level], $levelOptions[$this->level]],
+                ["{name}", "{level}", "{current_text}", "{new_level}"],
+                [
+                    $this->user->name,
+                    $levelOptions[$this->user->level],
+                    $current_text,
+                    $levelOptions[$this->level]
+                ],
                 $str);
         }
         $data['status_icon'] = config("challenge.status")[$this->status]['icon'] ?? null;

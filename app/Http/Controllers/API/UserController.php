@@ -183,7 +183,7 @@ class UserController extends ApiBaseController
                     // 'index_no',
                     'type' => $request->input('challenge_type', null),
                     'partner_role' => $input['partner_role'] ?? null,
-                    'level' => User::CONSUMER_MERCHANT,
+                    'level' => User::COMMUNITY_STATION,
                     'success_at' => null,
                     'status' => Challenge::APPLYING,
                 ]);
