@@ -28,6 +28,7 @@ class PublicController extends ApiBaseController
     // combine index page data in one api
     public function index()
     {
+        $img_url = url("/storage/mpp/");
         $data = [
             'challengeStats' => ChallengeHelper::stats(),
             'challengeLevels' => array_slice(config('challenge.levels'), 3),
@@ -38,7 +39,14 @@ class PublicController extends ApiBaseController
                                 CrowdFunding::whereIn('status', [CrowdFunding::USING, CrowdFunding::COMPLETED])->count()],
                 ['label' => __('Return Funding People'),    'value' => CrowdFunding::where('status', CrowdFunding::COMPLETED)->count()]
             ],
-            'fundingConfig' => config("car-manager.funding")
+            'fundingConfig' => config("car-manager.funding"),
+            "images" => [
+                "car_manager"   => $img_url."/car-manager.jpg",
+                "car_owner"     => $img_url."/car-owner.jpg",
+                "city_partner"  => $img_url."/city-partner.jpg",
+                "consumer"      => $img_url."/consumer.jpg",
+                "funding"       => $img_url."/funding.jpg",
+            ]
         ];
         return $this->sendResponse($data);
     }
