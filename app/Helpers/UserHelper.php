@@ -53,8 +53,8 @@ class UserHelper{
             // $today_income = $user->balanceLogs()->where("created_at", ">", Carbon::today())->where('type', BalanceLog::DEPOSIT)->sum('amount');
             // $total_income = $user->balanceLogs()->where('type', BalanceLog::DEPOSIT)->sum('amount');
             return [
-                ['label' => __("Team Members"),     "value" => $team_members],
-                ["label" => __("Direct Members"),   'value' => $direct_members],
+                ['label' => __("Register Consumers"),     "value" => $team_members],
+                ["label" => __("Partner Consumers"),   'value' => $direct_members],
                 // ["label" => __("Direct Certified Members"), "value" => $certified_members]
                 // ["label" => __("Yesterday Members"),'value' => $yesterday_members],
                 // ["label" => __("Yesterday Income"), 'value' => money($yesterday_income)],
