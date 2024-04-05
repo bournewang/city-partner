@@ -170,6 +170,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $data['referer_name'] = $this->referer->name ?? $this->referer->nickname ?? $this->referer->mobile ?? null;
         $data['qrcode'] = $this->qrcode ? url($this->qrcode) : null;
         $data['display_name'] = $this->displayName();
+        $data['display_area'] = $this->displayArea();
         $data['agent_id'] = $this->agent->id ?? null;
         return $data;
     }

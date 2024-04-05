@@ -37,7 +37,11 @@ class UserController extends ApiBaseController
     {
         $input = $request->all();
         $user = $this->user;
-        if (($input['name'] ?? $user->name) && ($input['mobile'] ?? $user->mobile) && $user->level < User::REGISTER_CONSUMER) {
+        if (($input['name'] ?? $user->name)
+            && ($input['mobile'] ?? $user->mobile)
+            && $user->level < User::REGISTER_CONSUMER
+            && $user->referer_id
+        ) {
             \Log::debug("name & mobile exists & level < 1, update level to User::REGISTER_CONSUMER");
             $input['level'] = User::REGISTER_CONSUMER;
         }
@@ -249,6 +253,24 @@ class UserController extends ApiBaseController
             // echo $e->getMessage();
             return $this->sendError("获取二维码失败: ".$e->getMessage());
         }
+    }
+
+    public function fetchUser($id)
+    {
+        if (!$user = User::find($id)) {
+            return $this->sendError("no user with id $id");
+        }
+        return $this->sendResponse([
+            "info" => $user->info(),
+            "fieldOptions" => [
+                ["name" => "name", "label" => __("Name")],
+                ["name" => "mobile", "label" => __("Mobile")],
+                ["name" => "id_no", "label" => __("ID No")],
+                ["name" => "level_label", "label" => __("Level")],
+                ["name" => "display_area", "label" => __("Display Area")],
+                ["name" => "street", "label" => __("Street")],
+            ]
+        ]);
     }
 
     /**

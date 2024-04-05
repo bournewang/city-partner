@@ -41,11 +41,16 @@ class PublicController extends ApiBaseController
             ],
             'fundingConfig' => config("car-manager.funding"),
             "images" => [
-                "car_manager"   => $img_url."/car-manager.jpg",
-                "car_owner"     => $img_url."/car-owner.jpg",
-                "city_partner"  => $img_url."/city-partner.jpg",
-                "consumer"      => $img_url."/consumer.jpg",
-                "funding"       => $img_url."/funding.jpg",
+                "apply" => [
+                    "car_manager"   => $img_url."/apply-car-manager.jpg",
+                    "car_owner"     => $img_url."/apply-car-owner.jpg",
+                    "consumer"      => $img_url."/apply-consumer.jpg",
+                ],
+                "partner" => [
+                    "car_manager"   => $img_url."/partner-car-manager.jpg",
+                    "car_owner"     => $img_url."/partner-car-owner.jpg",
+                    "consumer"      => $img_url."/partner-consumer.jpg",
+                ]
             ]
         ];
         return $this->sendResponse($data);
@@ -82,7 +87,9 @@ class PublicController extends ApiBaseController
                 ["icon" => "cooperate",     "name" => "partner_years",    "label" =>  "合伙年限"],
                 ["icon" => "calendar-2",    "name" => "partner_start_at", "label" =>  "合伙开始日期"],
                 ["icon" => "calendar-event", "name" => "partner_end_at",   "label" =>  "合伙结束日期"],
-                ["icon" => "institution-checked", "name" => "bank",             "label" =>  "开户银行",       "type" => "picker", "options" => $bankOptions],
+                ["icon" => "institution-checked", "name" => "bank",             "label" =>  "开户银行",
+                    // "type" => "picker", "options" => $bankOptions
+                ],
                 ["icon" => "institution",   "name" => "sub_bank",         "label" =>  "支行（或其他银行）"],
                 ["icon" => "verify",        "name" => "account_name",     "label" =>  "账户名称"],
                 ["icon" => "data-display",  "name" => "account_no",     "label" =>  "账号"]

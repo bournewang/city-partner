@@ -44,17 +44,17 @@ class UserHelper{
     static public function teamOverview($user)
     {
         $str = cache1("user.{$user->id}.team-overview", function()use($user){
-            $team = DB::table('relations')->where('path', 'like', "%,$user->id,%");
+            // $team = DB::table('relations')->where('path', 'like', "%,$user->id,%");
             // $yesterday_members = User::whereIn('id', $team->pluck('user_id'))->whereBetween("created_at", [Carbon::today()->subDay(1), Carbon::today()])->count();
-            $team_members = $team->count();
-            $direct_members = $user->recommends->count();
-            $certified_members = $user->recommends()->whereNotNull("certified_at")->count();
+            $register_members = $user->recommends()->where('level', User::REGISTER_CONSUMER)->count();
+            $partner_members = $user->recommends()->where('level', User::PARTNER_CONSUMER)->count();
+            // $certified_members = $user->recommends()->whereNotNull("certified_at")->count();
             // $yesterday_income = $user->balanceLogs()->whereBetween("created_at", [Carbon::today()->subDay(1), Carbon::today()])->where('type', BalanceLog::DEPOSIT)->sum('amount');
             // $today_income = $user->balanceLogs()->where("created_at", ">", Carbon::today())->where('type', BalanceLog::DEPOSIT)->sum('amount');
             // $total_income = $user->balanceLogs()->where('type', BalanceLog::DEPOSIT)->sum('amount');
             return [
-                ['label' => __("Register Consumers"),     "value" => $team_members],
-                ["label" => __("Partner Consumers"),   'value' => $direct_members],
+                ['label' => __("Register Consumers"),     "value" => $register_members],
+                ["label" => __("Partner Consumers"),   'value' => $partner_members],
                 // ["label" => __("Direct Certified Members"), "value" => $certified_members]
                 // ["label" => __("Yesterday Members"),'value' => $yesterday_members],
                 // ["label" => __("Yesterday Income"), 'value' => money($yesterday_income)],

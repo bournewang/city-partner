@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/apply',      [UserController::class, "apply"]);
     Route::post('/user/car',        [UserController::class, "addCar"]);
     Route::get ('/user/car',        [UserController::class, "car"]);
+    Route::get ('/fetch-user/{id}', [UserController::class, "fetchUser"]);
 
     Route::post('/company',         [CompanyController::class, "store"]);
     // Route::post('/image/upload',    [ImageController::class, "store"]);
