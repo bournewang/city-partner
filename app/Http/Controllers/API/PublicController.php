@@ -51,9 +51,9 @@ class PublicController extends ApiBaseController
             'fundingConfig' => config("car-manager.funding"),
             "images" => [
                 "apply" => [
-                    "car_manager"   => $img_url."/apply-car-manager.jpg",
-                    "car_owner"     => $img_url."/apply-car-owner.jpg",
-                    "consumer"      => $img_url."/apply-consumer.jpg",
+                    "car_manager"   => $img_url."/apply-car-manager-1.jpg",
+                    "car_owner"     => $img_url."/apply-car-owner-1.jpg",
+                    "consumer"      => $img_url."/apply-consumer-1.jpg",
                 ],
                 "partner" => [
                     "car_manager"   => $img_url."/partner-car-manager.jpg",
@@ -61,6 +61,7 @@ class PublicController extends ApiBaseController
                     "consumer"      => $img_url."/partner-consumer.jpg",
                 ]
             ],
+            "welcome" => config("challenge.welcome"),
             "notice" => $notice
         ];
         return $this->sendResponse($data);
