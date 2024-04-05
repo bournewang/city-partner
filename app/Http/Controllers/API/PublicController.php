@@ -29,9 +29,18 @@ class PublicController extends ApiBaseController
     public function index()
     {
         $img_url = url("/storage/mpp/");
+        $total = User::where('level', '>', 0)->count();
+        $today_new = User::where('level', '>', 0)->where('created_at', '>', today()->toDateString())->count();
+        $notice = str_replace(["{total}", "{today_new}"], [$total, $today_new], "当前共注册{total}人，今天新注册{today_new}人！");
         $data = [
             'challengeStats' => ChallengeHelper::stats(),
             'challengeLevels' => array_slice(config('challenge.levels'), 3),
+            'carOwnerStats' => [
+                ['label' => __("Develop General Manager"),  'value' => 125],
+                ['label' => __("General Manager Team"),     'value' => 100],
+                ['label' => __("Car Owner"),                'value' => 50],
+                ['label' => __("CCER Carbon Reduce Vehicle"), 'value' => 12],
+            ],
             'fundingStats' => [
                 ['label' => __('Mutual Community People'),  'value' => User::count()],
                 ['label' => __('Mutual Funding People'),    'value' => User::whereNotNull('certified_at')->count()],
@@ -51,7 +60,8 @@ class PublicController extends ApiBaseController
                     "car_owner"     => $img_url."/partner-car-owner.jpg",
                     "consumer"      => $img_url."/partner-consumer.jpg",
                 ]
-            ]
+            ],
+            "notice" => $notice
         ];
         return $this->sendResponse($data);
     }
