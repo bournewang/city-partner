@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/challenge',  [UserController::class, "startChallenge"]);
     Route::get('/user/crowdFunding',[UserController::class, "crowdFunding"]);
     Route::get('/user/company',     [UserController::class, "company"]);
+    Route::get('/user/partner-company',[UserController::class, "partnerCompany"]);
     Route::get('/user/partner-stats',[UserController::class, "partnerStats"]);
     Route::get('/user/agent',       [UserController::class, "agent"]);
     Route::get('/user/team-overview',[UserController::class,"teamOverview"]);
@@ -40,7 +41,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/apply',      [UserController::class, "apply"]);
     Route::post('/user/car',        [UserController::class, "addCar"]);
     Route::get ('/user/car',        [UserController::class, "car"]);
-    Route::get ('/fetch-user/{id}', [UserController::class, "fetchUser"]);
+    Route::get ('/consumer/{id}',   [UserController::class, "consumer"]);
 
     Route::post('/company',         [CompanyController::class, "store"]);
     // Route::post('/image/upload',    [ImageController::class, "store"]);

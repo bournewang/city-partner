@@ -92,7 +92,15 @@ class UserController extends ApiBaseController
 
     public function company()
     {
-        if ($company = ($this->user->company ?? $this->user->referer->company ?? null)) {
+        if ($company = ($this->user->company ?? null)) {
+            return $this->sendResponse($company->info());
+        }
+        return $this->sendResponse(null);
+    }
+
+    public function partnerCompany()
+    {
+        if ($company = ($this->user->referer->company ?? null)) {
             return $this->sendResponse($company->info());
         }
         return $this->sendResponse(null);
@@ -265,20 +273,41 @@ class UserController extends ApiBaseController
         }
     }
 
-    public function fetchUser($id)
+    public function consumer($id)
     {
         if (!$user = User::find($id)) {
             return $this->sendError("no user with id $id");
         }
         return $this->sendResponse([
-            "info" => $user->info(),
-            "fieldOptions" => [
+            "consumer" => $user->info(),
+            "consumerFields" => [
                 ["name" => "name", "label" => __("Name")],
                 ["name" => "mobile", "label" => __("Mobile")],
                 ["name" => "id_no", "label" => __("ID No")],
-                ["name" => "level_label", "label" => __("Level")],
+                ["name" => "level_label", "label" => "身份类别"],
                 ["name" => "display_area", "label" => __("Display Area")],
                 ["name" => "street", "label" => __("Street")],
+            ],
+            'car' => $user->car ? $user->car->info() : null,
+            'carFields' => [
+                ["icon" => "data-display", "name" => "plate_no", "label" => "车牌号", "disabled" => true],
+                ["icon" => "barcode-1", "name" => "vin", "label" => "车架号", "disabled" => true],
+                ["icon" => "flag-1", "name" => "car_model_brand", "label" => "品牌", "disabled" => true],
+                ["icon" => "vehicle", "name" => "car_model_name", "label" => "车型", "disabled" => true],
+                ["icon" => "calendar-event", "name" => "car_model_yeartype", "label" => "年份", "disabled" => true],
+                ["icon" => "undertake-environment-protection", "name" => "car_model_fuelgrade", "label" => "汽油型号", "disabled" => true],
+            ],
+            "partnerAsset" => [
+                "subscription_amount" => 0,
+                "paid_amount" => 0,
+                "topup_amount" => 0,
+                "temp_quota" => 0
+            ],
+            "partnerAssetFields" => [
+                ["name" => "subscription_amount", "label" => __("Subscription to pay")],
+                ["name" => "paid_amount", "label" => __("Paid amount")],
+                ["name" => "topup_amount", "label" => __("Topup amount")],
+                ["name" => "temp_quota", "label" => __("Temp quota")],
             ]
         ]);
     }
