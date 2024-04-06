@@ -92,10 +92,20 @@ class UserController extends ApiBaseController
 
     public function company()
     {
-        if ($company = $this->user->company) {
+        if ($company = ($this->user->company ?? $this->user->referer->company ?? null)) {
             return $this->sendResponse($company->info());
         }
         return $this->sendResponse(null);
+    }
+
+    public function partnerStats()
+    {
+        return $this->sendResponse([
+            ['label' => "新消费合伙资产认缴(万元)", "value" => 0],
+            ['label' => "新消费合伙资产已实缴(万元)", "value" => 0],
+            ['label' => "充值实缴当前余额(万元)", "value" => 0],
+            ['label' => "申请临时额度(万元)", "value" => 0],
+        ]);
     }
 
     public function agent()

@@ -167,7 +167,8 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $data['created_at'] = $this->created_at->toDateTimeString();
         $data['level_label'] = $this->levelLabel();
         // $data['referer_id'] = $this->referer_id ?? 0;
-        $data['referer_name'] = $this->referer->name ?? $this->referer->nickname ?? $this->referer->mobile ?? null;
+        $data['referer_name'] = $this->referer->name ?? null;
+        $data['referer_mobile'] = $this->referer->mobile ?? null;
         $data['qrcode'] = $this->qrcode ? url($this->qrcode) : null;
         $data['display_name'] = $this->displayName();
         $data['display_area'] = $this->displayArea();

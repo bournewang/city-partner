@@ -35,7 +35,9 @@ return [
         Challenge::APPLYING     => ["icon" => "time", "text" => "您的挑战已提交，请您耐心等待审核通过。"],
         Challenge::CHALLENGING  => ["icon" => "rocket", "text" => "尊敬的{name}, 您的征召挑战资格已核准。<br/>
                                     {current_text}<br/>
-                                    接下来，您已正式进入【{new_level}】资格挑战区。您可截屏保存保荐码转发给其他人开始征召者"
+                                    接下来，你以《{new_level}》身份进入挑战区，参加征召城市合伙人挑战。
+                                    您可截屏保存保荐码转发给其他人开始征召者。
+                                    "
                                 ],
         // 您的挑战资格已确认。<br/>目前等级为{level}，正在挑战{new_level}。<br/>可截屏保存保荐码转发给其他人开始挑战。
         Challenge::SUCCESS      => ["icon" => "check-circle", "text" => null],
