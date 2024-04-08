@@ -9,6 +9,7 @@ use App\Http\Controllers\API\ImageController;
 use App\Http\Controllers\API\CarManagerController;
 use App\Http\Controllers\API\PublicController;
 use App\Http\Controllers\API\CompanyController;
+use App\Http\Controllers\API\CarController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
