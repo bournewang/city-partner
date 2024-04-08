@@ -68,6 +68,6 @@ Route::post('/wxapp/login',         [WechatController::class, 'login']);
 // car manager
 Route::get('/car-manager/funding-stats',    [CarManagerController::class, 'fundingStas']);
 Route::get('/car-manager/funding-config',   [CarManagerController::class, 'fundingConfig']);
-
+Route::get('/car/query',            [CarController::class, 'query']);
 
 // car owner
