@@ -30,12 +30,22 @@ class WechatController extends ApiBaseController
                 'session_key' => $data['session_key']
             ]);
         }
-        if (!$user = User::firstWhere('openid', $openid)) {
-            \Log::debug("user not found with openid: $openid");
-            $referer = null;
-            if ($referer_id = $request->input('referer_id', null)) {
-                $referer = User::find($referer_id);
+        $referer = null;
+        if ($referer_id = $request->input('referer_id', null)) {
+            $referer = User::find($referer_id);
+        }
+        if ($user = User::firstWhere('openid', $openid)) {
+            \Log::debug("user found $user->id with openid: $openid");
+
+            // if user not partner, user can be re-assign referer
+            if ($referer && $user->referer_id != $referer->id
+                    && ($user->referer->level ?? 0) <= User::CONSUMER_MERCHANT) {
+                \Log::debug("user referer level: ".($user->referer->level ?? null));
+                \Log::debug("user referer_id {$user->referer_id} != new referer->id {$referer->id}, update referer_id");
+                $user->update(['referer_id' => $referer->id]);
             }
+        }else{
+            \Log::debug("user not found with openid: $openid");
             $mobile = $request->input('mobile', null);
             $info = [
                 // 'store_id'  => $store_id,
@@ -61,8 +71,6 @@ class WechatController extends ApiBaseController
                 $user = User::create($info);
             }
             UserHelper::createQrCode($user);
-        }else{
-            \Log::debug("user found $user->id with openid: $openid");
         }
 
         $info = $user->info();
