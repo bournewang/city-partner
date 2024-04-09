@@ -40,18 +40,19 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user/team-detail', [UserController::class, "teamDetail"]);
     Route::post('/user/images',     [UserController::class, "images"]);
     Route::post('/user/apply',      [UserController::class, "apply"]);
-    Route::post('/user/car',        [UserController::class, "addCar"]);
+    Route::post('/user/car',        [UserController::class, "saveCar"]);
     Route::get ('/user/car',        [UserController::class, "car"]);
     Route::get ('/consumer/{id}',   [UserController::class, "consumer"]);
 
     Route::post('/company',         [CompanyController::class, "store"]);
+    Route::post('/company/{id}/partner-asset', [CompanyController::class, "partnerAsset"]);
     // Route::post('/image/upload',    [ImageController::class, "store"]);
 });
 Route::get('/public/index',         [PublicController::class, "index"]);
 Route::get('/public/area',          [PublicController::class, "areaData"]);
 Route::get('/public/privacy',       [PublicController::class, "privacy"]);
-Route::get('/public/company-options',[PublicController::class, "companyOptions"]);
-Route::get('/public/car-options',   [PublicController::class, "carOptions"]);
+Route::get('/public/form-options',  [PublicController::class, "formOptions"]);
+// Route::get('/public/car-options',   [PublicController::class, "carOptions"]);
 Route::get('/public/apps',          [PublicController::class, "apps"]);
 Route::get('/public/banners',       [PublicController::class, "banners"]);
 Route::get('/public/market',        [PublicController::class, "market"]);

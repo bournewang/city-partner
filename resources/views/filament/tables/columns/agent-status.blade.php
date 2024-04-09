@@ -2,10 +2,9 @@
 $class = [
     Agent::APPLYING     => 'gray',
     Agent::APPROVED  => 'success',
-    // Challenge::USING         => 'success',
     Agent::REJECTED      => 'danger'
-][$state];
+][$getState()];
 ?>
 <span class="text-custom-600 dark:text-custom-400" style="--c-400:var(--{{$class}}-400);--c-600:var(--{{$class}}-600);">
-    {{Agent::statusOptions()[$state]}}
+    {{Agent::statusOptions()[$getState()]}}
 </span>

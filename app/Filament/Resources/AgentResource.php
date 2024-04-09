@@ -72,7 +72,7 @@ class AgentResource extends Resource
                 // TextColumn::make("status")->translateLabel()->searchable(),
                 TextColumn::make("created_at")->translateLabel(),
                 ViewColumn::make('status')->translateLabel()
-                    ->view('filament.tables.columns.challenge-status'),
+                    ->view('filament.tables.columns.agent-status'),
             ])
             ->filters([
                 //

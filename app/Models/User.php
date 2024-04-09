@@ -117,6 +117,18 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         return $this->hasOne(Company::class, 'legal_person_id');
     }
 
+    public function partnerCompanies()
+    {
+        return $this->belongsToMany(Company::class, "company_user")
+        ->withPivot(
+            "partnership_years",
+            "partnership_start",
+            "partnership_end",
+            "subscription_amount",
+            "paid_amount",
+        );
+    }
+
     public function agent()
     {
         return $this->hasOne(Agent::class);
@@ -171,6 +183,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $data['referer_mobile'] = $this->referer->mobile ?? null;
         $data['qrcode'] = $this->qrcode ? url($this->qrcode) : null;
         $data['display_name'] = $this->displayName();
+        $data['area'] = implode("|", [$this->province_code, $this->city_code,$this->county_code]);
         $data['display_area'] = $this->displayArea();
         $data['agent_id'] = $this->agent->id ?? null;
         return $data;

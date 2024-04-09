@@ -32,4 +32,15 @@ class CompanyController extends ApiBaseController
         return $this->sendResponse($company->info());
     }
 
+    public function partnerAsset($id, Request $request)
+    {
+        $data = $request->all();
+        if ($company = $this->user->partnerCompanies()->find($id)) {
+            $this->user->partnerCompanies()->updateExistingPivot($id, $data);
+        }else{
+            $this->user->partnerCompanies()->attach($id, $data);
+        }
+
+        return $this->sendResponse($data);
+    }
 }

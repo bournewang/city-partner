@@ -25,6 +25,15 @@ class ViewChallenge extends ViewRecord
                     if ($record->status == Challenge::APPLYING) {
                         $record->user->update(["level" => User::CONSUMER_MERCHANT]);
                         $record->update(['status' => Challenge::CHALLENGING]);
+
+                        // create a company
+                        Company::create([
+                            "company_type" => $record->type,
+                            "execute_partner" => config("city-partner.execute_partner"),
+                            "partner_role" => Company::COMMON_PARTNER,
+                            "legal_person_id" => $record->user_id,
+                        ]);
+
                         $this->refreshFormData(['status']);
                         // UserHelper::createQrCode($record->user);
                     }

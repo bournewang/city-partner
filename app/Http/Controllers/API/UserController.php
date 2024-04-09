@@ -11,6 +11,7 @@ use App\Models\Car;
 use App\Models\CarModel;
 use App\API\VinApi;
 use App\Helpers\UserHelper;
+use App\Helpers\FormHelper;
 use App\Wechat;
 
 class UserController extends ApiBaseController
@@ -44,6 +45,22 @@ class UserController extends ApiBaseController
         ) {
             \Log::debug("name & mobile exists & level < 1, update level to User::REGISTER_CONSUMER");
             $input['level'] = User::REGISTER_CONSUMER;
+        }
+        if ($area = ($input['area'] ?? null)) {
+            $areas = explode('|', $area);
+            $areaData = json_decode(file_get_contents(database_path("areadata.json")), 1);
+            if ($code = $areas[0] ?? null) {
+                $input['province_code'] = $code;
+                $input['province_name'] = $areaData['provinces'][$code] ?? null;
+            }
+            if ($code = $areas[1] ?? null) {
+                $input['city_code'] = $code;
+                $input['city_name'] = $areaData['cities'][$code] ?? null;
+            }
+            if ($code = $areas[2] ?? null) {
+                $input['county_code'] = $code;
+                $input['county_name'] = $areaData['counties'][$code] ?? null;
+            }
         }
         $user->update(array_filter($input));
 
@@ -101,7 +118,31 @@ class UserController extends ApiBaseController
     public function partnerCompany()
     {
         if ($company = ($this->user->referer->company ?? null)) {
-            return $this->sendResponse($company->info());
+            $data = ['partnerCompany' => $company->info()];
+
+            $asset = [];
+            if ($partner = $this->user->partnerCompanies->first()) {
+                $asset = $partner->pivot->toArray();
+            }
+            $asset['name'] = $this->user->name;
+            $asset['mobile'] = $this->user->mobile;
+            $asset['assetTitle'] = FormHelper::partnerAssetTitle($this->user->challenge_type);
+            $data["partnerAsset"] = $asset;
+            // if ($car = $this->user->car) {
+            if ($this->user->challenge_type == 'car_owner' && ($car = $this->user->car)) {
+                $data['car'] = $car->info();
+            }elseif ($this->user->challenge_type == 'car_manager'){
+                $data['car'] = [
+                    "plate_no" => null,
+                    "vin" => null,
+                    "car_model_brand" => "广汽传琪",
+                    "car_model_name" => "广汽传琪E9",
+                    "car_model_yeartype" => "2024",
+                    "car_model_fuelgrade" => "95号汽油"
+                ];
+            }
+            // }
+            return $this->sendResponse($data);
         }
         return $this->sendResponse(null);
     }
@@ -132,7 +173,7 @@ class UserController extends ApiBaseController
         return $this->sendResponse(null);
     }
 
-    public function addCar(Request $request)
+    public function saveCar(Request $request)
     {
         $input = $request->all();
         $input['user_id'] = $this->user->id;
@@ -158,8 +199,13 @@ class UserController extends ApiBaseController
         if (!$model) {
             return $this->sendError("车架号码（VIN码）不正确");
         }
+
         $input['car_model_id'] = $model->id ?? null;
-        $car = Car::create($input);
+        if ($car = $this->user->car) {
+            $car->update($input);
+        }else{
+            $car = Car::create($input);
+        }
 
         return $this->sendResponse($car->info());
     }
@@ -278,38 +324,20 @@ class UserController extends ApiBaseController
         if (!$user = User::find($id)) {
             return $this->sendError("no user with id $id");
         }
-        return $this->sendResponse([
-            "consumer" => $user->info(),
-            "consumerFields" => [
-                ["name" => "name", "label" => __("Name")],
-                ["name" => "mobile", "label" => __("Mobile")],
-                ["name" => "id_no", "label" => __("ID No")],
-                ["name" => "level_label", "label" => "身份类别"],
-                ["name" => "display_area", "label" => __("Display Area")],
-                ["name" => "street", "label" => __("Street")],
-            ],
-            'car' => $user->car ? $user->car->info() : null,
-            'carFields' => [
-                ["icon" => "data-display", "name" => "plate_no", "label" => "车牌号", "disabled" => true],
-                ["icon" => "barcode-1", "name" => "vin", "label" => "车架号", "disabled" => true],
-                ["icon" => "flag-1", "name" => "car_model_brand", "label" => "品牌", "disabled" => true],
-                ["icon" => "vehicle", "name" => "car_model_name", "label" => "车型", "disabled" => true],
-                ["icon" => "calendar-event", "name" => "car_model_yeartype", "label" => "年份", "disabled" => true],
-                ["icon" => "undertake-environment-protection", "name" => "car_model_fuelgrade", "label" => "汽油型号", "disabled" => true],
-            ],
-            "partnerAsset" => [
-                "subscription_amount" => 0,
-                "paid_amount" => 0,
-                "topup_amount" => 0,
-                "temp_quota" => 0
-            ],
-            "partnerAssetFields" => [
-                ["name" => "subscription_amount", "label" => __("Subscription to pay")],
-                ["name" => "paid_amount", "label" => __("Paid amount")],
-                ["name" => "topup_amount", "label" => __("Topup amount")],
-                ["name" => "temp_quota", "label" => __("Temp quota")],
-            ]
-        ]);
+        $data = [
+            "consumer"  => $user->info(),
+            'car'       => $user->car ? $user->car->info() : null,
+        ];
+        $asset = [];
+        if ($partner = $user->partnerCompanies->first()) {
+            $asset = $partner->pivot->toArray();
+        }
+        $asset['name'] = $user->name;
+        $asset['mobile'] = $user->mobile;
+        $asset['assetTitle'] = FormHelper::partnerAssetTitle($user->challenge_type);
+        $data["partnerAsset"] = $asset;
+
+        return $this->sendResponse($data);
     }
 
     /**
