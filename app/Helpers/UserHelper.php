@@ -36,6 +36,15 @@ class UserHelper{
         }
     }
 
+    static public function recommendStats($user)
+    {
+        return [
+            'register_consumers' => $user->recommends()->where('level', User::REGISTER_CONSUMER)->count(),
+            'partner_consumers' => $user->recommends()->where('level', User::PARTNER_CONSUMER)->count(),
+            'challenge_consumers' => $user->recommends()->where('level', '>', User::PARTNER_CONSUMER)->count(),
+        ];
+    }
+
     static public function totalTeamMembers($user)
     {
         return DB::table('relations')->where('path', 'like', "%,{$user->id},%")->count();

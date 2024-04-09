@@ -16,20 +16,17 @@ use App\Helpers\CarHelper;
 class CarController extends AppBaseController
 {
     protected $user;
-    const rules = [
-        'vin' => 'required|string|size:17',
-        'plate_no' => 'required|string|min:5|max:8',
+    const mobileRules = [
+        'mobile'    => 'required|string|size:11',
     ];
-    private function _getUser(Request $request)
+    const rules = [
+        'mobile'    => 'required|string|size:11',
+        'vin'       => 'required|string|size:17',
+        'plate_no'  => 'required|string|min:5|max:8',
+    ];
+    private function _getUser($mobile)
     {
-        if (!$mobile = $request->input('mobile')) {
-            // return null;
-            throw new \Exception("没有手机号码: $mobile");
-        }
-
         if (!$user = User::firstWhere('mobile', $mobile)) {
-            // return null;
-            // throw new \Exception("没有该用户: $mobile");
             $user = User::create([
                 'mobile' => $mobile,
                 'email' => $mobile."@xiaofeice.com",
@@ -52,11 +49,11 @@ class CarController extends AppBaseController
      */
     public function index(Request $request)
     {
-        try{
-            $this->_getUser($request);
-        }catch(\Exception $e){
-            return $this->sendError($e->getMessage());
+        $validator = Validator::make($request->all(), self::mobileRules);
+        if ($validator->fails()) {
+            return $this->sendError(array_map(fn($k): string =>$k[0], $validator->errors()->toArray()));
         }
+        $this->_getUser($request->input('mobile'));
 
         $data = [];
         foreach ($this->user->cars as $car){
@@ -79,11 +76,11 @@ class CarController extends AppBaseController
      */
     public function get($id, Request $request)
     {
-        try{
-            $this->_getUser($request);
-        }catch(\Exception $e){
-            return $this->sendError($e->getMessage());
+        $validator = Validator::make($request->all(), self::mobileRules);
+        if ($validator->fails()) {
+            return $this->sendError(array_map(fn($k): string =>$k[0], $validator->errors()->toArray()));
         }
+        $this->_getUser($request->input('mobile'));
 
         $data = null;
         if ($car = $this->user->cars()->find($id)){
@@ -118,18 +115,12 @@ class CarController extends AppBaseController
      */
     public function store(Request $request)
     {
-        try{
-            $this->_getUser($request);
-        }catch(\Exception $e){
-            return $this->sendError($e->getMessage());
-        }
-
         $input = $request->all();
-
         $validator = Validator::make($input, self::rules);
         if ($validator->fails()) {
             return $this->sendError(array_map(fn($k): string =>$k[0], $validator->errors()->toArray()));
         }
+        $this->_getUser($request->input('mobile'));
 
         $input['user_id'] = $this->user->id;
         $vin = $input['vin'];
@@ -171,17 +162,11 @@ class CarController extends AppBaseController
      */
     public function update($id, Request $request)
     {
-        try{
-            $this->_getUser($request);
-        }catch(\Exception $e){
-            return $this->sendError($e->getMessage());
-        }
-
         $validator = Validator::make($request->all(), self::rules);
         if ($validator->fails()) {
             return $this->sendError(array_map(fn($k): string =>$k[0], $validator->errors()->toArray()));
         }
-        // var_dump($validated);
+        $this->_getUser($request->input('mobile'));
 
         $input = [];
         $input['plate_no'] = $request->input('plate_no');
@@ -221,11 +206,11 @@ class CarController extends AppBaseController
      */
     public function delete($id, Request $request)
     {
-        try{
-            $this->_getUser($request);
-        }catch(\Exception $e){
-            return $this->sendError($e->getMessage());
+        $validator = Validator::make($request->all(), self::mobileRules);
+        if ($validator->fails()) {
+            return $this->sendError(array_map(fn($k): string =>$k[0], $validator->errors()->toArray()));
         }
+        $this->_getUser($request->input('mobile'));
 
         if ($car = $this->user->cars()->find($id)){
             $car->delete();

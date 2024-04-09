@@ -16,17 +16,25 @@ class ViewAgent extends ViewRecord
     {
         return [
             // Actions\DeleteAction::make(),
-            // Actions\Action::make('Confirm')
-            //     ->translateLabel()
-            //     ->visible(fn (): bool => $this->getRecord()->status == Agent::APPLYING)
-            //     ->action(function () {
-            //         $record = $this->getRecord();
-            //         if ($record->status == Agent::APPLYING) {
-            //             $record->update(['status' => Agent::CHALLENGING]);
-            //             $this->refreshFormData(['status']);
-            //             // UserHelper::createQrCode($record->user);
-            //         }
-            //     })
+            Actions\Action::make('Approve')
+                ->translateLabel()
+                // ->visible(fn (): bool => $this->getRecord()->status == Agent::APPLYING)
+                ->action(function () {
+                    $record = $this->getRecord();
+                    // if ($record->status == Agent::APPLYING) {
+                    $record->update(['status' => Agent::APPROVED]);
+                    $this->refreshFormData(['status']);
+                }),
+            Actions\Action::make('Reject')
+                ->translateLabel()
+                // ->visible(fn (): bool => $this->getRecord()->status == Agent::APPLYING)
+                ->action(function () {
+                    $record = $this->getRecord();
+                    // if ($record->status == Agent::APPLYING) {
+                    $record->update(['status' => Agent::REJECTED]);
+                    $this->refreshFormData(['status']);
+                    // }
+                }),
         ];
     }
 }

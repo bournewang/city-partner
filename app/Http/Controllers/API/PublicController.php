@@ -76,6 +76,7 @@ class PublicController extends ApiBaseController
             "carViewFields"     => FormHelper::carViewFields(),
             "carFormFields"     => FormHelper::carFormFields(),
             "consumerFields"    => FormHelper::consumerFields(),
+            "partnerStatsFields"=> FormHelper::partnerStatsFields()
         ];
         return $this->sendResponse($data);
     }

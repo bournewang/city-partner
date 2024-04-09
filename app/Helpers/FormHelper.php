@@ -82,7 +82,16 @@ class FormHelper
             ["icon" => "institution-checked", "name" => "bank",       "label" =>  "开户银行", "type" => "picker", "options" => $bankOptions, "display_field" => "bank_label"],
             ["icon" => "institution",   "name" => "sub_bank",         "label" =>  "支行"],
             ["icon" => "verify",        "name" => "account_name",     "label" =>  "账户名称"],
-            ["icon" => "data-display",  "name" => "account_no",     "label" =>  "账号"]
+            ["icon" => "data-display",  "name" => "account_no",     "label" =>  "账号"],
+        ];
+    }
+
+    static public function partnerStatsFields()
+    {
+        return [
+            ["icon" => "data-display",  "name" => "register_consumers", "label" =>  ___('register_consumers')],
+            ["icon" => "data-display",  "name" => "partner_consumers",  "label" =>  ___('partner_consumers')],
+            ["icon" => "data-display",  "name" => "challenge_consumers","label" =>  ___('challenge_consumers')],
         ];
     }
 }

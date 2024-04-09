@@ -10,6 +10,7 @@ use App\Http\Controllers\API\CarManagerController;
 use App\Http\Controllers\API\PublicController;
 use App\Http\Controllers\API\CompanyController;
 use App\Http\Controllers\API\CarController;
+use App\Http\Controllers\API\AgentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -46,7 +47,9 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::post('/company',         [CompanyController::class, "store"]);
     Route::post('/company/{id}/partner-asset', [CompanyController::class, "partnerAsset"]);
-    // Route::post('/image/upload',    [ImageController::class, "store"]);
+
+    Route::get ('/managers',        [AgentController::class, "managers"]);
+    Route::get ('/managers/{id}',   [AgentController::class, "manager"]);
 });
 Route::get('/public/index',         [PublicController::class, "index"]);
 Route::get('/public/area',          [PublicController::class, "areaData"]);
@@ -56,7 +59,7 @@ Route::get('/public/form-options',  [PublicController::class, "formOptions"]);
 Route::get('/public/apps',          [PublicController::class, "apps"]);
 Route::get('/public/banners',       [PublicController::class, "banners"]);
 Route::get('/public/market',        [PublicController::class, "market"]);
-Route::get('/public/rules',        [PublicController::class, "rules"]);
+Route::get('/public/rules',         [PublicController::class, "rules"]);
 
 Route::get('/challenge/levels',     [ChallengeController::class, "levels"]);
 Route::get('/challenge/types',      [ChallengeController::class, "types"]);

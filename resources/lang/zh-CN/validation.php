@@ -15,7 +15,8 @@ return [
         'string'  => ':attribute不能小于:min位.',
     ],
     'attributes' => [
-        'vin' => '车架号(VIN码)',
-        'plate_no' => '车牌号',
+        'mobile'    => '手机号码',
+        'vin'       => '车架号(VIN码)',
+        'plate_no'  => '车牌号',
     ],
 ];

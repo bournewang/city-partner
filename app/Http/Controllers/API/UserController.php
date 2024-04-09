@@ -12,6 +12,7 @@ use App\Models\CarModel;
 use App\API\VinApi;
 use App\Helpers\UserHelper;
 use App\Helpers\FormHelper;
+use App\Helpers\AreaHelper;
 use App\Wechat;
 
 class UserController extends ApiBaseController
@@ -47,20 +48,8 @@ class UserController extends ApiBaseController
             $input['level'] = User::REGISTER_CONSUMER;
         }
         if ($area = ($input['area'] ?? null)) {
-            $areas = explode('|', $area);
-            $areaData = json_decode(file_get_contents(database_path("areadata.json")), 1);
-            if ($code = $areas[0] ?? null) {
-                $input['province_code'] = $code;
-                $input['province_name'] = $areaData['provinces'][$code] ?? null;
-            }
-            if ($code = $areas[1] ?? null) {
-                $input['city_code'] = $code;
-                $input['city_name'] = $areaData['cities'][$code] ?? null;
-            }
-            if ($code = $areas[2] ?? null) {
-                $input['county_code'] = $code;
-                $input['county_name'] = $areaData['counties'][$code] ?? null;
-            }
+            $areaData = AreaHelper::parse($area);
+            $input = array_merge($input, $areaData);
         }
         $user->update(array_filter($input));
 
@@ -109,10 +98,13 @@ class UserController extends ApiBaseController
 
     public function company()
     {
+        $data = [];
         if ($company = ($this->user->company ?? null)) {
-            return $this->sendResponse($company->info());
+            $data['company'] = $company->info();
         }
-        return $this->sendResponse(null);
+        $data['partnerStats'] = UserHelper::recommendStats($this->user);
+
+        return $this->sendResponse($data);
     }
 
     public function partnerCompany()
@@ -275,22 +267,34 @@ class UserController extends ApiBaseController
             // $data = $crowdFunding->info();
         }elseif ($apply_type == "agent") {
             // $input['user_id'] = $this->user->id;
-            $agent = Agent::create([
+            $data = [
                 "user_id" => $this->user->id,
-                "province_code" => $input['agent_province_code'] ?? null,
-                "province_name" => $input['agent_province_name'] ?? null,
-                "city_code"     => $input['agent_city_code'] ?? null,
-                "city_name"     => $input['agent_city_name'] ?? null,
-                "county_code"   => $input['agent_county_code'] ?? null,
-                "county_name"   => $input['agent_county_name'] ?? null,
                 "status"        => Agent::APPLYING
-            ]);
+            ];
+            if ($area_str = ($input['agent_area'] ?? null)) {
+                $area = AreaHelper::parse($area_str);
+                // \Log::debug("agent area:");
+                // \Log::debug($area);
+                $data = array_merge($data, $area);
+            }
+            // \Log::debug("create agent with data: ");
+            // \Log::debug($data);
+            $agent = Agent::create($data);
         }elseif ($apply_type == "consumer"){
             if ($this->user->level < User::PARTNER_CONSUMER) {
                 $input['level'] = User::PARTNER_CONSUMER;
             }
         }
 
+        if ($area_str = ($input['area'] ?? null)) {
+            $area = AreaHelper::parse($area_str);
+            // \Log::debug("area:");
+            // \Log::debug($area);
+            $input = array_merge($input, $area);
+        }
+
+        // \Log::debug("update user with data:");
+        // \Log::debug($input);
         $this->user->update($input);
         $data = $this->user->refresh()->info();
         return $this->sendResponse($data);

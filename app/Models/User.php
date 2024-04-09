@@ -182,6 +182,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     {
         $data = $this->toArray();
         $data['created_at'] = $this->created_at->toDateTimeString();
+        $data['created_date'] = $this->created_at->toDateString();
         $data['level_label'] = $this->levelLabel();
         // $data['referer_id'] = $this->referer_id ?? 0;
         $data['referer_name'] = $this->referer->name ?? null;
@@ -191,6 +192,9 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $data['area'] = implode("|", [$this->province_code, $this->city_code,$this->county_code]);
         $data['display_area'] = $this->displayArea();
         $data['agent_id'] = $this->agent->id ?? null;
+        $data['agent_status'] = $this->agent->status ?? null;
+        $data['challenge_id'] = $this->challenge->id ?? null;
+        $data['challenge_status'] = $this->challenge->status ?? null;
         return $data;
     }
 

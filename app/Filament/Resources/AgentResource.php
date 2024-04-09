@@ -57,19 +57,12 @@ class AgentResource extends Resource
                 TextColumn::make("id")->translateLabel()->searchable(),
                 ImageColumn::make("user.avatar")->label("Avatar")->translateLabel()->circular()
                     ->defaultImageUrl(url("/images/default-avatar-1.png")),
-                // TextColumn::make("user.mobile")->translateLabel()->searchable(),
                 TextColumn::make("user_id")->label('User')->translateLabel()
                     ->view('filament.tables.columns.user-displayname'),
                 TextColumn::make("user.mobile")->label('Mobile')->translateLabel(),
-
-                // TextColumn::make("index_no")->translateLabel()->searchable(),
-                // TextColumn::make("level")->translateLabel()->searchable(),
-                // ViewColumn::make('level')->translateLabel()
-                //     ->view('filament.tables.columns.user-level'),
-                // ViewColumn::make('type')->translateLabel()
-                //         ->view('filament.tables.columns.challenge-type'),
-                // TextColumn::make("success_at")->translateLabel()->searchable(),
-                // TextColumn::make("status")->translateLabel()->searchable(),
+                TextColumn::make("province_name")->label('Province')->translateLabel()->searchable(),
+                TextColumn::make("city_name")->label('City')->translateLabel()->searchable(),
+                TextColumn::make("county_name")->label('County')->translateLabel()->searchable(),
                 TextColumn::make("created_at")->translateLabel(),
                 ViewColumn::make('status')->translateLabel()
                     ->view('filament.tables.columns.agent-status'),
@@ -107,24 +100,11 @@ class AgentResource extends Resource
 
                     TextEntry::make("status")->translateLabel()
                         ->formatStateUsing(fn (string $state): View =>
-                        view('filament.tables.columns.agent-status', ['state' => $state])
-                        )->columnSpan(2),
+                        view('filament.infolists.components.agent-status', ['state' => $state])),
                     // TextEntry::make("user.")->label('')->translateLabel(),
                     ImageEntry::make("user.avatar")->label('Avatar')->translateLabel()->circular(),//->columnSpan(2),
                     SpatieMediaLibraryImageEntry::make('user.id_card_front')->translateLabel()->collection('id_card_front')->label('ID Front'),
                     SpatieMediaLibraryImageEntry::make('user.id_card_end')->translateLabel()->collection('id_card_end')->label('ID End'),
-                    // SpatieMediaLibraryImageEntry::make('user.pay_receipt_funding')->translateLabel()->collection('pay_receipt_challenge')->label('Pay Receipt'),
-
-                    // TextEntry::make("type")->label("Challenge Type")->translateLabel()
-                    //     ->formatStateUsing(fn (string $state): View =>
-                    //     view('filament.infolists.components.challenge-type', ['state' => $state])),
-                    // TextEntry::make("partner_role")->translateLabel()
-                    //     ->formatStateUsing(fn (string $state): View =>
-                    //     view('filament.infolists.components.partner-roles', ['state' => $state])),
-                    // TextEntry::make("level")->translateLabel(),
-                    // TextEntry::make("success_at")->translateLabel(),
-                    // TextEntry::make("created_at")->translateLabel(),
-                        // view('filament.infolists.components.agent-status', ['state' => $state])),
                 ])
             ]);
     }
