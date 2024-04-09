@@ -29,7 +29,12 @@ class CarController extends AppBaseController
 
         if (!$user = User::firstWhere('mobile', $mobile)) {
             // return null;
-            throw new \Exception("没有该用户: $mobile");
+            // throw new \Exception("没有该用户: $mobile");
+            $user = User::create([
+                'mobile' => $mobile,
+                'email' => $mobile."@xiaofeice.com",
+                'password' => \bcrypt($mobile)
+            ]);
         }
         $this->user = $user;
     }

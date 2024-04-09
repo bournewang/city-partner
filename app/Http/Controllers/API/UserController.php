@@ -340,31 +340,11 @@ class UserController extends ApiBaseController
         return $this->sendResponse($data);
     }
 
-    /**
-     * 获取用户分销网体
-     *
-     * @OA\Get(
-     *  path="/api/user/team-overview",
-     *  tags={"User"},
-     *  @OA\Response(response=200,description="successful operation"),
-     *  security={{ "api_key":{} }}
-     * )
-     */
     public function teamOverview()
     {
         return $this->sendResponse(UserHelper::teamOverview($this->user));
     }
 
-    /**
-     * 获取直推用户网体数据
-     *
-     * @OA\Get(
-     *  path="/api/user/team-detail",
-     *  tags={"User"},
-     *  @OA\Response(response=200,description="successful operation"),
-     *  security={{ "api_key":{} }}
-     * )
-     */
     public function teamDetail()
     {
         return $this->sendResponse(UserHelper::teamDetail($this->user));

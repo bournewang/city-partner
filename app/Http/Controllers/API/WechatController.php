@@ -13,26 +13,6 @@ use Log;
 
 class WechatController extends ApiBaseController
 {
-    /**
-     * Login api
-     *
-     * @OA\Post(
-     *  path="/api/wxapp/login",
-     *  tags={"Auth"},
-     *   @OA\RequestBody(
-     *       required=true,
-     *       @OA\MediaType(
-     *           mediaType="application/x-www-form-urlencoded",
-     *           @OA\Schema(
-     *               type="object",
-     *               @OA\Property(property="code",description="code",type="string")
-     *           )
-     *       )
-     *   ),
-     *  @OA\Response(response=200,description="successful operation"),
-     *  security={{ "api_key":{} }}
-     * )
-     */
     public function login(Request $request)
     {
         \Log::debug(__CLASS__.'->'.__FUNCTION__);
@@ -45,67 +25,51 @@ class WechatController extends ApiBaseController
         $data = Wechat::codeToSession($code);
         \Log::debug($data);
         \Cache::put("wx.session.".$data['session_key'], json_encode($data), 60*5);
-        if ($openid = $data['openid'] ?? null) {
-            if ($user = User::firstWhere('openid', $openid)) {
-                \Auth::login($user);
-            }else{
-                $referer = null;
-                if ($referer_id = $request->input('referer_id', null)) {
-                    $referer = User::find($referer_id);
-                }
-                $info = [
-                    // 'store_id'  => $store_id,
-                    'openid'    => $openid,
-                    'mobile'    => $request->input('mobile', null),
-                    'name'      => $request->input('name', null),
-                    'nickname'  => $request->input('nickname', null),
-                    'avatar'    => $request->input('avatar', null),
-                    'email'     => $openid."@wechat.com",
-                    'password'  => bcrypt($openid),
-                    'referer_id'=> $referer_id,
-                    'challenge_type' => $referer->challenge_type ?? null,
-                    // 'rewards_expires_at' => Carbon::today()->addDays($setting->level_0_rewards_days),
-                    'level'     => 0
-                ];
-                \Log::debug("try to create user: " . json_encode($info));
-                // $info['referer_id'] = $referer_id;
-                $user = User::create($info);
-
-                UserHelper::createQrCode($user);
-            }
-
-            $info = $user->info();
-            $info['api_token'] = $user->createToken("api")->plainTextToken;
-            return $this->sendResponse($info);
+        if (!$openid = $data['openid'] ?? null) {
+            return $this->sendError('no openid', [
+                'session_key' => $data['session_key']
+            ]);
         }
-        return $this->sendError('no openid', [
-            'session_key' => $data['session_key']
-        ]);
+        if (!$user = User::firstWhere('openid', $openid)) {
+            \Log::debug("user not found with openid: $openid");
+            $referer = null;
+            if ($referer_id = $request->input('referer_id', null)) {
+                $referer = User::find($referer_id);
+            }
+            $mobile = $request->input('mobile', null);
+            $info = [
+                // 'store_id'  => $store_id,
+                'openid'    => $openid,
+                'mobile'    => $mobile,
+                'name'      => $request->input('name', null),
+                'nickname'  => $request->input('nickname', null),
+                'avatar'    => $request->input('avatar', null),
+                'email'     => $openid."@xiaofeice.com",
+                'password'  => bcrypt($mobile || $openid),
+                'referer_id'=> $referer_id,
+                'challenge_type' => $referer->challenge_type ?? null,
+                'level'     => 0
+            ];
+
+            if ($mobile && $user = User::firstWhere('mobile', $mobile)) {
+                \Log::debug("get user with mobile: ".$user->id);
+                \Log::debug("update user ");
+                \Log::debug($info);
+                $user->update($info);
+            }else{
+                \Log::debug("try to create user: " . json_encode($info));
+                $user = User::create($info);
+            }
+            UserHelper::createQrCode($user);
+        }else{
+            \Log::debug("user found $user->id with openid: $openid");
+        }
+
+        $info = $user->info();
+        $info['api_token'] = $user->createToken("api")->plainTextToken;
+        return $this->sendResponse($info);
     }
 
-    /**
-     * Register api
-     *
-     * @OA\Post(
-     *  path="/api/wxapp/register",
-     *  tags={"Auth"},
-     *   @OA\RequestBody(
-     *       required=true,
-     *       @OA\MediaType(
-     *           mediaType="application/x-www-form-urlencoded",
-     *           @OA\Schema(
-     *               type="object",
-     *               @OA\Property(property="session_key",description="session key from login api response",type="string"),
-     *               @OA\Property(property="code",description="code for phone number",type="string"),
-     *               @OA\Property(property="store_id",description="store id from init",type="integer"),
-     *               @OA\Property(property="referer_id",description="referer id from init",type="integer"),
-     *           )
-     *       )
-     *   ),
-     *  @OA\Response(response=200,description="successful operation"),
-     *  security={{ "api_key":{} }}
-     * )
-     */
     public function register(Request $request)
     {
         \Log::debug(__CLASS__.'->'.__FUNCTION__);
