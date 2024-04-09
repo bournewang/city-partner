@@ -28,10 +28,7 @@ class Car extends Model
 
     public function info()
     {
-        $data = [
-            "plate_no" => $this->plate_no,
-            "vin" => $this->vin
-        ];
+        $data = $this->toArray();
         $model_keys = ["brand", "name", "yeartype", "fuelgrade"];
         if ($model = $this->carModel) {
             foreach ($model->toArray() as $key => $val) {

@@ -13,8 +13,8 @@ use App\Exceptions\ApiException;
 
 /**
  * @OA\Info(
- *      version="0.6.0",
- *      title="御臻商城API文档",
+ *      version="0.5.0",
+ *      title="通路消费侧API文档",
  *      description="",
  *      @OA\Contact(
  *          email="xiaopei0206@icloud.com"

@@ -70,6 +70,10 @@ Route::post('/wxapp/login',         [WechatController::class, 'login']);
 // car manager
 Route::get('/car-manager/funding-stats',    [CarManagerController::class, 'fundingStas']);
 Route::get('/car-manager/funding-config',   [CarManagerController::class, 'fundingConfig']);
-Route::get('/car/query',            [CarController::class, 'query']);
 
+Route::get('/cars',                 [CarController::class, 'index']);
+Route::post('/cars',                [CarController::class, 'store']);
+Route::get('/cars/{id}',            [CarController::class, 'get']);
+Route::put('/cars/{id}',            [CarController::class, 'update']);
+Route::delete('/cars/{id}',         [CarController::class, 'delete']);
 // car owner

@@ -139,6 +139,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         return $this->hasOne(Car::class);
     }
 
+    public function cars()
+    {
+        return $this->hasMany(Car::class);
+    }
+
     const NONE_REGISTER     = 0; //"none_register";
     const REGISTER_CONSUMER = 1; //"register_consumer";
     const PARTNER_CONSUMER  = 2; //"partner_consumer";
