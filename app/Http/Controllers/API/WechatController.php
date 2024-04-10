@@ -63,6 +63,15 @@ class WechatController extends ApiBaseController
                     'challenge_type'        => $referer->challenge_type ?? null,
                     'challenge_type_label'  => $referer->challenge_type_label ?? null,
                 ]);
+                if ($user->relation) {
+                    $user->relation->update(['path' => $referer->path.",".$referer->id]);
+                }else{
+                    Relation::create([
+                        'root_id' => $referer->root_id ?? null,
+                        'user_id' => $user->id,
+                        'path' => $referer->path.",".$referer->id
+                    ]);
+                }
             }
         }else{
             debug("user not found with openid: $openid");
@@ -89,6 +98,13 @@ class WechatController extends ApiBaseController
             }else{
                 debug("try to create user: " . json_encode($info));
                 $user = User::create($info);
+                if ($referer) {
+                    Relation::create([
+                        'root_id' => $referer->root_id ?? null,
+                        'user_id' => $user->id,
+                        'path' => $referer->path.",".$referer->id
+                    ]);
+                }
             }
             UserHelper::createQrCode($user);
         }
