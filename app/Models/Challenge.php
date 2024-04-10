@@ -78,7 +78,7 @@ class Challenge extends Model
         }
         $levelOptions = User::levelOptions();
         if ($str = config("challenge.status")[$this->status]['text']) {
-            $current_text = config("challenge.current_text")[$this->user->level] ?? null;
+            $current_text = str_replace("{challenge_type_label}", $this->user->challenge_type_label, config("challenge.current_text")[$this->user->level] ?? null);
             $data["status_prompt"] = str_replace(
                 ["{name}", "{level}", "{current_text}", "{new_level}"],
                 [

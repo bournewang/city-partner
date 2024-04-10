@@ -7,6 +7,7 @@ use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use App\Models\Challenge;
 use App\Models\User;
+use App\Models\Company;
 use App\Helpers\UserHelper;
 
 class ViewChallenge extends ViewRecord

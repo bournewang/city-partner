@@ -109,22 +109,24 @@ class UserController extends ApiBaseController
 
     public function partnerCompany()
     {
+        $data = [];
+        $asset = [
+            "name" => $this->user->name,
+            "mobile" => $this->user->mobile
+        ];
+        $car = [];
         if ($company = ($this->user->referer->company ?? null)) {
-            $data = ['partnerCompany' => $company->info()];
+            // $data = ['partnerCompany' => $company->info()];
 
-            $asset = [];
             if ($partner = $this->user->partnerCompanies->first()) {
-                $asset = $partner->pivot->toArray();
+                $asset = array_merge($asset, $partner->pivot->toArray());
             }
-            $asset['name'] = $this->user->name;
-            $asset['mobile'] = $this->user->mobile;
-            $asset['assetTitle'] = FormHelper::partnerAssetTitle($this->user->challenge_type);
-            $data["partnerAsset"] = $asset;
+            // $data["partnerAsset"] = $asset;
             // if ($car = $this->user->car) {
             if ($this->user->challenge_type == 'car_owner' && ($car = $this->user->car)) {
-                $data['car'] = $car->info();
+                $car = $car->info();
             }elseif ($this->user->challenge_type == 'car_manager'){
-                $data['car'] = [
+                $car = [
                     "plate_no" => null,
                     "vin" => null,
                     "car_model_brand" => "广汽传琪",
@@ -134,9 +136,15 @@ class UserController extends ApiBaseController
                 ];
             }
             // }
-            return $this->sendResponse($data);
+            // return $this->sendResponse($data);
         }
-        return $this->sendResponse(null);
+        $asset['assetTitle'] = FormHelper::partnerAssetTitle($this->user->challenge_type);
+        $data = [
+            'company' => $company ? $company->info() : null,
+            'partnerAsset' => $asset,
+            'car' => $car ?? null
+        ];
+        return $this->sendResponse($data);
     }
 
     public function partnerStats()

@@ -193,8 +193,10 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $data['display_area'] = $this->displayArea();
         $data['agent_id'] = $this->agent->id ?? null;
         $data['agent_status'] = $this->agent->status ?? null;
+        $data['is_agent'] = ($this->agent->status ?? null) == Agent::APPROVED;
         $data['challenge_id'] = $this->challenge->id ?? null;
         $data['challenge_status'] = $this->challenge->status ?? null;
+        $data['is_challenging'] = in_array(($this->challenge->status ?? null), [Challenge::CHALLENGING, Challenge::SUCCESS]);
         return $data;
     }
 
