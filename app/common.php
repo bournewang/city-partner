@@ -45,3 +45,8 @@ function money($val)
 {
     return !$val ? "-" : sprintf(__('RMB')."%.2f", $val);
 }
+
+function debug($str)
+{
+    \Log::debug($str);
+}

@@ -15,15 +15,15 @@ class WechatController extends ApiBaseController
 {
     public function login(Request $request)
     {
-        \Log::debug(__CLASS__.'->'.__FUNCTION__);
-        \Log::debug($request->all());
+        debug(__CLASS__.'->'.__FUNCTION__);
+        debug($request->all());
         if (!$code = $request->input('code')) {
             throw new \Exception("no code");
         }
         // $mpp = \EasyWeChat::miniProgram();
         // $data = $mpp->auth->session($code);
         $data = Wechat::codeToSession($code);
-        \Log::debug($data);
+        debug($data);
         \Cache::put("wx.session.".$data['session_key'], json_encode($data), 60*5);
         if (!$openid = $data['openid'] ?? null) {
             return $this->sendError('no openid', [
@@ -33,19 +33,39 @@ class WechatController extends ApiBaseController
         $referer = null;
         if ($referer_id = $request->input('referer_id', null)) {
             $referer = User::find($referer_id);
+            debug("referer: " . json_encode([
+                'leve' => $referer->level,
+                'challenge_type' => $referer->challenge_type,
+                // 'challenge_type_label' => $referer->challenge_type_label,
+            ]));
         }
         if ($user = User::firstWhere('openid', $openid)) {
-            \Log::debug("user found $user->id with openid: $openid");
+            debug("user {$user->id} found with openid: $openid");
 
-            // if user not partner, user can be re-assign referer
-            if ($referer && $user->referer_id != $referer->id
-                    && ($user->referer->level ?? 0) <= User::CONSUMER_MERCHANT) {
-                \Log::debug("user referer level: ".($user->referer->level ?? null));
-                \Log::debug("user referer_id {$user->referer_id} != new referer->id {$referer->id}, update referer_id");
-                $user->update(['referer_id' => $referer->id]);
+            // if user's previous referer is not a challenger,
+            // user can be re-assign to new referer
+            if ($user->referer){
+                debug("previous referer: " . json_encode([
+                    'leve' => $user->referer->level,
+                    'challenge_type' => $user->referer->challenge_type,
+                    // 'challenge_type_label' => $user->referer->challenge_type_label,
+                ]));
+            }
+            if (
+                $referer
+                && $referer->id != $user->referer_id                        // referer changes
+                && ($user->referer->level ?? 0) < User::CONSUMER_MERCHANT   // not a challenger
+                && $referer->level > $user->referer->level                  // new referer's level greater than previous referer's level
+            ) {
+                debug("referer changes AND referer level greater than previous, update");
+                $user->update([
+                    'referer_id'            => $referer->id,
+                    'challenge_type'        => $referer->challenge_type ?? null,
+                    'challenge_type_label'  => $referer->challenge_type_label ?? null,
+                ]);
             }
         }else{
-            \Log::debug("user not found with openid: $openid");
+            debug("user not found with openid: $openid");
             $mobile = $request->input('mobile', null);
             $info = [
                 // 'store_id'  => $store_id,
@@ -57,17 +77,17 @@ class WechatController extends ApiBaseController
                 'email'     => $openid."@xiaofeice.com",
                 'password'  => bcrypt($mobile || $openid),
                 'referer_id'=> $referer_id,
-                'challenge_type' => $referer->challenge_type ?? null,
+                'challenge_type'        => $referer->challenge_type ?? null,
+                'challenge_type_label'  => $referer->challenge_type_label ?? null,
                 'level'     => 0
             ];
 
             if ($mobile && $user = User::firstWhere('mobile', $mobile)) {
-                \Log::debug("get user with mobile: ".$user->id);
-                \Log::debug("update user ");
-                \Log::debug($info);
+                debug("get user with mobile, update user ".$user->id);
+                debug($info);
                 $user->update($info);
             }else{
-                \Log::debug("try to create user: " . json_encode($info));
+                debug("try to create user: " . json_encode($info));
                 $user = User::create($info);
             }
             UserHelper::createQrCode($user);
@@ -80,15 +100,15 @@ class WechatController extends ApiBaseController
 
     public function register(Request $request)
     {
-        \Log::debug(__CLASS__.'->'.__FUNCTION__);
-        \Log::debug($request->all());
+        debug(__CLASS__.'->'.__FUNCTION__);
+        debug($request->all());
         if (!$session_key = $request->input('session_key')) {
             // throw new ApiException("no code");
         }
         // $mpp = EasyWeChat::miniProgram();
         // $data = $mpp->phone_number->getUserPhoneNumber($request->input('code'));
         $data = Wechat::codeToPhoneNumber($request->input('code'));
-        \Log::debug($data);
+        debug($data);
         if (!isset($data['errcode']) || $data['errcode'] != 0) {
             return $this->sendError("fetch phone number failed: ".$data['errmsg']);
         }
@@ -119,15 +139,15 @@ class WechatController extends ApiBaseController
         ];
         $referer_id = $request->input('referer_id', null);
         if (!$user = User::withTrashed()->firstWhere('mobile', $phone_number)) {
-            \Log::debug("try to create user: " . json_encode($info));
+            debug("try to create user: " . json_encode($info));
             $info['referer_id'] = $referer_id;
             $user = User::create($info);
         }else{
             if ($user->deleted_at) {
-                \Log::debug("restore user $user->id");
+                debug("restore user $user->id");
                 $user->restore();
             }
-            \Log::debug("update user $user->id: ".json_encode($info));
+            debug("update user $user->id: ".json_encode($info));
             $user->update($info);
         }
 
@@ -140,7 +160,7 @@ class WechatController extends ApiBaseController
         }
 
         \Auth::login($user);
-        \Log::debug("user: $user->id");
+        debug("user: $user->id");
         $data = $user->info();
         $data['api_token'] = $user->createToken("api")->plainTextToken;
         return $this->sendResponse($data);
@@ -148,7 +168,7 @@ class WechatController extends ApiBaseController
 
     public function notify(Request $request)
     {
-        \Log::debug(__CLASS__.'->'.__FUNCTION__);
+        debug(__CLASS__.'->'.__FUNCTION__);
         $app = \EasyWeChat::payment();
         //  data:
         //  array (
@@ -170,7 +190,7 @@ class WechatController extends ApiBaseController
         //   'transaction_id' => '4200001310202201054219704874',
         // )
         $response = $app->handlePaidNotify(function ($data, $fail) {
-            \Log::debug($data);
+            debug($data);
             if ($data['result_code'] == 'SUCCESS' &&
                 $data['return_code'] == 'SUCCESS' &&
                 ($order_no = $data['out_trade_no'])) {
@@ -188,8 +208,8 @@ class WechatController extends ApiBaseController
 
     public function withdrawNotify(Request $request)
     {
-        \Log::debug(__CLASS__.'->'.__FUNCTION__);
-        \Log::debug($request->all());
+        debug(__CLASS__.'->'.__FUNCTION__);
+        debug($request->all());
 
 
     }
