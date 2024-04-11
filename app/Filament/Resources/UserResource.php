@@ -22,6 +22,10 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Contracts\View\View;
+use Filament\Infolists\Components\Section;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 
 class UserResource extends Resource
 {
@@ -35,18 +39,25 @@ class UserResource extends Resource
         return $form
             ->schema([
                 //
-                Select::make('referer_id')->label("Referer")
-                    ->translateLabel()
-                    ->options(User::whereNotNull("name")->pluck('name', 'id'))
-                    ->searchable(),
+                // Select::make('referer_id')->label("Referer")
+                //     ->translateLabel()
+                //     ->options(User::whereNotNull("name")->pluck('name', 'id'))
+                //     ->searchable(),
                 TextInput::make('name')->translateLabel(),
                 TextInput::make('nickname')->translateLabel(),
                 TextInput::make('mobile')->translateLabel(),
                 // TextInput::make('status')->translateLabel(),
                 // TextInput::make('level')->translateLabel(),
-                Select::make('level')
-                    ->translateLabel()
-                    ->options(User::levelOptions())
+                // Select::make('level')
+                //     ->translateLabel()
+                //     ->options(User::levelOptions())
+
+                SpatieMediaLibraryFileUpload::make('id_card_front')->translateLabel()->collection('id_card_front')->label('ID Front'),
+                SpatieMediaLibraryFileUpload::make('id_card_end')->translateLabel()->collection('id_card_end')->label('ID End'),
+                SpatieMediaLibraryFileUpload::make('pay_receipt_challenge')->translateLabel()->collection('pay_receipt_challenge')->label("征召授职付款凭证"),
+                SpatieMediaLibraryFileUpload::make('pay_receipt_funding')->translateLabel()->collection('pay_receipt_funding')->label("众筹付款凭证"),
+                SpatieMediaLibraryFileUpload::make('pay_receipt_consumer')->translateLabel()->collection('pay_receipt_consumer')->label("入伙实缴付款凭证"),
+
 
             ]);
     }
@@ -85,7 +96,7 @@ class UserResource extends Resource
                     })
             ])
             ->actions([
-                // Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -99,23 +110,28 @@ class UserResource extends Resource
     {
         return $infolist
             ->schema([
-                TextEntry::make("openid")->translateLabel(),
-                TextEntry::make("platform_openid")->translateLabel(),
-                TextEntry::make("name")->translateLabel(),
-                TextEntry::make("nickname")->translateLabel(),
-                // TextColumn::make("email")->translateLabel()->searchable()
-                TextEntry::make("mobile")->translateLabel(),
-                TextEntry::make("status")->translateLabel(),
-                // TextEntry::make("level")->translateLabel(),
-                ViewColumn::make('level')->translateLabel()
-                    ->view('filament.tables.columns.user-level'),
-                TextEntry::make("referer.name")->translateLabel(),
-                TextEntry::make("created_at")->translateLabel() //label("Created At"),
-                // TextEntry::make("recommends")->translateLabel()->counts('recommends'),
-                // Infolists\Components\TextEntry::make('name'),
-                // Infolists\Components\TextEntry::make('email'),
-                // Infolists\Components\TextEntry::make('notes')
-                    // ->columnSpanFull(),
+                Section::make()
+                ->columns(3)
+                ->schema([
+                    // TextEntry::make("openid")->translateLabel(),
+                    // TextEntry::make("platform_openid")->translateLabel(),
+                    TextEntry::make("name")->translateLabel(),
+                    TextEntry::make("nickname")->translateLabel(),
+                    // TextColumn::make("email")->translateLabel()->searchable()
+                    TextEntry::make("mobile")->translateLabel(),
+                    // TextEntry::make("status")->translateLabel(),
+                    // TextEntry::make("level")->translateLabel(),
+                    TextEntry::make("level")->translateLabel()
+                        ->formatStateUsing(fn (string $state): View =>
+                        view('filament.infolists.components.user-level', ['state' => $state])),
+                    TextEntry::make("referer.name")->translateLabel(),
+                    TextEntry::make("created_at")->translateLabel(), //label("Created At"),
+                    SpatieMediaLibraryImageEntry::make('id_card_front')->translateLabel()->collection('id_card_front')->label('ID Front'),
+                    SpatieMediaLibraryImageEntry::make('id_card_end')->translateLabel()->collection('id_card_end')->label('ID End'),
+                    SpatieMediaLibraryImageEntry::make('pay_receipt_challenge')->translateLabel()->collection('pay_receipt_challenge')->label("征召授职付款凭证"),
+                    SpatieMediaLibraryImageEntry::make('pay_receipt_funding')->translateLabel()->collection('pay_receipt_funding')->label("众筹付款凭证"),
+                    SpatieMediaLibraryImageEntry::make('pay_receipt_consumer')->translateLabel()->collection('pay_receipt_consumer')->label("入伙实缴付款凭证"),
+                ])
             ]);
     }
 
@@ -131,7 +147,7 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
-            // 'view' => Pages\Viewuser::route('/{record}'),
+            'view' => Pages\Viewuser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }

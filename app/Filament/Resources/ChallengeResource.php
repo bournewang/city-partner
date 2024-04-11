@@ -46,7 +46,7 @@ class ChallengeResource extends Resource
                 // TextInput::make('name'),
                 Select::make('user_id')
                     ->translateLabel()
-                    ->options(User::all()->pluck('name', 'id'))
+                    ->options(User::whereNotNull("name")->pluck('name', 'id'))
                     ->searchable(),
                 // TextInput::make('index_no')->translateLabel(),
                 // TextInput::make('level')->translateLabel(),
