@@ -38,7 +38,7 @@ class ChallengeHelper
     static public function stats()
     {
         return [
-            ['label' => __('Register Consumers'),   'value' => User::count()],
+            ['label' => __('Register Consumers'),   'value' => User::where('level', User::REGISTER_CONSUMER)->count()],
             ['label' => __('Partner Consumers'),    'value' => User::where('level', User::PARTNER_CONSUMER)->count()],
             ['label' => __('Challengers'),          'value' => Challenge::whereIn('status', [Challenge::APPLYING, Challenge::CHALLENGING])->count()],
             ['label' => __('Successed Challengers'),'value' => Challenge::where('status', Challenge::SUCCESS)->orWhere('level', '>', User::CONSUMER_MERCHANT)->count()]

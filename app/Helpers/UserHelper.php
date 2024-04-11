@@ -53,25 +53,34 @@ class UserHelper{
     static public function teamOverview($user)
     {
         $str = cache1("user.{$user->id}.team-overview", function()use($user){
-            // $team = DB::table('relations')->where('path', 'like', "%,$user->id,%");
-            // $yesterday_members = User::whereIn('id', $team->pluck('user_id'))->whereBetween("created_at", [Carbon::today()->subDay(1), Carbon::today()])->count();
-            $register_members = $user->recommends()->where('level', User::REGISTER_CONSUMER)->count();
-            $partner_members = $user->recommends()->where('level', User::PARTNER_CONSUMER)->count();
-            // $certified_members = $user->recommends()->whereNotNull("certified_at")->count();
-            // $yesterday_income = $user->balanceLogs()->whereBetween("created_at", [Carbon::today()->subDay(1), Carbon::today()])->where('type', BalanceLog::DEPOSIT)->sum('amount');
-            // $today_income = $user->balanceLogs()->where("created_at", ">", Carbon::today())->where('type', BalanceLog::DEPOSIT)->sum('amount');
-            // $total_income = $user->balanceLogs()->where('type', BalanceLog::DEPOSIT)->sum('amount');
+            $register_members   = $user->recommends()->where('level', User::REGISTER_CONSUMER)->count();
+            $partner_members    = $user->recommends()->where('level', User::PARTNER_CONSUMER)->count();
+            $appoint_managers   = $user->recommends()->where('level', '>', User::PARTNER_CONSUMER)->count();
             return [
-                ['label' => __("Register Consumers"),     "value" => $register_members],
-                ["label" => __("Partner Consumers"),   'value' => $partner_members],
-                // ["label" => __("Direct Certified Members"), "value" => $certified_members]
-                // ["label" => __("Yesterday Members"),'value' => $yesterday_members],
-                // ["label" => __("Yesterday Income"), 'value' => money($yesterday_income)],
-                // ["label" => __("Today Income"),     'value' => money($today_income)],
-                // ["label" => __("Total Income"),     'value' => money($total_income)],
+                ['label' => __("Register Consumers"),       "value" => $register_members],
+                ["label" => __("Partner Consumers"),        'value' => $partner_members],
+                ["label" => __("Appoint Consumer Managers"),"value" => $appoint_managers]
             ];
         }, 3600);
         return json_decode($str);
+    }
+
+    static public function communityStationNotice($user)
+    {
+        $str = cache1("user.{$user->id}.community-station-notice", function()use($user){
+            $total_consumers= $user->recommends()->where('level', User::REGISTER_CONSUMER)      ->count();
+            $total_managers = $user->recommends()->where('level', '>', User::PARTNER_CONSUMER)  ->count();
+            $new_consumers  = $user->recommends()->where('level', User::REGISTER_CONSUMER)      ->where('created_at', '>', today()->toDateString())->count();
+            $new_managers   = $user->recommends()->where('level', '>', User::PARTNER_CONSUMER)  ->where('created_at', '>', today()->toDateString())->count();
+
+            return ["notice" => str_replace([
+                "{total_consumers}", "{total_managers}", "{new_consumers}", "{new_managers}"],
+                [$total_consumers, $total_managers, $new_consumers, $new_managers],
+                config("challenge.community_station_notice")
+            )];
+        }, 3600);
+        return json_decode($str)->notice;
+
     }
 
     static public function teamDetail($user)

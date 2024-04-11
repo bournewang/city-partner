@@ -30,9 +30,6 @@ class PublicController extends ApiBaseController
     public function index()
     {
         $img_url = url("/storage/mpp/");
-        $total = User::where('level', '>', 0)->count();
-        $today_new = User::where('level', '>', 0)->where('created_at', '>', today()->toDateString())->count();
-        $notice = str_replace(["{total}", "{today_new}"], [$total, $today_new], "当前共注册{total}人，今天新注册{today_new}人！");
         $data = [
             'challengeStats' => ChallengeHelper::stats(),
             'challengeLevels' => array_slice(config('challenge.levels'), 3),
@@ -63,7 +60,7 @@ class PublicController extends ApiBaseController
                 ]
             ],
             "welcome" => config("challenge.welcome"),
-            "notice" => $notice
+            "notice" => $this->user && $this->user->level >= User::COMMUNITY_STATION ? UserHelper::communityStationNotice($this->user) : null
         ];
         return $this->sendResponse($data);
     }
