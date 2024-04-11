@@ -31,9 +31,9 @@ class WechatController extends ApiBaseController
             ]);
         }
         $referer = null;
-        if ($referer_id = $request->input('referer_id', null)) {
-            $referer = User::find($referer_id);
-            debug("referer: " . json_encode([
+        $referer_id = $request->input('referer_id', null);
+        if ($referer_id && $referer = User::find($referer_id)) {
+            debug("referer {$referer->id}: " . json_encode([
                 'leve' => $referer->level,
                 'challenge_type' => $referer->challenge_type,
                 // 'challenge_type_label' => $referer->challenge_type_label,
@@ -45,7 +45,7 @@ class WechatController extends ApiBaseController
             // if user's previous referer is not a challenger,
             // user can be re-assign to new referer
             if ($user->referer){
-                debug("previous referer: " . json_encode([
+                debug("previous referer {$user->referer_id} : " . json_encode([
                     'leve' => $user->referer->level,
                     'challenge_type' => $user->referer->challenge_type,
                     // 'challenge_type_label' => $user->referer->challenge_type_label,
