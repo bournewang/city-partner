@@ -35,6 +35,10 @@ class UserResource extends Resource
         return $form
             ->schema([
                 //
+                Select::make('referer_id')->label("Referer")
+                    ->translateLabel()
+                    ->options(User::whereNotNull("name")->pluck('name', 'id'))
+                    ->searchable(),
                 TextInput::make('name')->translateLabel(),
                 TextInput::make('nickname')->translateLabel(),
                 TextInput::make('mobile')->translateLabel(),
@@ -62,7 +66,7 @@ class UserResource extends Resource
                 // TextColumn::make("level")->translateLabel(),
                 ViewColumn::make('level')->translateLabel()
                     ->view('filament.tables.columns.user-level'),
-                TextColumn::make("referer.nickname")->translateLabel(),
+                TextColumn::make("referer.name")->translateLabel(),
                 TextColumn::make("recommends_count")->translateLabel()->counts('recommends'),
                 TextColumn::make("created_at")->translateLabel() //label(__("Created At")),
             ])
