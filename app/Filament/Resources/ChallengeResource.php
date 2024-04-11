@@ -34,7 +34,7 @@ use Filament\Infolists\Components\Section;
 class ChallengeResource extends Resource
 {
     protected static ?string $model = Challenge::class;
-    protected static ?string $label = "挑战";
+    protected static ?string $label = "征召";
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

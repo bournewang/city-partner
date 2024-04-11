@@ -63,7 +63,8 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         "challenge_id",
         "crowd_funding_id",
         "challenge_type",
-        "challenge_type_label"
+        "challenge_type_label",
+        "partner"
     ];
 
     /**
@@ -191,12 +192,14 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $data['display_name'] = $this->displayName();
         $data['area'] = implode("|", [$this->province_code, $this->city_code,$this->county_code]);
         $data['display_area'] = $this->displayArea();
+        $data['id_no_star'] = substr($this->id_no, 0,6)."****" . substr($this->id_no, -4,4);
         $data['agent_id'] = $this->agent->id ?? null;
         $data['agent_status'] = $this->agent->status ?? null;
         $data['is_agent'] = ($this->agent->status ?? null) == Agent::APPROVED;
         $data['challenge_id'] = $this->challenge->id ?? null;
         $data['challenge_status'] = $this->challenge->status ?? null;
         $data['is_challenging'] = in_array(($this->challenge->status ?? null), [Challenge::CHALLENGING, Challenge::SUCCESS]);
+        $data['is_partner'] = $this->level == self::PARTNER_CONSUMER || $this->partner;
         return $data;
     }
 

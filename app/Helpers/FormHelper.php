@@ -54,7 +54,7 @@ class FormHelper
         return [
             ["name" => "name",          "label" => __("Name")],
             ["name" => "mobile",        "label" => __("Mobile")],
-            ["name" => "id_no",         "label" => __("ID No")],
+            ["name" => "id_no",         "label" => __("ID No"),     "display_field" => "id_no_star"],
             // ["name" => "level_label",   "label" => "身份类别"],
             ["name" => "area",          "label" => __("Display Area"), "display_field" => "display_area", "type" => "area"],
             ["name" => "street",        "label" => __("Street")],
