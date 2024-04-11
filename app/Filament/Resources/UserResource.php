@@ -42,7 +42,7 @@ class UserResource extends Resource
                 TextInput::make('name')->translateLabel(),
                 TextInput::make('nickname')->translateLabel(),
                 TextInput::make('mobile')->translateLabel(),
-                TextInput::make('status')->translateLabel(),
+                // TextInput::make('status')->translateLabel(),
                 // TextInput::make('level')->translateLabel(),
                 Select::make('level')
                     ->translateLabel()
