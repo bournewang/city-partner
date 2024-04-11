@@ -1,6 +1,8 @@
-/* .fi-sidebar {
-    background-color: black !important;
-} */
+:root {
+    /* --font-family: 'Inter'; */
+    --sidebar-width: 10rem !important;
+    --collapsed-sidebar-width: 5rem;
+}
 
 img.max-w-none.object-cover {
     /* height: 8rem; */
