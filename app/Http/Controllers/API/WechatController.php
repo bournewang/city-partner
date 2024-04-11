@@ -55,7 +55,7 @@ class WechatController extends ApiBaseController
                 $referer
                 && $referer->id != $user->referer_id                        // referer changes
                 && ($user->referer->level ?? 0) < User::CONSUMER_MERCHANT   // not a challenger
-                && $referer->level > $user->referer->level                  // new referer's level greater than previous referer's level
+                && ($user->referer->level ?? 0) < $referer->level           // new referer's level greater than previous referer's level
             ) {
                 debug("referer changes AND referer level greater than previous, update");
                 $user->update([
