@@ -38,6 +38,7 @@ class UserController extends ApiBaseController
     public function profile(Request $request)
     {
         $input = $request->all();
+        unset($input['avatar']);
         $user = $this->user;
         if (($input['name'] ?? $user->name)
             && ($input['mobile'] ?? $user->mobile)
