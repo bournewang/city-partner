@@ -42,7 +42,8 @@ return [
                                 ],
         // 您的挑战资格已确认。<br/>目前等级为{level}，正在挑战{new_level}。<br/>可截屏保存保荐码转发给其他人开始挑战。
         Challenge::SUCCESS      => ["icon" => "check-circle", "text" => null],
-        Challenge::CANCELED     => ["icon" => "close-octagon", "text" => "您已挑战资格已取消。"]
+        Challenge::CANCELED     => ["icon" => "close-octagon", "text" => "您已挑战资格已取消。"],
+        Challenge::REJECTED     => ["icon" => "close-circle", "text" => "您的征召申请被驳回, 请查看原因并重新提交。原因：{reason}"]
     ],
     "levels" => [
         User::NONE_REGISTER => [

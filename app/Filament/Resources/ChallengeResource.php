@@ -94,6 +94,7 @@ class ChallengeResource extends Resource
                     TextEntry::make("status")->translateLabel()
                         ->formatStateUsing(fn (string $state): View =>
                         view('filament.infolists.components.challenge-status', ['state' => $state])),
+                    TextEntry::make("reason")->translateLabel()
                 ])
             ]);
     }
@@ -122,6 +123,7 @@ class ChallengeResource extends Resource
                 TextColumn::make("created_at")->translateLabel(),
                 ViewColumn::make('status')->translateLabel()
                     ->view('filament.tables.columns.challenge-status'),
+                TextColumn::make("reason")->translateLabel(),    
             ])
             ->defaultSort("id", "desc")
             ->filters([

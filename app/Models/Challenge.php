@@ -17,6 +17,7 @@ class Challenge extends Model
         'level',
         'success_at',
         'status',
+        'reason'
     ];
 
     protected $casts = [
@@ -38,6 +39,7 @@ class Challenge extends Model
     const CHALLENGING = 'challenging';
     const SUCCESS = 'success';
     const CANCELED = 'canceled';
+    const REJECTED = 'rejected';
 
     static public function statusOptions()
     {
@@ -46,6 +48,7 @@ class Challenge extends Model
             self::CHALLENGING   => __(ucfirst(self::CHALLENGING)),
             self::SUCCESS       => __("Challenge Success"),
             self::CANCELED      => __(ucfirst(self::CANCELED)),
+            self::REJECTED      => __(ucfirst(self::REJECTED))
         ];
     }
     public function user()
@@ -80,12 +83,13 @@ class Challenge extends Model
         if ($str = config("challenge.status")[$this->status]['text']) {
             $current_text = str_replace("{challenge_type_label}", $this->user->challenge_type_label, config("challenge.current_text")[$this->user->level] ?? null);
             $data["status_prompt"] = str_replace(
-                ["{name}", "{level}", "{current_text}", "{new_level}"],
+                ["{name}", "{level}", "{current_text}", "{new_level}", "{reason}"],
                 [
                     $this->user->name,
                     $levelOptions[$this->user->level],
                     $current_text,
-                    $levelOptions[$this->level]
+                    $levelOptions[$this->level],
+                    $this->reason
                 ],
                 $str);
         }

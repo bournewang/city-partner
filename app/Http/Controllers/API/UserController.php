@@ -255,10 +255,9 @@ class UserController extends ApiBaseController
                 ]);
             }elseif($challenge->status == Challenge::SUCCESS){
                 $challenge->update(['status' => Challenge::CHALLENGING]);
+            }elseif($challenge->status == Challenge::REJECTED) {
+                $challenge->update(['status' => Challenge::APPLYING]);
             }
-            $input['challenge_id'] = $challenge->id;
-            // $data = $challenge->info();
-            // return $this->sendResponse();
         }elseif ($apply_type == "funding"){
             $crowdFunding = CrowdFunding::create([
                 'user_id' => $this->user->id,
