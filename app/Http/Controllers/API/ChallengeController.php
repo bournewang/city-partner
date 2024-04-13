@@ -27,7 +27,13 @@ class ChallengeController extends ApiBaseController
         $data = ['stats' => ChallengeHelper::stats()];
         if ($request->input('activity', false)) {
             $list = Challenge::orderBy('id', 'desc')->limit(20)->get();
-            $statusOptions = Challenge::statusOptions();
+            $statusOptions = [
+                Challenge::APPLYING      => __("Challenge").__(ucfirst(Challenge::APPLYING)),
+                Challenge::CHALLENGING   => "已授职",
+                Challenge::SUCCESS       => __("Challenge Success"),
+                Challenge::CANCELED      => __(ucfirst(Challenge::CANCELED)),
+            ];
+
             $activity = [];
             foreach ($list as $item){
                 // $data[] = "$item->success_at ".$item->user->name ."挑战".$item->user->levelLabel()."成功！";

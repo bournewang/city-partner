@@ -149,11 +149,12 @@ class UserController extends ApiBaseController
 
     public function partnerStats()
     {
+        $company = $this->user->partnerCompanies->first();
         return $this->sendResponse([
-            ['label' => "新消费合伙资产认缴(万元)", "value" => 0],
-            ['label' => "新消费合伙资产已实缴(万元)", "value" => 0],
-            ['label' => "充值实缴当前余额(万元)", "value" => 0],
-            ['label' => "申请临时额度(万元)", "value" => 0],
+            ['label' => "合伙资产认缴(万元)",    "value" => $company->pivot->subscription_amount ?? 0.00],
+            ['label' => "合伙资产已实缴(万元)",   "value" => $company->pivot->paid_amount ?? 0.00],
+            ['label' => "实缴充值(余额)", "value" => 0.00],
+            ['label' => "申请临时额度",   "value" => 0.00],
         ]);
     }
 
@@ -288,6 +289,17 @@ class UserController extends ApiBaseController
             if ($this->user->level < User::PARTNER_CONSUMER) {
                 $input['level'] = User::PARTNER_CONSUMER;
             }
+            $input['partner'] = true;
+
+            if ($company = ($this->user->referer->company ?? null)) {
+                $this->user->partnerCompanies()->attach($company->id, [
+                    "partnership_years" => 5,
+                    "partnership_start" => null,
+                    "partnership_end" => null,
+                    "subscription_amount" => 0,
+                    "paid_amount" => 0,
+                ]);
+            }
         }
 
         if ($area_str = ($input['area'] ?? null)) {
@@ -307,7 +319,7 @@ class UserController extends ApiBaseController
     public function recommends()
     {
         $data = [];
-        foreach ($this->user->recommends as $user) {
+        foreach ($this->user->recommends()->where('level', '>', 0)->get() as $user) {
             $data[] = $user->info();
         }
         return $this->sendResponse($data);
