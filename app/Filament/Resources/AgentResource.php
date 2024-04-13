@@ -56,7 +56,7 @@ class AgentResource extends Resource
             ->columns([
                 TextColumn::make("id")->translateLabel()->searchable(),
                 ImageColumn::make("user.avatar")->label("Avatar")->translateLabel()->circular()
-                    ->defaultImageUrl(url("/images/default-avatar-1.png")),
+                    ->defaultImageUrl(url("/images/default-avatar.png")),
                 TextColumn::make("user_id")->label('User')->translateLabel()
                     ->view('filament.tables.columns.user-displayname'),
                 TextColumn::make("user.mobile")->label('Mobile')->translateLabel(),

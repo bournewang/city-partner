@@ -216,17 +216,13 @@ class UserController extends ApiBaseController
         foreach($this->user->getMedia($collection) as $media) {
             $media->delete();
         }
-        $this->user
+        $media = $this->user
             ->addMedia($request->file('img'))
             ->toMediaCollection($collection);
 
         if ($collection == "head-img") {
-            if ($media = $this->user->refresh()->getMedia($collection)->first()) {
-                $this->user->update(['avatar' => $media->getUrl('thumb')]);
-            }else{
-                \Log::debug("------ avatar not exists!");
-            }
-
+            $this->user->update(['avatar' => $media->getUrl('thumb')]);
+            debug("update avatar = " .$media->getUrl('thumb'));
         }
 
          return $this->sendResponse(true);

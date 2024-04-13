@@ -18,6 +18,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Columns\ViewColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
@@ -69,6 +70,8 @@ class UserResource extends Resource
                 //
                 TextColumn::make("id")->translateLabel()->searchable(),
                 // TextColumn::make("platform_openid")->translateLabel()->searchable(),
+                ImageColumn::make('avatar')->translateLabel()->circular()
+                    ->defaultImageUrl(url('/images/default-avatar.png')),
                 TextColumn::make("name")->translateLabel()->searchable(),
                 TextColumn::make("nickname")->translateLabel()->searchable(),
                 // TextColumn::make("email")->translateLabel()->searchable()
