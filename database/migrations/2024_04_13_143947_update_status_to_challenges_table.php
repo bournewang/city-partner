@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::table('challenges', function (Blueprint $table) {
             //
             // $table->enum("status", array_keys(Challenge::statusOptions()))->change();
-            $table->string('status')->index()->change();
+            \DB::statement("ALTER TABLE challenges MODIFY COLUMN status enum('applying','challenging','success','canceled', 'rejected');");
             $table->string('reason')->nullable();
         });
     }

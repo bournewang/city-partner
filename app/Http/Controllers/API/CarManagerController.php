@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\CrowdFunding;
 use App\Helpers\UserHelper;
+use App\Helpers\CrowdFundingHelper;
 use App\Wechat;
 
 class CarManagerController extends ApiBaseController
@@ -13,14 +14,7 @@ class CarManagerController extends ApiBaseController
     public function fundingStas(Request $req)
     {
         $data = [
-                'stats' => [
-                    ['label' => __('Mutual Community People'),  'value' => CrowdFunding::count()],
-                    ['label' => __('Mutual Funding People'),    'value' =>
-                                    CrowdFunding::whereIn('status', [CrowdFunding::WAITING, CrowdFunding::USING, CrowdFunding::COMPLETED])->count()],
-                    ['label' => __('Get Funding People'),       'value' =>
-                                    CrowdFunding::whereIn('status', [CrowdFunding::USING, CrowdFunding::COMPLETED])->count()],
-                    ['label' => __('Return Funding People'),    'value' => CrowdFunding::where('status', CrowdFunding::COMPLETED)->count()]
-                ]
+                'stats' => CrowdFundingHelper::stats()
         ];
         if ($req->input('activity', false)) {
             $list = CrowdFunding::orderBy('id', 'desc')->limit(20)->get();

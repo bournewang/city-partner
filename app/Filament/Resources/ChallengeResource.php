@@ -123,7 +123,7 @@ class ChallengeResource extends Resource
                 TextColumn::make("created_at")->translateLabel(),
                 ViewColumn::make('status')->translateLabel()
                     ->view('filament.tables.columns.challenge-status'),
-                TextColumn::make("reason")->translateLabel(),    
+                TextColumn::make("reason")->translateLabel(),
             ])
             ->defaultSort("id", "desc")
             ->filters([

@@ -12,6 +12,8 @@ use App\Models\App;
 use App\Helpers\UserHelper;
 use App\Helpers\ChallengeHelper;
 use App\Helpers\FormHelper;
+use App\Helpers\CarOwnerHelper;
+use App\Helpers\CrowdFundingHelper;
 use App\Wechat;
 
 class PublicController extends ApiBaseController
@@ -33,19 +35,8 @@ class PublicController extends ApiBaseController
         $data = [
             'challengeStats' => ChallengeHelper::stats(),
             'challengeLevels' => array_slice(config('challenge.levels'), 3),
-            'carOwnerStats' => [
-                ['label' => __("Develop General Manager"),  'value' => 125],
-                ['label' => __("General Manager Team"),     'value' => 100],
-                ['label' => __("Car Owner"),                'value' => 50],
-                ['label' => __("CCER Carbon Reduce Vehicle"), 'value' => 12],
-            ],
-            'fundingStats' => [
-                ['label' => __('Mutual Community People'),  'value' => User::count()],
-                ['label' => __('Mutual Funding People'),    'value' => User::whereNotNull('certified_at')->count()],
-                ['label' => __('Get Funding People'),       'value' =>
-                                CrowdFunding::whereIn('status', [CrowdFunding::USING, CrowdFunding::COMPLETED])->count()],
-                ['label' => __('Return Funding People'),    'value' => CrowdFunding::where('status', CrowdFunding::COMPLETED)->count()]
-            ],
+            'carOwnerStats' => CarOwnerHelper::stats(),
+            'fundingStats'  => CrowdFundingHelper::stats(),
             'fundingConfig' => config("car-manager.funding"),
             "images" => [
                 "apply" => [
@@ -60,7 +51,8 @@ class PublicController extends ApiBaseController
                 ]
             ],
             "welcome" => config("challenge.welcome"),
-            "notice" => $this->user && $this->user->level >= User::COMMUNITY_STATION ? UserHelper::communityStationNotice($this->user) : null
+            "notice" => $this->user && $this->user->level >= User::COMMUNITY_STATION ? ChallengeHelper::notice() : null
+            // UserHelper::communityStationNotice($this->user) : null
         ];
         return $this->sendResponse($data);
     }

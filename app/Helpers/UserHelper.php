@@ -40,7 +40,7 @@ class UserHelper{
     {
         return [
             'register_consumers' => $user->recommends()->where('level', User::REGISTER_CONSUMER)->count(),
-            'partner_consumers' => $user->recommends()->where('level', User::PARTNER_CONSUMER)->count(),
+            'partner_consumers' => 0,//$user->recommends()->where('level', User::PARTNER_CONSUMER)->count(),
             'challenge_consumers' => $user->recommends()->where('level', '>', User::PARTNER_CONSUMER)->count(),
         ];
     }

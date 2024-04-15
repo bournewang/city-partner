@@ -26,21 +26,23 @@ class ChallengeController extends ApiBaseController
     {
         $data = ['stats' => ChallengeHelper::stats()];
         if ($request->input('activity', false)) {
-            $list = Challenge::orderBy('id', 'desc')->limit(20)->get();
-            $statusOptions = [
-                Challenge::APPLYING      => __("Challenge").__(ucfirst(Challenge::APPLYING)),
-                Challenge::CHALLENGING   => "已授职",
-                Challenge::SUCCESS       => __("Challenge Success"),
-                Challenge::CANCELED      => __(ucfirst(Challenge::CANCELED)),
-            ];
+            // $list = Challenge::orderBy('level', 'desc')->orderBy('success_at', 'asc')->limit(20)->get();
+            // $statusOptions = [
+            //     Challenge::APPLYING      => __("Challenge").__(ucfirst(Challenge::APPLYING)),
+            //     Challenge::CHALLENGING   => "已授职",
+            //     Challenge::SUCCESS       => __("Challenge Success"),
+            //     Challenge::CANCELED      => __(ucfirst(Challenge::CANCELED)),
+            //     Challenge::REJECTED      => __("Rejected")
+            // ];
+            $list = ChallengeHelper::ranking();
 
             $activity = [];
             foreach ($list as $item){
                 // $data[] = "$item->success_at ".$item->user->name ."挑战".$item->user->levelLabel()."成功！";
                 $activity[] = [
-                    "updated_at" => $item->updated_at ? $item->updated_at->toDateTimeString() : null,
-                    "content" => $item->user->displayName() . $statusOptions[$item->status]."!",
-                    "avatar" => $item->user->avatar
+                    "updated_at" => $item['updated_at'] ?? null,
+                    "content" => ($item["name"] ?? null) . ($item['level_label'] ?? null) . ($item['status_label'] ?? null) . ", 征召人数" .($item['recommends_count']??0) . "。",
+                    "avatar" => ($item['avatar'] ?? null)
                 ];
             }
             $data['activity'] =$activity;
