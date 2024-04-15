@@ -21,7 +21,7 @@ class LineUsersChart extends ChartWidget
         } elseif ($activeFilter == 'season'){
             $subDays = 91;
         }
-        $data = Trend::model(User::class)
+        $data = Trend::query(User::where('level', '>', User::NONE_REGISTER))
             ->between(
                 start: today()->subDays($subDays),
                 end: today()->subDay(1)->endOfDay(),

@@ -10,9 +10,9 @@ use App\Models\Challenge;
 use DB;
 class StatsOverview extends BaseWidget
 {
-    protected function getTrendData($class, $dateColumn = 'created_at')
+    protected function getTrendData($builder, $dateColumn = 'created_at')
     {
-        $origin = $class::whereBetween($dateColumn, [today()->subDays(7), today()->subDay(1)->endOfDay()])
+        $origin = $builder->whereBetween($dateColumn, [today()->subDays(7), today()->subDay(1)->endOfDay()])
             ->select(DB::raw("count(id) as total"), DB::raw("date($dateColumn) as calc_date"))
             ->groupBy('calc_date')
             ->orderBy('calc_date', 'asc')
@@ -53,9 +53,9 @@ class StatsOverview extends BaseWidget
 
     protected function getStats(): array
     {
-        [$diff1, $trend1, $register_data]  = $this->getTrendData(User::class);
-        [$diff2, $trend2, $challenge_data] = $this->getTrendData(Challenge::class);
-        [$diff3, $trend3, $success_data]   = $this->getTrendData(Challenge::class, 'success_at');
+        [$diff1, $trend1, $register_data]  = $this->getTrendData(User::where('level', '>', User::NONE_REGISTER));
+        [$diff2, $trend2, $challenge_data] = $this->getTrendData(Challenge::whereIn('status', [Challenge::APPLYING, Challenge::CHALLENGING, Challenge::SUCCESS]));
+        [$diff3, $trend3, $success_data]   = $this->getTrendData(Challenge::where('status', Challenge::SUCCESS));
 
         // \Log::debug($register_data);
         // \Log::debug($challenge_data);
