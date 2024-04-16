@@ -325,6 +325,11 @@ class UserController extends ApiBaseController
         return $this->sendResponse($data);
     }
 
+    public function paginateRecommends(Request $request)
+    {
+        return $this->sendResponse($this->paginateInfo($this->user->recommends()->where('level', '>', 0), $request));
+    }
+
     public function qrcode()
     {
         if ($this->user->qrcode){
