@@ -51,8 +51,7 @@ class PublicController extends ApiBaseController
                 ]
             ],
             "welcome" => config("challenge.welcome"),
-            "notice" => $this->user && $this->user->level >= User::COMMUNITY_STATION ? ChallengeHelper::notice() : null
-            // UserHelper::communityStationNotice($this->user) : null
+            "notice" => ChallengeHelper::notice()
         ];
         return $this->sendResponse($data);
     }
