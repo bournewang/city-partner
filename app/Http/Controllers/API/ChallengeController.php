@@ -26,18 +26,10 @@ class ChallengeController extends ApiBaseController
     {
         $data = ['stats' => ChallengeHelper::stats()];
         if ($request->input('activity', false)) {
-            // $list = Challenge::orderBy('level', 'desc')->orderBy('success_at', 'asc')->limit(20)->get();
-            // $statusOptions = [
-            //     Challenge::APPLYING      => __("Challenge").__(ucfirst(Challenge::APPLYING)),
-            //     Challenge::CHALLENGING   => "已授职",
-            //     Challenge::SUCCESS       => __("Challenge Success"),
-            //     Challenge::CANCELED      => __(ucfirst(Challenge::CANCELED)),
-            //     Challenge::REJECTED      => __("Rejected")
-            // ];
-            $list = ChallengeHelper::ranking();
+            $ranking = ChallengeHelper::ranking();
 
             $activity = [];
-            foreach ($list as $item){
+            foreach ($ranking['items'] as $item){
                 // $data[] = "$item->success_at ".$item->user->name ."挑战".$item->user->levelLabel()."成功！";
                 $activity[] = [
                     "updated_at" => $item['updated_at'] ?? null,
@@ -46,8 +38,28 @@ class ChallengeController extends ApiBaseController
                 ];
             }
             $data['activity'] =$activity;
+            $data['hasMore'] = $ranking['hasMorePages'];
         }
         return $this->sendResponse($data);
+    }
+
+    public function activity(Request $request)
+    {
+        $ranking = ChallengeHelper::ranking();
+
+        $activity = [];
+        foreach ($ranking['items'] as $item){
+            $activity[] = [
+                "updated_at" => $item['updated_at'] ?? null,
+                "content" => ($item["name"] ?? null) . ($item['level_label'] ?? null) . ($item['status_label'] ?? null) . ", 征召人数" .($item['recommends_count']??0) . "。",
+                "avatar" => ($item['avatar'] ?? null)
+            ];
+        }
+        return $this->sendResponse([
+            'items' => $activity,
+            'page' => $request->input('page', 1),
+            'hasMorepages' => $ranking['hasMorePages']
+        ]);
     }
 
     public function levels()

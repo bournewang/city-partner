@@ -91,7 +91,7 @@ class ChallengeHelper
 
     static public function ranking()
     {
-        $collection = DB::table('challenges')
+        $paginator = DB::table('challenges')
            ->select('users.name as name', 'users.avatar', 'challenges.status', 'challenges.level', 'challenges.updated_at',
            // 'users.recommends_count as recommends_count'
             DB::raw('(SELECT COUNT(*) FROM users r WHERE r.referer_id = users.id and r.level > 0) as recommends_count')
@@ -100,10 +100,10 @@ class ChallengeHelper
            ->orderBy('challenges.level', 'desc')
            ->orderByRaw("FIELD(challenges.status , 'success', 'challenging', 'applying', 'canceled', 'rejected')")
            ->orderBy('recommends_count', 'desc')
-           ->limit(50)
-           ->get();
+           ->simplePaginate(20)
+           ;
         $data = [];
-        foreach ($collection as $item){
+        foreach ($paginator->getCollection() as $item){
             $data[] = [
                 'name' => $item->name,
                 'avatar' => $item->avatar,
@@ -115,7 +115,10 @@ class ChallengeHelper
                 'updated_at' => $item->updated_at
             ];
         }
-        return $data;
+        return [
+            'hasMorePages' => $paginator->hasMorePages(),
+            'items' => $data
+        ];
     }
 
     static public function range()
