@@ -107,10 +107,8 @@ class ChallengeResource extends Resource
                 TextColumn::make("id")->translateLabel()->searchable(),
                 ImageColumn::make("user.avatar")->label("Avatar")->translateLabel()->circular()
                     ->defaultImageUrl(url("/images/default-avatar.png")),
-                // TextColumn::make("user.mobile")->translateLabel()->searchable(),
-                TextColumn::make("user_id")->label('User')->translateLabel()
-                    ->view('filament.tables.columns.user-displayname'),
-                TextColumn::make("user.mobile")->label('Mobile')->translateLabel(),
+                TextColumn::make("user.name")->label('User')->translateLabel()->searchable(),
+                TextColumn::make("user.mobile")->label('Mobile')->translateLabel()->searchable(),
 
                 // TextColumn::make("index_no")->translateLabel()->searchable(),
                 // TextColumn::make("level")->translateLabel()->searchable(),

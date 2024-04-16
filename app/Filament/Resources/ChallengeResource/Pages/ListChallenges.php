@@ -8,6 +8,8 @@ use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Components\Tab;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Challenge;
+use App\Models\User;
+use App\Filament\LevelTab;
 
 class ListChallenges extends ListRecords
 {
@@ -22,7 +24,7 @@ class ListChallenges extends ListRecords
 
     public function getTabs(): array
     {
-        return [
+        $tabs = [
             __('All') => Tab::make(),
             __('Applying') => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', Challenge::APPLYING)),
@@ -33,5 +35,15 @@ class ListChallenges extends ListRecords
             __('Canceled') => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', Challenge::CANCELED)),
         ];
+
+        // $tabs = [
+        //     __('All') => Tab::make()
+        // ];
+
+        foreach (User::levelOptions() as $level => $label) {
+            if ($level < User::COMMUNITY_STATION) continue;
+            $tabs[$label] = LevelTab::makeTab($level);
+        }
+        return $tabs;
     }
 }
