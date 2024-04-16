@@ -64,6 +64,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         "crowd_funding_id",
         "challenge_type",
         "challenge_type_label",
+        "is_union_founder",
         "partner"
     ];
 
@@ -200,6 +201,11 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $data['challenge_status'] = $this->challenge->status ?? null;
         $data['is_challenging'] = in_array(($this->challenge->status ?? null), [Challenge::CHALLENGING, Challenge::SUCCESS]);
         $data['is_partner'] = $this->level == self::PARTNER_CONSUMER || $this->partner;
+        $data['name_with_star'] = !$this->name ? null : (mb_substr($this->name, 0,1) . "**");
+        $data['mobile_with_star'] = !$this->mobile ? null : (substr($this->mobile, 0, 3) . "****" . substr($this->mobile, -4, 4));
+        $data['vip_card'] = $this->is_union_founder ? url("/storage/mpp/level/union-founder.png") :
+                ($this->level >= self::CONSUMER_MERCHANT && $this->level <= self::PROVINCE_CEO ?
+                url("/storage/mpp/level/{$this->level}.png") : null);
         return $data;
     }
 

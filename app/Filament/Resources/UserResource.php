@@ -82,6 +82,7 @@ class UserResource extends Resource
                     ->view('filament.tables.columns.user-level'),
                 TextColumn::make("referer.name")->translateLabel(),
                 TextColumn::make("recommends_count")->translateLabel()->counts('recommends'),
+                ToggleColumn::make("is_union_founder")->translateLabel(),
                 TextColumn::make("created_at")->translateLabel() //label(__("Created At")),
             ])
             ->defaultSort("id", "desc")
