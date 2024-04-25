@@ -40,10 +40,11 @@ class UserResource extends Resource
         return $form
             ->schema([
                 //
-                // Select::make('referer_id')->label("Referer")
-                //     ->translateLabel()
-                //     ->options(User::whereNotNull("name")->pluck('name', 'id'))
-                //     ->searchable(),
+                Select::make('referer_id')->label("Referer")
+                    ->translateLabel()
+                    ->options(User::whereNotNull("name")->pluck('name', 'id'))
+                    ->nullable()
+                    ->searchable(),
                 TextInput::make('name')->translateLabel(),
                 TextInput::make('nickname')->translateLabel(),
                 TextInput::make('mobile')->translateLabel(),
@@ -103,11 +104,12 @@ class UserResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            // ->bulkActions([
+            //     Tables\Actions\BulkActionGroup::make([
+            //         Tables\Actions\DeleteBulkAction::make(),
+            //     ]),
+            // ])
+            ;
     }
 
     public static function infolist(Infolist $infolist): Infolist
