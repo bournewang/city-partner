@@ -18,6 +18,7 @@ class App extends Model implements HasMedia
         "name",
         "type",
         "category",
+        "appid",
         "url",
         "sort",
         "status"
