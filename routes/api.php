@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/user/team-overview',[UserController::class,"teamOverview"]);
     Route::get('/user/recommends',  [UserController::class, "recommends"]);
     Route::get('/user/paginate-recommends',  [UserController::class, "paginateRecommends"]);
+    Route::post('/user/sales',      [UserController::class, "sales"]);
 
     Route::get('/user/team-detail', [UserController::class, "teamDetail"]);
     Route::post('/user/images',     [UserController::class, "images"]);

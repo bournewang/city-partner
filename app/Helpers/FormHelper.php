@@ -61,6 +61,13 @@ class FormHelper
         ];
     }
 
+    static public function salesFields()
+    {
+        $fields = self::consumerFields();
+        $fields[] = ["name" => "sales_label",          "label" => __("Sales")];
+        return $fields;
+    }
+
     static public function companyFields($user)
     {
         $bankOptions = [];

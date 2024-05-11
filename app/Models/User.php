@@ -65,6 +65,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         "challenge_type",
         "challenge_type_label",
         "is_union_founder",
+        "sales",
         "partner"
     ];
 
@@ -170,6 +171,15 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         return self::levelOptions()[$this->level];
     }
 
+    const NON_RESP = "non_resp";
+    const RESP = "resp";
+    static public function respOptions(){
+        return [
+            self::NON_RESP => ___(self::NON_RESP),
+            self::RESP => ___(self::RESP)
+        ];
+    }
+
     public function root()
     {
         return $this->belongsTo(User::class);
@@ -203,9 +213,12 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $data['is_partner'] = $this->level == self::PARTNER_CONSUMER || $this->partner;
         $data['name_with_star'] = !$this->name ? null : (mb_substr($this->name, 0,1) . "**");
         $data['mobile_with_star'] = !$this->mobile ? null : (substr($this->mobile, 0, 3) . "****" . substr($this->mobile, -4, 4));
+        $data['sales_label'] = $this->sales ? self::respOptions()[$this->sales] . __("Sales") : null;
         $data['vip_card'] = $this->is_union_founder ? url("/storage/mpp/level/union-founder.png") :
                 ($this->level >= self::CONSUMER_MERCHANT && $this->level <= self::PROVINCE_CEO ?
                 url("/storage/mpp/level/{$this->level}.png") : null);
+        // $data['level'] = 0;
+        // $data['sales'] = null;
         return $data;
     }
 
