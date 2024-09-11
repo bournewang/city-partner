@@ -55,7 +55,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get ('/managers',        [AgentController::class, "managers"]);
     Route::get ('/managers/{id}',   [AgentController::class, "manager"]);
 
-    Route::post('/payment/preorder',[PaymentControllerPaymentController::class, "preorder"]);
+    Route::post('/payment/preorder',[PaymentController::class, "preorder"]);
 });
 Route::get('/public/index',         [PublicController::class, "index"]);
 Route::get('/public/area',          [PublicController::class, "areaData"]);

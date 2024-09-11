@@ -50,7 +50,7 @@ class NuonuoApi {
             "sellerNote" => $goodsName, // String	Y	测试	255	商家备注
             "payType" => "WECHAT", // String	Y	ALIPAY		支付类型（只能是WECHAT/ALIPAY）
             "appid" => env('WECHAT_MINIAPP_ID'), // String	Y	wxd51f8fef5c0fc8d1	36	小程序appid
-            "notifyUrl" => "http://www.baidu.com", // String	Y	http://www.baidu.com	255	支付完成异步通知地址
+            "notifyUrl" => env('APP_URL').'api/wxapp/notify', // String	Y	http://www.baidu.com	255	支付完成异步通知地址
             "appKey" => config("invoice.app_key"), // String	Y	ASD125FAA	100	开放平台分配给应用的appKey
             "taxNo" => config("invoice.tax_num"), // String	Y	339901999999142	50	商户税号
             "customerOrderNo" => $order_no, // String	Y	20221114092116250017	64	商户订单号
