@@ -11,6 +11,7 @@ use App\Http\Controllers\API\PublicController;
 use App\Http\Controllers\API\CompanyController;
 use App\Http\Controllers\API\CarController;
 use App\Http\Controllers\API\AgentController;
+use App\Http\Controllers\API\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -53,6 +54,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
     Route::get ('/managers',        [AgentController::class, "managers"]);
     Route::get ('/managers/{id}',   [AgentController::class, "manager"]);
+
+    Route::post('/payment/preorder',[PaymentControllerPaymentController::class, "preorder"]);
 });
 Route::get('/public/index',         [PublicController::class, "index"]);
 Route::get('/public/area',          [PublicController::class, "areaData"]);
@@ -72,6 +75,7 @@ Route::get('/challenge/activity',   [ChallengeController::class, "activity"]);
 Route::get('/challenge/range',      [ChallengeController::class, "range"]);
 Route::post('/wxapp/register',      [WechatController::class, 'register']);
 Route::post('/wxapp/login',         [WechatController::class, 'login']);
+Route::post('/wxapp/notify',        [WechatController::class, 'notify']);
 
 // car manager
 Route::get('/car-manager/funding-stats',    [CarManagerController::class, 'fundingStas']);

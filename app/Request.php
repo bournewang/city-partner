@@ -7,11 +7,11 @@ class Request
     private $api;
     private $header;
 
-    public function __construct($base_uri, $headers)
+    public function __construct($base_uri, $headers = [])
     {
         $this->api = new Client([
             'base_uri' => $base_uri,
-            'timeout'  => 2.0,
+            'timeout'  => 5.0,
         ]);
         $this->header = $headers;
     }
@@ -35,10 +35,11 @@ class Request
         }
     }
 
-    public function post($url, $data)
+    public function post($url, $data, $json = false)
     {
         try{
-            $res = $this->api->post($url,   ['headers'=> $this->header, 'form_params' => $data]);
+            $data_key = $json ? 'json' : 'form_params';
+            $res = $this->api->post($url,   ['headers'=> $this->header, $data_key => $data]);
             return $this->responseToJson($res);
         } catch(ClientException $e){
             throw new \Exception($e->getMessage());

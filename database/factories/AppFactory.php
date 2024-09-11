@@ -27,7 +27,7 @@ class AppFactory extends Factory
             //
             "name" => fake()->name,
             "type" => $type,
-            "data" => $url,
+            "url" => $url,
             "status" => 1
         ];
     }

@@ -1,0 +1,1 @@
+vendor/wechatpay/wechatpay/bin/CertificateDownloader.php

@@ -14,6 +14,7 @@ class Order extends Model
         'order_no',
         'amount',
         'status',
+        'type',
         'paid_at',
         'refund_at'
     ];

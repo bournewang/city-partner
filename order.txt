@@ -1,0 +1,11 @@
+[2024-04-30 11:22:34] local.DEBUG: https://sdk.nuonuo.com/open/v1/services?senid=1d27bd737fcabe3746376f3154a904cf&nonce=230949488&timestamp=1714447354&appkey=75411605  
+[2024-04-30 11:22:34] local.DEBUG: headers:   
+[2024-04-30 11:22:34] local.DEBUG: array (
+  0 => 'Content-Type: application/json',
+  1 => 'X-Nuonuo-Sign: bn46uZkgA6El+98q84qDy/75BsY=',
+  2 => 'accessToken: 135fb40e4ed8bbc9a0f51b1oc9ftulki',
+  3 => 'userTax: 339901999999198',
+  4 => 'method: nuonuo.AggregatePay.miniprogramsquery',
+  5 => 'sdkVer: 2.0.0',
+)  
+[2024-04-30 11:22:34] local.DEBUG: {"amount":1,"subject":"test goods","goodsListItem":[{"amount":1,"goodsName":"test goods","goodsNum":1}],"deptId":"1","userid":"1","sellerNote":"test comment","payType":"WECHAT","appid":"wxd51f8fef5c0fc8d1","notifyUrl":"http:\/\/www.baidu.com","appKey":"75411605","taxNo":"339901999999198","customerOrderNo":"2024043000002"} 

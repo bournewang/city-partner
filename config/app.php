@@ -170,6 +170,7 @@ return [
         App\Providers\Filament\AdminPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
         Illuminate\Redis\RedisServiceProvider::class,
+        Buqiu\Invoice\InvoiceProvider::class
     ])->toArray(),
 
     /*
@@ -186,6 +187,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Redis' => Illuminate\Support\Facades\Redis::class,
+        'InvoiceSdkFacade' =>   Buqiu\Invoice\Facades\InvoiceSdkFacade::class
     ])->toArray(),
 
 ];

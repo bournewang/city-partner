@@ -20,7 +20,7 @@ class BannerSeeder extends Seeder
             ["type" => "inner_url", "category" => "banner",  "image" => "banner-3.jpg", "url" => "/pages/rules/page?type=car-owner", "sort" => 3, "status" => 1],
             ["type" => "inner_url", "category" => "banner",  "image" => "banner-4.jpg", "url" => null, "sort" => 4, "status" => 1],
 
-            ["type" => "inner_url", "category" => "ad", "image" => "ad-1.png", "ad_position" => 1, "height" => "8em", "url" => "/pages/apply/page?type=challenge", "sort" => 1, "status" => 1],
+            ["type" => "inner_url", "category" => "ad", "image" => "ad-1.png", "ad_position" => 1, "height" => "8em", "url" => "/pages/projects/page", "sort" => 1, "status" => 1],
             ["type" => "inner_url", "category" => "ad", "image" => "ad-2.jpg", "ad_position" => 2, "height" => "5em", "url" => "/pages/apply/page?type=agent", "sort" => 2, "status" => 1],
 
         ];
