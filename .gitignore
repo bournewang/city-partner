@@ -22,3 +22,4 @@ yarn-error.log
 /.idea
 /.vscode
 nuonuo-sdk-php2.0.0
+composer.lock

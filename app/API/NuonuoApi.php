@@ -5,24 +5,42 @@ use Buqiu\Invoice\InvoiceSDK;
 class NuonuoApi {
     private $sdk;
     private $token;
-    public function __construct()
+    private $type;
+    private $config;
+    // usage: 
+    // (new NuonuoApi('payment'))->preorder(...)
+    // (new NuonuoApi('invoice'))->createInvoice(...)
+    public function __construct($type = 'payment')
     {
-        $this->sdk = new InvoiceSDK(config('invoice'));
-        $this->token = env("NUONUO_TOKEN");
+        $this->type = $type;
+        $config = config('invoice');
+        if ($type === 'payment') {
+            $config['app_key'] = env('NUONUO_APP_KEY');
+            $config['app_secret'] = env('NUONUO_APP_SECRET');
+            $this->token = env("NUONUO_TOKEN");
+        }else {
+            $config['app_key'] = env('NUONUO_INVOICE_APP_KEY');
+            $config['app_secret'] = env('NUONUO_INVOICE_APP_SECRET');
+            $this->token = env("NUONUO_INVOICE_TOKEN");
+        }
+
+        $this->config = $config;
+        $this->sdk = new InvoiceSDK($config);
     }
 
-    public function create($index, $goodsName, $price, $taxRate, $num = 1)
+    public function createInvoice($orderNo, $buyerName, $goodsName, $price, $taxRate, $num = 1)
     {
         return $this->request("nuonuo.OpeMplatform.requestBillingNew", [
-            "buyerName" => "Mr Wang",
-            "orderNo" => date("Ymd").sprintf("%05d", $index),
+            "buyerName" => $buyerName,
+            "orderNo" => $orderNo,
             "invoiceDate" => now()->toDateTimeString(),
-            "pushMode" => 1,
-            "email" => "xiaopei0206@icloud.com",
+            "pushMode" => -1,
+            // "email" => "",
             "invoiceType" => 1,
+            "invoiceLine" => "pc",
             "goodsName" => $goodsName,
             "price" => $price,
-            "num" => 1,
+            "num" => $num,
             "taxRate" => $taxRate,
             "withTaxFlag" => 1
         ]);
@@ -30,10 +48,11 @@ class NuonuoApi {
 
     public function query($serialNo)
     {
-        return $this->request("nuonuo.OpeMplatform.queryInvoiceResult", [
+        $res = $this->request("nuonuo.OpeMplatform.queryInvoiceResult", [
             "serialNos" => $serialNo,
             "isOfferInvoiceDetail" => 1
         ]);
+        return $res->result[0];
     }
 
     public function preorder($order_no, $goodsName, $goodsNum, $amount, $openId)
@@ -51,8 +70,8 @@ class NuonuoApi {
             "payType" => "WECHAT", // String	Y	ALIPAY		支付类型（只能是WECHAT/ALIPAY）
             "appid" => env('WECHAT_MINIAPP_ID'), // String	Y	wxd51f8fef5c0fc8d1	36	小程序appid
             "notifyUrl" => env('APP_URL').'api/wxapp/notify', // String	Y	http://www.baidu.com	255	支付完成异步通知地址
-            "appKey" => config("invoice.app_key"), // String	Y	ASD125FAA	100	开放平台分配给应用的appKey
-            "taxNo" => config("invoice.tax_num"), // String	Y	339901999999142	50	商户税号
+            "appKey" => $this->config["app_key"], // String	Y	ASD125FAA	100	开放平台分配给应用的appKey
+            "taxNo" => $this->config["tax_num"], // String	Y	339901999999142	50	商户税号
             "customerOrderNo" => $order_no, // String	Y	20221114092116250017	64	商户订单号
             // "openid" => "oWCUh7R2lH6kNoWMoIDm5GpMFrsg"
         ];

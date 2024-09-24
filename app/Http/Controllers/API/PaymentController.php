@@ -13,13 +13,13 @@ use Log;
 
 class PaymentController extends ApiBaseController
 {
-    public function preorder(Request $request)
+    public function registerConsumer(Request $request)
     {
         $request->validate([
-            'type' => 'required|string',
-            'goodsName' => 'required|string',
-            'goodsNum' => 'required|integer',
-            'amount' => 'required|numeric',
+            // 'type' => 'required|string',
+            // 'goodsName' => 'required|string',
+            // 'goodsNum' => 'required|integer',
+            // 'amount' => 'required|numeric',
         ]);
         $input = $request->all();
         $index = $this->countOrdersToday();
@@ -28,13 +28,13 @@ class PaymentController extends ApiBaseController
         $order = Order::create([
             'user_id' => $this->user->id,
             'order_no' => $order_no,
-            'amount' => $input['amount'],
+            'amount' => 36.5,
             'status' => Order::CREATED,
-            'type' => $input['type'],
+            'type' => 'register-consumer',
             'paid_at' => null,
             'refund_at' => null
         ]);
-        $res = (new NuonuoApi())->preorder($order->order_no, $input['goodsName'], $input['goodsNum'], $input['amount'], $this->user->openid);
+        $res = (new NuonuoApi('payment'))->preorder($order->order_no, 'Register Consumer', 1, $order->amount, $this->user->openid);
         if ($res->code == 'JH200' && $res->result->payInfo) {
             return $this->sendResponse(json_decode($res->result->payInfo));
         }else{

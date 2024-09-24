@@ -8,9 +8,9 @@
 
 return [
     // 开放平台appKey
-    'app_key' => env("NUONUO_APP_KEY"),
+    // 'app_key' => env("NUONUO_APP_KEY"),
     // 开放平台appSecret
-    'app_secret' => env("NUONUO_APP_SECRET"),
+    // 'app_secret' => env("NUONUO_APP_SECRET"),
     // 临时授权码
     'code' => env("NUONUO_CODE"),
     // 授权商户税号
@@ -22,9 +22,9 @@ return [
     // 开票回调地址
     'call_back_url' => '',
     // 销方电话
-    'saler_tel' => '',
+    'saler_tel' => '18118723688',
     // 销方地址
-    'saler_address' => '',
+    'saler_address' => '深圳市宝安区沙井街道后亭社区四海云创大厦2栋B座2101A',
     // 销方银行开户行及账号(二手车销售统一发票时必填)
     'saler_account' => '',
     // 复核人

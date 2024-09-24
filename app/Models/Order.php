@@ -16,7 +16,8 @@ class Order extends Model
         'status',
         'type',
         'paid_at',
-        'refund_at'
+        'refund_at',
+        'invoice_serial_num'
     ];
 
     protected $casts = [
