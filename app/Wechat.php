@@ -24,17 +24,17 @@ class Wechat
         return $app->getClient()->postJson('wxa/business/getuserphonenumber', ['code' => $code]);
     }
 
-    static public function pay()
+    static public function preorder($order_no, $amount)
     {
         $app = new PaymentApp(config('wechat.payment'));
         $response = $app->getClient()->postJson("v3/pay/transactions/native", [
            "mchid" => config("wechat.payment.mch_id"),
-           "out_trade_no" => "20240205".sprintf("%05d", rand(1,1000)),
+           "out_trade_no" => $order_no,
            "appid" => config("wechat.mini_app.app_id"),
            "description" => "test order",
-           "notify_url" => "https://weixin.qq.com/",
+           "notify_url" => "https://xiaofeice.com/api/wxapp/notify",
            "amount" => [
-                "total" => 1,
+                "total" => $amount * 100,
                 "currency" => "CNY"
             ],
             // "payer" => [
@@ -43,5 +43,6 @@ class Wechat
         ]);
 
         \dd($response->toArray(false));
+        return $response;
     }
 }

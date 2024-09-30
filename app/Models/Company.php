@@ -52,6 +52,10 @@ class Company extends Model
         if ($this->bank) {
             $data['bank_label'] = config('banks')[$this->bank] ?? null;
         }
+        if ($this->legalPerson)
+        foreach ($this->legalPerson->getMedia('receive_qrcode') as $media) {
+            $data['receive_qrcode'] = $media->getUrl('preview');
+        }
         $data['company_type_label'] = Challenge::typeOptions()[$this->company_type] ?? null;
         $data['partner_role_label'] = self::partnerRoleOptions()[$this->partner_role] ?? null;
         return $data;

@@ -9,6 +9,7 @@ use App\Http\Controllers\API\ImageController;
 use App\Http\Controllers\API\CarManagerController;
 use App\Http\Controllers\API\PublicController;
 use App\Http\Controllers\API\CompanyController;
+use App\Http\Controllers\API\TxController;
 use App\Http\Controllers\API\CarController;
 use App\Http\Controllers\API\AgentController;
 use App\Http\Controllers\API\PaymentController;
@@ -47,10 +48,16 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/user/apply',      [UserController::class, "apply"]);
     Route::post('/user/car',        [UserController::class, "saveCar"]);
     Route::get ('/user/car',        [UserController::class, "car"]);
+    Route::post('/user/topup',      [UserController::class, "topup"]);
     Route::get ('/consumer/{id}',   [UserController::class, "consumer"]);
 
     Route::post('/company',         [CompanyController::class, "store"]);
     Route::post('/company/{id}/partner-asset', [CompanyController::class, "partnerAsset"]);
+    Route::get ('/company/topups',  [CompanyController::class, "topups"]);
+
+    Route::get ('/tx/{id}',         [TxController::class, "get"]);
+    Route::post('/tx/{id}/audit',   [TxController::class, "audit"]);
+    Route::post('/tx/{id}/cancel',  [TxController::class, "cancel"]);
 
     Route::get ('/managers',        [AgentController::class, "managers"]);
     Route::get ('/managers/{id}',   [AgentController::class, "manager"]);

@@ -9,11 +9,13 @@ use App\Models\CrowdFunding;
 use App\Models\Agent;
 use App\Models\Car;
 use App\Models\CarModel;
+use App\Models\Tx;
 use App\API\VinApi;
 use App\Helpers\UserHelper;
 use App\Helpers\FormHelper;
 use App\Helpers\AreaHelper;
 use App\Wechat;
+use Carbon\Carbon;
 
 class UserController extends ApiBaseController
 {
@@ -154,7 +156,7 @@ class UserController extends ApiBaseController
         return $this->sendResponse([
             ['label' => "合伙资产认缴(万元)",    "value" => $company->pivot->subscription_amount ?? 0.00],
             ['label' => "合伙资产已实缴(万元)",   "value" => $company->pivot->paid_amount ?? 0.00],
-            ['label' => "实缴充值(余额)", "value" => 0.00],
+            ['label' => "实缴充值(余额)", "value" => $company->pivot->balance ?? 0.00],
             ['label' => "申请临时额度",   "value" => 0.00],
         ]);
     }
@@ -379,5 +381,29 @@ class UserController extends ApiBaseController
     public function teamDetail()
     {
         return $this->sendResponse(UserHelper::teamDetail($this->user));
+    }
+
+    public function topup(Request $request)
+    {
+        // check topup evidence 
+        $img = $this->user->getMedia('topup_evidence')->first();
+        // do not has evidence or expired
+        if (!$img || (Carbon::now() > $img->created_at->addHours(1))) {
+            return $this->sendError("请上传支付凭证！");
+        }
+        if (!$company = ($this->user->referer->company ?? null)) {
+            return $this->sendError("没有加入合伙公司！");
+        }
+        $tx = Tx::create([
+            'user_id' => $this->user->id,
+            'from_company_id' => null,
+            'to_company_id' => $company->id,
+            'type' => Tx::TOPUP,
+            'amount' => $request->input('amount'),
+            'status' => Tx::CREATED,
+        ]);
+        $img->update(['model_type' => Tx::class, 'model_id' => $tx->id]);
+
+        return $this->sendResponse($tx->id, "充值提交成功，请等待管理员审核通过！");
     }
 }

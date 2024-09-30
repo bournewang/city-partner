@@ -9,6 +9,8 @@ use App\Models\Order;
 use App\Models\Relation;
 use App\Helpers\UserHelper;
 use App\Wechat;
+use App\API\NuonuoApi;
+use EasyWeChat\Pay\Application as EasyWeChatApp;
 use Log;
 
 class WechatController extends ApiBaseController
@@ -185,41 +187,39 @@ class WechatController extends ApiBaseController
     public function notify(Request $request)
     {
         debug(__CLASS__.'->'.__FUNCTION__);
-        $app = \EasyWeChat::payment();
-        //  data:
-        //  array (
-        //   'appid' => 'wx561877352e872072',
-        //   'bank_type' => 'OTHERS',
-        //   'cash_fee' => '1',
-        //   'fee_type' => 'CNY',
-        //   'is_subscribe' => 'N',
-        //   'mch_id' => '1484920352',
-        //   'nonce_str' => '61d592e64368c',
-        //   'openid' => 'oZO6h5ft4olVbJcLfU4OEkBqYdxc',
-        //   'out_trade_no' => '891840',
-        //   'result_code' => 'SUCCESS',
-        //   'return_code' => 'SUCCESS',
-        //   'sign' => '573C1A93A6AE80BA2B743A5BBA0D7639',
-        //   'time_end' => '20220105204530',
-        //   'total_fee' => '1',
-        //   'trade_type' => 'JSAPI',
-        //   'transaction_id' => '4200001310202201054219704874',
-        // )
-        $response = $app->handlePaidNotify(function ($data, $fail) {
-            debug($data);
-            if ($data['result_code'] == 'SUCCESS' &&
-                $data['return_code'] == 'SUCCESS' &&
-                ($order_no = $data['out_trade_no'])) {
-                if ($order = Order::where('order_no', $order_no)->first()) {
-                    $order->update(['status' => Order::PAID, 'paid_at' => Carbon::now()]);
-                    // OrderHelper::profitSplit($order);
-                    return true;
+        debug($request->getContent());
+        // Decrypt the message
+        $encryptedMessage = $request->input('param'); // Assuming the encrypted message is sent in the request
+        $key = env('NUONUO_APP_SECRET'); // Replace with your actual key
+        $iv = ''; // ECB mode does not use an IV
+        $decryptedMessage = openssl_decrypt(base64_decode($encryptedMessage), 'AES-128-ECB', $key, OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING);
+        $decryptedMessage = rtrim($decryptedMessage, "\0"); // Remove padding
+        debug("Decrypted message: " . $decryptedMessage);
+
+        $res = json_decode($decryptedMessage);
+        echo "order no " .$res->customerOrderNo.";";
+        echo "pay statue: " .$res->payStatus;
+        // 0 waiting, 1 success, 2 fail, 3 closed, 4 refunding, 5 refund success, 6 refund fail
+        if ($res->payStatus == 1) {
+            echo "payment success";
+            $orderNo  = $res->customerOrderNo;
+            if ($order = Order::firstWhere('order_no', )){
+                $order->update(['status' => Order::PAID]);
+
+                // set user level
+                if ($order->type == 'register-consumer') {
+                    $user = User::find($order->user_id);
+                    if ($user->level < User::REGISTER_CONSUMER)
+                        $user->update(['level' => User::REGISTER_CONSUMER]);
                 }
+                // create invoice
+                // $sdk = new NuonuoApi('invoice');
+                // $res = $sdk->createInvoice($orderNo, $order->user->name, $res->subject, $order->amount, 0.01, 1);
+                // if ($res->code == 'E0000') {
+                //     $order->update(['invoice_serial_num' => $res->result->invoiceSerialNum]);
+                // }
             }
-            // 或者错误消息
-            $fail('Something going wrong.');
-        });
-        $response->send();
+        }
     }
 
     public function withdrawNotify(Request $request)

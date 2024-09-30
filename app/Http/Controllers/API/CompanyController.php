@@ -7,6 +7,7 @@ use App\Models\Challenge;
 use App\Models\User;
 use App\Helpers\ChallengeHelper;
 use App\Models\Company;
+use App\Models\Tx;
 use Log;
 
 class CompanyController extends ApiBaseController
@@ -41,6 +42,18 @@ class CompanyController extends ApiBaseController
             $this->user->partnerCompanies()->attach($id, $data);
         }
 
+        return $this->sendResponse($data);
+    }
+
+    public function topups(Request $request)
+    {
+        $company_id = $this->user->company->id ?? null;
+        if (!$company_id) {
+            return $this->sendError("没有成立合伙公司");
+        }
+
+        $txes = Tx::where('to_company_id', $company_id)->where('status', Tx::CREATED);
+        $data = $this->paginateInfo($txes, $request);
         return $this->sendResponse($data);
     }
 }

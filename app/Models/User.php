@@ -129,6 +129,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
             "partnership_end",
             "subscription_amount",
             "paid_amount",
+            "balance"
         );
     }
 
@@ -235,5 +236,35 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     public function displayAddress()
     {
         return $this->displayArea() . $this->street;
+    }
+
+    public function txes()
+    {
+        return $this->hasMany(Tx::class);
+    }
+
+    public function topups($company)
+    {
+        $company_id = is_int($company) ? $company : $company->id;
+        return $this->txes()
+            ->where('to_company_id', $company_id)
+            ->where('type', Tx::TOPUP)
+            ->where('status', Tx::PAID)
+            ->sum('amount');
+    }
+    public function balanceIn($company)
+    {
+        $company_id = is_int($company) ? $company : $company->id;
+        $topups = $this->txes()
+            ->where('to_company_id', $company_id)
+            ->where('type', Tx::TOPUP)
+            ->where('status', Tx::PAID)
+            ->sum('amount');
+        $consumes = $this->txes()
+            ->where('from_company_id', $company_id)
+            ->where('type', Tx::CONSUME)
+            ->where('status', Tx::PAID)
+            ->sum('amount');
+        return round($topups - $consumes, 2);
     }
 }

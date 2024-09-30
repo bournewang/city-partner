@@ -9,6 +9,7 @@ use App\Helpers\ChallengeHelper;
 use App\Models\Company;
 use App\Models\Order;
 use App\API\NuonuoApi;
+use App\Wechat;
 use Log;
 
 class PaymentController extends ApiBaseController
@@ -28,12 +29,14 @@ class PaymentController extends ApiBaseController
         $order = Order::create([
             'user_id' => $this->user->id,
             'order_no' => $order_no,
-            'amount' => 36.5,
+            'amount' => 0.01,
             'status' => Order::CREATED,
             'type' => 'register-consumer',
             'paid_at' => null,
             'refund_at' => null
         ]);
+        // $res = Wechat::preorder("202409250001", 1);
+        // return $this->sendResponse($res);
         $res = (new NuonuoApi('payment'))->preorder($order->order_no, 'Register Consumer', 1, $order->amount, $this->user->openid);
         if ($res->code == 'JH200' && $res->result->payInfo) {
             return $this->sendResponse(json_decode($res->result->payInfo));

@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
             //
             $table->string('type')->nullable();
+            $table->string('subject')->nullable();
+            $table->string('invoice_serial_num')->nullable();
+            $table->string('invoice_pdf')->nullable();
         });
     }
 
@@ -25,6 +28,9 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
             //
             $table->dropColumn('type');
+            $table->dropColumn('subject');
+            $table->dropColumn('invoice_serial_num');
+            $table->dropColumn('invoice_pdf');
         });
     }
 };
