@@ -154,7 +154,7 @@ class UserController extends ApiBaseController
     {
         $company = $this->user->partnerCompanies->first();
         return $this->sendResponse([
-            ['label' => "合伙资产认缴(万元)",    "value" => $company->pivot->subscription_amount ?? 0.00],
+            ['label' => "合伙资产认缴(万元)",    "value" => 300000], //$company->pivot->subscription_amount ?? 0.00],
             ['label' => "合伙资产已实缴(万元)",   "value" => $company->pivot->paid_amount ?? 0.00],
             ['label' => "实缴充值(余额)", "value" => $company->pivot->balance ?? 0.00],
             ['label' => "申请临时额度",   "value" => 0.00],
@@ -298,7 +298,7 @@ class UserController extends ApiBaseController
                     "partnership_years" => 5,
                     "partnership_start" => null,
                     "partnership_end" => null,
-                    "subscription_amount" => 0,
+                    "subscription_amount" => 300000,
                     "paid_amount" => 0,
                 ]);
             }
