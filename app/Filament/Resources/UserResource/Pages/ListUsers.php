@@ -24,12 +24,18 @@ class ListUsers extends ListRecords
     public function getTabs(): array
     {
         $tabs = [
-            __('All') => Tab::make()
+            __('All') => Tab::make(),
+            __('Sales') => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereNotNull('sales')),
+            ___(User::NON_RESP).__('Sales') => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('sales', User::NON_RESP)),
+            ___(User::RESP).__('Sales') => Tab::make()
+            ->modifyQueryUsing(fn (Builder $query) => $query->where('sales', User::RESP)),
         ];
 
-        foreach (User::levelOptions() as $level => $label) {
-            $tabs[$label] = LevelTab::makeTab($level);
-        }
+        // foreach (User::levelOptions() as $level => $label) {
+        //     $tabs[$label] = LevelTab::makeTab($level);
+        // }
         return $tabs;
     }
 }

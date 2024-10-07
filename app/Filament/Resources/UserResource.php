@@ -27,7 +27,9 @@ use Illuminate\Contracts\View\View;
 use Filament\Infolists\Components\Section;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
-
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Enums\FiltersLayout;
+ 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
@@ -98,8 +100,11 @@ class UserResource extends Resource
                         return $query
                             ->when($data['created_from'], fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date))
                             ->when($data['created_until'], fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date));
-                    })
-            ])
+                    }),
+                SelectFilter::make(__('Level'))
+                    ->options(User::levelOptions())
+                    ->attribute('level')
+                ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
