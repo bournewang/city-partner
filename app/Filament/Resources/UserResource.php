@@ -79,13 +79,18 @@ class UserResource extends Resource
                 TextColumn::make("nickname")->translateLabel()->searchable(),
                 // TextColumn::make("email")->translateLabel()->searchable()
                 TextColumn::make("mobile")->translateLabel()->searchable(),
-                ToggleColumn::make("status")->translateLabel(),
+                
                 // TextColumn::make("level")->translateLabel(),
                 ViewColumn::make('level')->translateLabel()
                     ->view('filament.tables.columns.user-level'),
+                ViewColumn::make('sales')->translateLabel()
+                    ->view('filament.tables.columns.sales'),
+                ViewColumn::make('operation')->translateLabel()
+                    ->view('filament.tables.columns.operation'),
                 TextColumn::make("referer.name")->translateLabel(),
                 TextColumn::make("recommends_count")->translateLabel()->counts('recommends'),
                 ToggleColumn::make("is_union_founder")->translateLabel(),
+                ToggleColumn::make("status")->translateLabel(),
                 TextColumn::make("created_at")->translateLabel() //label(__("Created At")),
             ])
             ->defaultSort("id", "desc")
@@ -135,6 +140,12 @@ class UserResource extends Resource
                     TextEntry::make("level")->translateLabel()
                         ->formatStateUsing(fn (string $state): View =>
                         view('filament.infolists.components.user-level', ['state' => $state])),
+                    TextEntry::make("sales")->translateLabel()
+                        ->formatStateUsing(fn (string $state): View =>
+                        view('filament.infolists.components.sales', ['state' => $state])),
+                    TextEntry::make("operation")->translateLabel()
+                        ->formatStateUsing(fn (string $state): View =>
+                        view('filament.infolists.components.operation', ['state' => $state])),
                     TextEntry::make("referer.name")->translateLabel(),
                     TextEntry::make("created_at")->translateLabel(), //label("Created At"),
                     SpatieMediaLibraryImageEntry::make('id_card_front')->translateLabel()->collection('id_card_front')->label('ID Front'),
