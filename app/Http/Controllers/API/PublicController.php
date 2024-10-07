@@ -38,6 +38,7 @@ class PublicController extends ApiBaseController
             'carOwnerStats' => CarOwnerHelper::stats(),
             'fundingStats'  => CrowdFundingHelper::stats(),
             'fundingConfig' => config("car-manager.funding"),
+            'cityPartner' => config('city-partner'),
             "images" => [
                 "apply" => [
                     "car_manager"   => $img_url."/apply-car-manager-1.jpg",

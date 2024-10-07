@@ -44,10 +44,10 @@ class CompanyResource extends Resource
                 TextInput::make("company_name")->translateLabel(),
                 TextInput::make("credit_code")->translateLabel(),
                 // TextInput::make("legalPerson.name")->translateLabel(),
-                Select::make('legal_person_id')->label("Legal person")
-                    ->translateLabel()
-                    ->options(User::all()->pluck('name', 'id'))
-                    ->searchable(),
+                // Select::make('legal_person_id')->label("Legal person")
+                //     ->translateLabel()
+                //     ->options(User::all()->pluck('name', 'id'))
+                //     ->searchable(),
                 DatePicker::make("registered_at")->translateLabel(),
                 TextInput::make("partner_years")->translateLabel(),
                 DatePicker::make("partner_start_at")->translateLabel(),
