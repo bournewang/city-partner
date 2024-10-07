@@ -66,6 +66,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         "challenge_type_label",
         "is_union_founder",
         "sales",
+        "operation",
         "partner"
     ];
 
@@ -181,6 +182,15 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         ];
     }
 
+    const DIRECTOR = "marketing_director";
+    const DIRECTOR_ASSISTANT = "director_assistant";
+    static public function operationOptions(){
+        return [
+            self::DIRECTOR => ___(self::DIRECTOR),
+            self::DIRECTOR_ASSISTANT => ___(self::DIRECTOR_ASSISTANT)
+        ];
+    }
+
     public function root()
     {
         return $this->belongsTo(User::class);
@@ -215,6 +225,7 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         $data['name_with_star'] = !$this->name ? null : (mb_substr($this->name, 0,1) . "**");
         $data['mobile_with_star'] = !$this->mobile ? null : (substr($this->mobile, 0, 3) . "****" . substr($this->mobile, -4, 4));
         $data['sales_label'] = $this->sales ? self::respOptions()[$this->sales] . __("Sales") : null;
+        $data['operation_label'] = $this->operation ? self::operationOptions()[$this->operation] : null;
         $data['vip_card'] = $this->is_union_founder ? url("/storage/mpp/level/union-founder.png") :
                 ($this->level >= self::CONSUMER_MERCHANT && $this->level <= self::PROVINCE_CEO ?
                 url("/storage/mpp/level/{$this->level}.png") : null);

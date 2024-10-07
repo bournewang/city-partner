@@ -65,6 +65,7 @@ class FormHelper
     {
         $fields = self::consumerFields();
         $fields[] = ["name" => "sales_label",          "label" => __("Sales")];
+        $fields[] = ["name" => "operation_label",          "label" => __("Operation")];
         return $fields;
     }
 

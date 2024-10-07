@@ -334,7 +334,8 @@ class UserController extends ApiBaseController
 
     public function sales(Request $request)
     {
-        $this->user->update(['sales' => $request->input('sales')]);
+        $data = ['sales' => $request->input('sales'), 'operation' => $request->input('operation')];
+        $this->user->update($data);
         return $this->sendResponse($this->user->info());
     }
 
