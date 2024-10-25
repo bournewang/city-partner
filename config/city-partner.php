@@ -7,5 +7,5 @@ return [
         "account_no" => "4102 11000 4004 1710",
         "bank" => "中国农业银行股份有限公司深圳东塘支行"
     ],
-    "receive_qrcode" => ("/images/receive-qrcode.jpg")
+    "receive_qrcode" => env('APP_URL').("/images/receive-qrcode.jpg")
 ];
