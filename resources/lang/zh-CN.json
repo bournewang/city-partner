@@ -149,5 +149,6 @@
     "Non Resp": "无责",
     "Last week": "近一周",
     "Last month": "近一月",
-    "Last season": "近一季度"
+    "Last season": "近一季度",
+    "Balance is not enough": "余额不足，:balance"
 }

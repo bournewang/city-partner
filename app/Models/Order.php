@@ -17,11 +17,23 @@ class Order extends Model
         'type',
         'paid_at',
         'refund_at',
+        'remark',
+        'shop_account_no',
+        'shop_account_name',
+        'developer_account_no',
+        'developer_account_name',
+        'county_agent_account_no',
+        'county_agent_account_name',
+        'city_agent_account_no',
+        'city_agent_account_name',
         'invoice_serial_num'
     ];
 
     protected $casts = [
     ];
+
+    // type options
+    const CONSUME = 'consume';
 
     const CREATED = 'unpaid';
     const PAID = 'paid';

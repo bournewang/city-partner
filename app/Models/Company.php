@@ -25,6 +25,8 @@ class Company extends Model
         "sub_bank",
         "account_name",
         "account_no",
+        "alipay_account_no",
+        "alipay_account_name"
     ];
 
     public function legalPerson()

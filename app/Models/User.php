@@ -67,7 +67,8 @@ class User extends Authenticatable implements FilamentUser, HasMedia
         "is_union_founder",
         "sales",
         "operation",
-        "partner"
+        "partner",
+        "alipay_account_no"
     ];
 
     /**

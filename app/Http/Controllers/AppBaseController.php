@@ -38,17 +38,17 @@ class AppBaseController extends Controller
     protected $store;
     public function sendResponse($result, $message = 'success')
     {
-        // if (in_array(Request::instance()->getMethod(), ['POST', 'PATCH', 'DELETE'])) {
-        //     DB::commit();
-        // }
+        if (in_array(Request::instance()->getMethod(), ['POST', 'PATCH', 'DELETE'])) {
+            DB::commit();
+        }
         return Response::json(self::makeResponse($message, $result));
     }
 
     public function sendError($error, $data = [])
     {
-        // if (in_array(Request::instance()->getMethod(), ['POST', 'PATCH', 'DELETE'])) {
-        //     DB::rollBack();
-        // }
+        if (in_array(Request::instance()->getMethod(), ['POST', 'PATCH', 'DELETE'])) {
+            DB::rollBack();
+        }
         return Response::json(self::makeError($error, $data));
     }
 

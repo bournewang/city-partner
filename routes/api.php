@@ -13,6 +13,7 @@ use App\Http\Controllers\API\TxController;
 use App\Http\Controllers\API\CarController;
 use App\Http\Controllers\API\AgentController;
 use App\Http\Controllers\API\PaymentController;
+use App\Http\Controllers\API\WalletController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -94,3 +95,7 @@ Route::get('/cars/{id}',            [CarController::class, 'get']);
 Route::put('/cars/{id}',            [CarController::class, 'update']);
 Route::delete('/cars/{id}',         [CarController::class, 'delete']);
 // car owner
+
+// wallet
+Route::get('/wallet',               [WalletController::class, 'get']);
+Route::post('/wallet/consume',      [WalletController::class, 'consume']);
